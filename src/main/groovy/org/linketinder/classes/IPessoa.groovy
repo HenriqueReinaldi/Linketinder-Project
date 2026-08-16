@@ -1,5 +1,11 @@
 package org.linketinder.classes
 
 interface IPessoa {
-    String nome, email, estado, CEP, descricao
+    String getNome();
+    String getEmail();
+    String getEstado();
+    String getCEP();
+    String getDescricao();
+
+    void representacao();
 }
