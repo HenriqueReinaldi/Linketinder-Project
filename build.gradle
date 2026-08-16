@@ -24,3 +24,7 @@ test {
 application {
     mainClass = "org.linketinder.Main"
 }
+
+tasks.named('run') {
+    standardInput = System.in
+}
