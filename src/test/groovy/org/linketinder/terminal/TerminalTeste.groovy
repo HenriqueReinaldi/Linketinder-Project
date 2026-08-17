@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 class TerminalTeste extends Specification{
     @Shared
-    List<Integer> numeros = (-10..10)
+    List<Integer> numeros = (-20..20)
 
     @Shared
     List<String> inputs_candidatos = numeros.collect(it -> new String(

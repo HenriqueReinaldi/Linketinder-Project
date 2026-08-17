@@ -13,16 +13,17 @@ class Terminal {
 
     Candidato cadastrar_candidato(){
         Scanner scan = new Scanner(System.in);
+        def pergunta = {String it -> print it; scan.nextLine()}
 
         try{
-            String nome = scan.nextLine();
-            String email = scan.nextLine();
-            String estado  = scan.nextLine();
-            String CEP = scan.nextLine();
-            String descricao = scan.nextLine();
-            String CPF = scan.nextLine();
-            int idade = Integer.parseInt(scan.nextLine());
-            List<String> competencias  = scan.nextLine().split(" ");
+            def nome = pergunta("Nome: ")
+            def email = pergunta("Email: ")
+            def estado = pergunta("Estado: ")
+            def CEP = pergunta("CEP: ")
+            def descricao = pergunta("Descrição: ")
+            def CPF = pergunta("CPF: ")
+            def idade = pergunta("Idade: ").toInteger()
+            def competencias = pergunta("Competencias: ").tokenize()
 
             Candidato c = new Candidato(nome, email, estado, CEP, descricao, CPF, idade, competencias)
 
@@ -31,23 +32,25 @@ class Terminal {
             }
             return null
         }
-        catch (Exception ignored){
+        catch (Exception e){
+            println e
             return null;
         }
     }
 
     Empresa cadastrar_empresa(){
         Scanner scan = new Scanner(System.in);
+        def pergunta = {String it -> print it; scan.nextLine()}
 
         try{
-            String nome = scan.nextLine();
-            String email = scan.nextLine();
-            String estado  = scan.nextLine();
-            String CEP = scan.nextLine();
-            String descricao = scan.nextLine();
-            String CNPJ = scan.nextLine();
-            String pais = scan.nextLine();
-            List<String> competencias  = scan.nextLine().split(" ");
+            def nome = pergunta("Nome: ")
+            def email = pergunta("Email: ")
+            def estado = pergunta("Estado: ")
+            def CEP = pergunta("CEP: ")
+            def descricao = pergunta("Descrição: ")
+            def CNPJ = pergunta("CPF: ")
+            def pais = pergunta("País: ")
+            def competencias = pergunta("Competencias: ").tokenize()
 
             Empresa e = new Empresa(nome, email, estado, CEP, descricao, CNPJ, pais, competencias)
 
@@ -56,7 +59,8 @@ class Terminal {
             }
             return null
         }
-        catch (Exception ignored){
+        catch (Exception e){
+            println e
             return null;
         }
     }
@@ -76,6 +80,12 @@ class Terminal {
                 return 0
             case "listar empresas":
                 dados.empresas.each {it.representacao()}
+                return 0
+            case "cadastrar candidato":
+                cadastrar_candidato();
+                return 0
+            case "cadastrar empresa":
+                cadastrar_empresa();
                 return 0
             case "sair":
                 return 1
