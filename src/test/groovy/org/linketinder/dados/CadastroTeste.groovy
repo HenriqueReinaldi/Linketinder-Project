@@ -45,9 +45,12 @@ class CadastroTeste extends Specification{
             def tamanho_previo = dados.get_qtd_candidatos()
 
         when: "um novo candidato é cadastrado"
-            cadastro.cadastrar_candidato(c)
+            def status =cadastro.cadastrar_candidato(c)
 
-        then: "percebe-se que a quantidade de candidatos aumentou"
+        then: "funcao retorna verdadeiro (candidato cadastrado)"
+            status
+
+        and: "percebe-se que a quantidade de candidatos aumentou"
             dados.get_qtd_candidatos() == tamanho_previo+1
 
         and: "e que agora o novo candidato existe na lista"
@@ -64,9 +67,12 @@ class CadastroTeste extends Specification{
             def tamanho_previo = dados.get_qtd_empresas()
 
         when: "uma nova empresa é cadastrada"
-            cadastro.cadastrar_empresa(e)
+            def status = cadastro.cadastrar_empresa(e)
 
-        then: "percebe-se que a quantidade de empresas aumentou"
+        then:  "funcao retorna verdadeiro (empresa cadastrado)"
+            status
+
+        and: "percebe-se que a quantidade de empresas aumentou"
             dados.get_qtd_empresas() == tamanho_previo+1
 
         and: "e que agora a nova empresa existe na lista"
