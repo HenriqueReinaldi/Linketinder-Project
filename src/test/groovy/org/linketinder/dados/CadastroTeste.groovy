@@ -81,4 +81,30 @@ class CadastroTeste extends Specification{
         where:
             e << empresas
     }
+
+    def "Nao é possivel cadastrar candidato nulo" () {
+        given:
+            def dados = new Dados()
+            def cadastro = new Cadastro(dados)
+            Candidato c = null
+
+        when: "cadastramos um candidato nulo"
+            def status = cadastro.cadastrar_candidato(c)
+
+        then: "funcao retorna falso"
+            !status
+    }
+
+    def "Não é possível cadastrar empresa nula" () {
+        given:
+            def dados = new Dados();
+            def cadastro = new Cadastro(dados);
+            Empresa e = null
+
+        when: "cadastramos uma empresa nula"
+            def status = cadastro.cadastrar_empresa(e)
+
+        then: "funcao retorna falso"
+            !status
+    }
 }
