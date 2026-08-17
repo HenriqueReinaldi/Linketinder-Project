@@ -65,4 +65,13 @@ class Dados {
             )
         }
     }
+
+
+    public int get_qtd_candidatos(){
+        return candidatos.size()
+    }
+
+    public int get_qtd_empresas(){
+        return empresas.size()
+    }
 }

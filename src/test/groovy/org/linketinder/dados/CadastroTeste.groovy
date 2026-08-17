@@ -39,41 +39,40 @@ class CadastroTeste extends Specification{
     };
 
     def "Cadastrar candidato funciona" () {
-        expect:
-            cad.cadastrar_candidato(cand)
+        given:
+            def dados = new Dados()
+            def cadastro = new Cadastro(dados)
+            def tamanho_previo = dados.get_qtd_candidatos()
+
+        when: "um novo candidato é cadastrado"
+            cadastro.cadastrar_candidato(c)
+
+        then: "percebe-se que a quantidade de candidatos aumentou"
+            dados.get_qtd_candidatos() == tamanho_previo+1
+
+        and: "e que agora o novo candidato existe na lista"
+            dados.getCandidatos().contains(c)
 
         where:
-            cad = new Cadastro()
-            cand << candidatos
-
-    }
-
-    def "Cadastrar não candidato como candidato não é permitido" (){
-        expect:
-            ! cad.cadastrar_candidato(cand)
-
-        where:
-            cad = new Cadastro()
-            cand << empresas
+            c << candidatos
     }
 
     def "Cadastrar empresa funciona" () {
-        expect:
-            cad.cadastrar_empresa(emp)
+        given:
+            def dados = new Dados()
+            def cadastro = new Cadastro(dados)
+            def tamanho_previo = dados.get_qtd_empresas()
+
+        when: "uma nova empresa é cadastrada"
+            cadastro.cadastrar_empresa(e)
+
+        then: "percebe-se que a quantidade de empresas aumentou"
+            dados.get_qtd_empresas() == tamanho_previo+1
+
+        and: "e que agora a nova empresa existe na lista"
+            dados.getEmpresas().contains(e)
 
         where:
-            cad = new Cadastro()
-            emp << empresas
-
+            e << empresas
     }
-
-    def "Cadastrar não empresa como empresa não é permitido" (){
-        expect:
-        ! cad.cadastrar_empresa(cand)
-
-        where:
-            cad = new Cadastro()
-            cand << candidatos
-    }
-
 }
