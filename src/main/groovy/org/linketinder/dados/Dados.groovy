@@ -48,7 +48,7 @@ class Dados {
                     "um bom candidato",
                     r.get_random_cpf(),
                     30,
-                    r.get_fixed_competencias(it, it+2)
+                    r.get_fixed_competencias(it as int, it+2 as int)
             )
         }
 
@@ -61,7 +61,7 @@ class Dados {
                     "uma boa empresa",
                     r.get_random_cnpj(),
                     "BRASIL",
-                    r.get_fixed_competencias(it, it+2)
+                    r.get_fixed_competencias(it as int, it+2 as int)
             )
         }
     }
