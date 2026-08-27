@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "rootDir": "./scripts",
+        "outDir": "./build",
+
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "es6"
+    }
+}
