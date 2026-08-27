@@ -8,6 +8,7 @@ const input_descricao: HTMLInputElement = document.getElementById("input_descric
 const input_idade: HTMLInputElement = document.getElementById("input_idade") as HTMLInputElement;
 const input_CPF: HTMLInputElement = document.getElementById("input_CPF") as HTMLInputElement;
 const input_competencias: HTMLInputElement = document.getElementById("input_competencias") as HTMLInputElement;
+const input_formacao: HTMLInputElement = document.getElementById("input_formacao") as HTMLInputElement;
 
 const submit: HTMLButtonElement = document.getElementById("cadastrar") as HTMLButtonElement;
 const status: HTMLParagraphElement = document.getElementById("status") as HTMLParagraphElement;
@@ -39,7 +40,8 @@ submit.onclick = (evento: MouseEvent) => {
         input_descricao.value,
         idade,
         input_CPF.value,
-        input_competencias.value.trim().split(" ")
+        input_competencias.value.trim().split(" "),
+        input_formacao.value
     );
 
     if (res) status_sucesso();

@@ -1,24 +1,23 @@
-para fazer:
+//para fazer:
 
-    //tela de cadastro de usuarios (empresa e candidato)
-        -> tela de cadastro de empresa
-        -> tela de cadastro de candidato
+//ok  //tela de cadastro de usuarios (empresa e candidato)
+//ok      -> tela de cadastro de empresa
+//ok      -> tela de cadastro de candidato
 
     //lista de todas as vagas cadastradas (visao de candidato)
     //lista de todos os candidatos cadastrados (visao da empresa)
         //grafico de barras de candidatos por competencia:
 
-       5|
-       4|               ||
-       3|               ||
-       2|    |||        ||
-       1|    |||        ||        |||
-        +---python-----java-----jscript---
+    //    5|
+    //    4|               ||
+    //    3|               ||
+    //    2|    |||        ||
+    //    1|    |||        ||        |||
+    //     +---python-----java-----jscript---
 
 
 
-
-    /!\COMPLETAMENTE EM ANONIMO OS DOIS
+    // /!\COMPLETAMENTE EM ANONIMO OS DOIS
 
 
 //fds backend (ainda)

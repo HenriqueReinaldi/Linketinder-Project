@@ -2,7 +2,7 @@
     "name": "linketinder",
     "version": "0.0.0",
     "type": "module",
-
+    
     "scripts": {
         "build": "npx tsc",
         "start": "npx serve .",

@@ -1,7 +1,6 @@
 import { Pessoa } from "./pessoa.js"
 
 export class Empresa extends Pessoa{
-
     constructor (
         nome: string,
         email:string,
@@ -14,3 +13,5 @@ export class Empresa extends Pessoa{
         public competencias_desejadas: string[]
     ){ super(nome, email, estado, CEP, descricao) }
 }
+
+// ainda nao sei como vaga se conecta com empresas, entao vou deixar separado por enquanto pra evitar retrabalho

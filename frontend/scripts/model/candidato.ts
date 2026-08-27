@@ -11,7 +11,8 @@ export class Candidato extends Pessoa{
 
         public idade: number,
         public CPF: string,
-        public competencias: string[]
+        public competencias: string[],
+        public formacao: string
         
     ){ super(nome, email, estado, CEP, descricao) }
 }
