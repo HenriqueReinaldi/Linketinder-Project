@@ -44,7 +44,6 @@ class EmpresaTeste extends Specification{
 
     def "outros getters retornam seus valores devidamente" () {
 
-
         expect:
             verifyAll {
                 empresa.getEstado() == "DF${numero}"

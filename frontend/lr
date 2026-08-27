@@ -1,0 +1,7 @@
+[c]
+    run: rm -rf ./build
+    end
+
+[main]
+    run: npm run this
+    end

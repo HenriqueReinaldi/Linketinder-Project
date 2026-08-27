@@ -12,14 +12,14 @@ class CandidatoTeste extends Specification{
     List<Candidato> Candidatos = numeros.collect {
         it ->  new Candidato
                 (
-                        "nome${it}",
-                        "email${it}@mail",
-                        "DF${it}",
-                        "0${it}",
-                        "um bom candidato${it}",
-                        "${it}",
-                        it.toInteger(),
-                        ["nenhuma${it}"],
+                    "nome${it}",
+                    "email${it}@mail",
+                    "DF${it}",
+                    "0${it}",
+                    "um bom candidato${it}",
+                    "${it}",
+                    it.toInteger(),
+                    ["nenhuma${it}"],
                 );
     }
 
