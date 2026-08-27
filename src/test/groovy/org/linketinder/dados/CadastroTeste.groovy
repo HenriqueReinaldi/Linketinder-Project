@@ -38,7 +38,7 @@ class CadastroTeste extends Specification{
             )
     };
 
-    def "Cadastrar candidato funciona" () {
+    def "Cadastrar candidato funciona"() {
         given:
             def dados = new Dados()
             def cadastro = new Cadastro(dados)

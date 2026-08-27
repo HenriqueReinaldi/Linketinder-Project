@@ -9,7 +9,6 @@ class Empresa extends Pessoa{
     String CNPJ, pais
     List competencias_desejadas = [];
 
-
     void representacao(){
         println """Empresa $nome:
         Email : $email

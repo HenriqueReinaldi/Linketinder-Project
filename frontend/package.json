@@ -1,0 +1,16 @@
+{
+    "name": "linketinder",
+    "version": "0.0.0",
+    "type": "module",
+
+    "scripts": {
+        "build": "npx tsc",
+        "start": "npx serve .",
+        "this": "npm run build && npm run start"
+    },
+
+    "devDependencies": {
+        "serve": "^14.2.0",
+        "typescript": "^5.0.0"
+    }
+}
