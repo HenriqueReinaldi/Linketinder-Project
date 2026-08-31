@@ -45,11 +45,10 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
 4. Backend feito com groovy e build tool gradle
 5. Frontend feito com Typescript + HTML, com o uso da biblioteca [chart.js](https://www.chartjs.org/)
 6. Frontend ainda é completamente independente do backend.
-
+7. Banco de dados feito com PostgreSQL
+8. Modelo DER feito com [dbdiagram](https://dbdiagram.io/home)
 
 
 ### Diagrama Entidade-Relacionamento:
 
 ![DER](./banco_de_dados/image.png)
-
-Ferramenta utilizada para criação: [dbdiagram](https://dbdiagram.io/home)
