@@ -31,6 +31,8 @@ class Service {
                 idade: ci.idade.toInteger(),
                 competencias: competencias,
                 nome: ci.nome,
+                sobrenome: ci.sobrenome,
+                data_nascimento: ci.nascimento,
                 email: ci.email,
                 descricao: ci.descricao,
                 senha: ci.senha,
@@ -41,7 +43,7 @@ class Service {
             e.printStackTrace(); return false
         }
 
-        return bd.cadastrar_candidato(candidato)
+        return bd.create.cadastrar_candidato(candidato)
     }
 
     //ei = empresa_info
@@ -74,6 +76,6 @@ class Service {
             e.printStackTrace(); return false
         }
 
-        return bd.cadastrar_empresa(empresa);
+        return bd.create.cadastrar_empresa(empresa);
     }
 }
