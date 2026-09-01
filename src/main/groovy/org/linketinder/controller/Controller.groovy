@@ -14,70 +14,13 @@ class Controller {
     Service service
 
     boolean cadastrar_candidato(){
-        Map<String, String> cd = tv.candidatoView.capturar_dados()
-
-        Candidato candidato = null;
-        try{
-            List<Competencia> competencias = cd["competencias"]
-                .tokenize()
-                .collect{new Competencia(it.trim())}
-
-            Endereco endereco = new Endereco(
-                CEP: cd.CEP,
-                pais: null,
-                estado: cd.estado
-            )
-
-            candidato = new Candidato(
-                CPF: cd.CPF,
-                idade: cd.idade.toInteger(),
-                competencias: competencias,
-                nome: cd.nome,
-                email: cd.email,
-                descricao: cd.descricao,
-                senha: cd.senha,
-                endereco: endereco
-            )
-
-        }
-        catch (Exception e) {
-            e.printStackTrace(); return false
-        }
-
-        return service.cadastrar_candidato(candidato)
+        Map<String, String> ci = tv.candidatoView.capturar_dados()
+        return service.cadastrar_candidato(ci)
     }
 
     boolean cadastrar_empresa(){
-        Map<String, String> cd = tv.empresaView.capturar_dados()
-
-        Empresa empresa = null;
-        try{
-            List<Competencia> competencias = cd["competencias"]
-                .tokenize()
-                .collect{new Competencia(it.trim())}
-
-            Endereco endereco = new Endereco(
-                CEP: cd.CEP,
-                pais: cd.pais,
-                estado: cd.estado
-            )
-
-            empresa = new Empresa(
-                CNPJ: cd.CNPJ,
-                competencias_desejadas: competencias,
-                nome: cd.nome,
-                email: cd.email,
-                descricao: cd.descricao,
-                senha: cd.senha,
-                endereco: endereco
-            )
-
-        }
-        catch (Exception e) {
-            e.printStackTrace(); return false
-        }
-
-        return service.cadastrar_empresa(empresa)
+        Map<String, String> ei = tv.empresaView.capturar_dados()
+        return service.cadastrar_empresa(ei)
     }
     
     int receber_input(String input){
