@@ -1,22 +1,20 @@
 package org.linketinder
+import org.linketinder.controller.Controller
+import org.linketinder.dao.Banco
+import org.linketinder.service.Service
+import org.linketinder.view.terminal.TermView
 
-import org.linketinder.dados.Cadastro
 
-//seu nome
 //Henrique de Figueiredo Reinaldi
-
-import org.linketinder.dados.Dados
-import org.linketinder.terminal.Terminal
 
 static void main(String[] args) {
 
+    Banco bd = new Banco()
 
-    Dados d = new Dados()
-    d.init()
+    TermView term_view = new TermView();
+    Service service = new Service(bd);
 
-    Cadastro c = new Cadastro(d)
+    Controller controller = new Controller(term_view, service)
 
-    Terminal t = new Terminal(d, c)
-    t.init()
-
+    controller.init();
 }

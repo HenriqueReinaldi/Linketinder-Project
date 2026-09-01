@@ -1,7 +1,7 @@
 package org.linketinder.dados
 
-import org.linketinder.classes.Candidato
-import org.linketinder.classes.Empresa
+import org.linketinder.model.objetos.Candidato
+import org.linketinder.model.objetos.Empresa
 import spock.lang.Shared
 import spock.lang.Specification
 

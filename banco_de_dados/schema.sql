@@ -3,10 +3,16 @@ create table pais(
 	nome character varying(50) not null
 );
 
+create table estado(
+    id serial primary key,
+    nome character varying(100) not null
+);
+
 create table endereco(
 	id serial primary key,
 	CEP character varying(8) not null,
-	pais_id int references pais(id) not null
+	pais_id int references pais(id) not null,
+    estado_id int references estado(id) not null
 );
 
 

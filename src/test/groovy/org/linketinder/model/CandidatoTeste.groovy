@@ -1,5 +1,6 @@
-package org.linketinder.classes
+package org.linketinder.model
 
+import org.linketinder.model.objetos.Candidato
 import spock.lang.Shared
 import spock.lang.Specification
 

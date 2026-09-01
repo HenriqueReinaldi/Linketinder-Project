@@ -1,7 +1,7 @@
 package org.linketinder.terminal
 
-import org.linketinder.dados.Cadastro
-import org.linketinder.dados.Dados
+import org.linketinder.controller.Controller
+
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -38,7 +38,7 @@ class TerminalTeste extends Specification{
         given: "Um novo terminal"
             Dados d = new Dados()
             Cadastro c = new Cadastro(d)
-            Terminal terminal = new Terminal(d, c)
+        Controller terminal = new Controller(d, c)
 
         and: "Um input"
             System.setIn(new ByteArrayInputStream(input.bytes))
@@ -61,7 +61,7 @@ class TerminalTeste extends Specification{
         given: "Um novo terminal"
             Dados d = new Dados()
             Cadastro c = new Cadastro(d)
-            Terminal terminal = new Terminal(d, c)
+            Controller terminal = new Controller(d, c)
 
         and: "Um input"
             System.setIn(new ByteArrayInputStream(input.bytes))
