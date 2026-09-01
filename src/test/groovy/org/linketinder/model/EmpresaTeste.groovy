@@ -1,5 +1,6 @@
-package org.linketinder.classes
+package org.linketinder.model
 
+import org.linketinder.model.objetos.Empresa
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -10,7 +11,7 @@ class EmpresaTeste extends Specification{
     List<Integer> numeros = (-20..20)
 
     @Shared
-    List<Empresa> empresas = numeros.collect {numero -> new Empresa
+    List<Empresa> empresas = numeros.collect { numero -> new Empresa
             (
                 "nome${numero}",
                 "email${numero}@mail",

@@ -4,10 +4,16 @@ create table pais(
 	nome character varying(50) not null
 );
 
+create table estado(
+   id serial primary key,
+   nome character varying(100) not null
+);
+
 create table endereco(
-	id serial primary key,
-	CEP character varying(8) not null,
-	pais_id int references pais(id) not null
+     id serial primary key,
+     CEP character varying(8) not null,
+     pais_id int references pais(id) not null,
+     estado_id int references estado(id) not null
 );
 
 
@@ -73,9 +79,13 @@ insert into pais (nome) values ('China');
 insert into pais (nome) values ('Brasil');
 insert into pais (nome) values ('Uzbequsitão');
 
-insert into endereco (CEP, pais_id) values ('00000000', 1);
-insert into endereco (CEP, pais_id) values ('11111111', 2);
-insert into endereco (CEP, pais_id) values ('22222222', 3);
+insert into estado (nome) values ('Braslandia');
+insert into estado (nome) values ('Brasilia');
+insert into estado (nome) values ('Brasilendia');
+
+insert into endereco (CEP, pais_id, estado_id) values ('00000000', 1, 2);
+insert into endereco (CEP, pais_id, estado_id) values ('11111111', 2, 3);
+insert into endereco (CEP, pais_id, estado_id) values ('22222222', 3, 3);
 
 insert into competencia (tecnologia) values ('python');
 insert into competencia (tecnologia) values ('cython');
@@ -208,7 +218,7 @@ insert into vaga (nome, descricao, endereco_id, empresa_id) values (
 	'deve dev o development do linketinder development dev team',
 	'2',
 	'5'
-)
+);
 
 insert into vaga_competencias (vaga_id, competencia_id) values (2, 9);
 insert into vaga_competencias (vaga_id, competencia_id) values (2, 8);

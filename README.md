@@ -51,4 +51,4 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
 
 ### Diagrama Entidade-Relacionamento:
 
-![DER](./banco_de_dados/image.png)
+![DER](banco_de_dados/image.png)
