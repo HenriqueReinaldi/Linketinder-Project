@@ -32,7 +32,7 @@ class Controller {
                 tv.send_message "sair                 | fecha o programa"
                 break
 
-            case ".":
+            case "listar candidatos":
                 service.bd.read.get_lista_candidatos().each {
                     String rep = tv.candidatoView.representacao(it)
                     tv.send_message rep

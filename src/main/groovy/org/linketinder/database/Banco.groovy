@@ -45,7 +45,6 @@ class Banco {
         create.conn = conn;
         read.conn = conn;
 
-        println read.get_lista_competencias()
        // println read.get_lista_candidatos()
     }
 }

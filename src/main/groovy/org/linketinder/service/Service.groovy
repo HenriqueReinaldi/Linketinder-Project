@@ -51,10 +51,6 @@ class Service {
         Empresa empresa = null;
 
         try{
-            List<Competencia> competencias = ei["competencias"]
-                .tokenize()
-                .collect{new Competencia(it.trim())}
-
             Endereco endereco = new Endereco(
                 CEP: ei.CEP,
                 pais: ei.pais,
@@ -63,7 +59,6 @@ class Service {
 
             empresa = new Empresa(
                 CNPJ: ei.CNPJ,
-                competencias_desejadas: competencias,
                 nome: ei.nome,
                 email: ei.email,
                 descricao: ei.descricao,
