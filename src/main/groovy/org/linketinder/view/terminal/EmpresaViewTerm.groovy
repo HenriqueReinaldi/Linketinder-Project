@@ -8,19 +8,13 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
 
     @Override
     String representacao(Empresa objeto) {
-
-        String competencias = objeto.competencias_desejadas
-            .collect{it.tecnologia }
-            .join(", ")
-            ?: ""
-
         """Empresa ${objeto.nome}:
            |Pais        : ${objeto.endereco.pais}
            |Email       : ${objeto.email}
            |Estado      : ${objeto.endereco.estado}
            |CEP         : ${objeto.endereco.CEP}
            |CNPJ        : ${objeto.CNPJ}
-           |Competencias: ${competencias}
+           |id          : ${objeto.id}
         """.stripMargin()
     }
 
@@ -45,7 +39,6 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
             "descricao" : "Descrição:",
             "CNPJ" : "CNPJ:",
             "pais": "pais:",
-            "competencias": "Competencias desejadas:",
             "senha": "Senha:"
         ]
 

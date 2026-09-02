@@ -21,6 +21,7 @@ class CandidatoViewTerm implements Representavel<Candidato>, Cadastravel<Candida
            |CPF         : ${objeto.CPF}
            |Competencias: ${competencias}
            |Nascimento  : ${objeto.data_nascimento}
+           |id          : ${objeto.id}
         """.stripMargin()
     }
 

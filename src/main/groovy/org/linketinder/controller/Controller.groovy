@@ -17,7 +17,6 @@ class Controller {
         Map<String, String> ci = tv.candidatoView.capturar_dados()
         return service.cadastrar_candidato(ci)
     }
-
     boolean cadastrar_empresa(){
         Map<String, String> ei = tv.empresaView.capturar_dados()
         return service.cadastrar_empresa(ei)
@@ -33,7 +32,7 @@ class Controller {
                 tv.send_message "sair                 | fecha o programa"
                 break
 
-            case "listar candidatos":
+            case ".":
                 service.bd.read.get_lista_candidatos().each {
                     String rep = tv.candidatoView.representacao(it)
                     tv.send_message rep
@@ -41,7 +40,7 @@ class Controller {
                 break
 
             case "listar empresas":
-                service.bd.empresas.each {
+                service.bd.read.get_lista_empresas().each {
                     String rep = tv.empresaView.representacao(it)
                     tv.send_message rep
                 }

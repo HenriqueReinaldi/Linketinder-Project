@@ -5,6 +5,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 
 import static java.sql.DriverManager.getConnection as getConnection
+import static java.sql.DriverManager.println
 
 class Banco {
     static String nome_banco;
@@ -44,6 +45,7 @@ class Banco {
         create.conn = conn;
         read.conn = conn;
 
+        println read.get_lista_competencias()
        // println read.get_lista_candidatos()
     }
 }

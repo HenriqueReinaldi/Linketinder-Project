@@ -7,6 +7,7 @@ import org.linketinder.model.Pessoa
 @ToString(includeSuperProperties = true, includeNames = true)
 @TupleConstructor(includeSuperProperties = true)
 class Empresa extends Pessoa{
+    int id
+
     String CNPJ
-    List<Competencia> competencias_desejadas = [];
 }

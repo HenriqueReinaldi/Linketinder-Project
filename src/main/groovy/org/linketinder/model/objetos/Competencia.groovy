@@ -7,9 +7,6 @@ import groovy.transform.TupleConstructor
 @TupleConstructor(includeSuperProperties = true)
 
 class Competencia{
+    int id
     String tecnologia
-
-    void representacao(){
-        println "Tecnologia : $tecnologia"
-    }
 }
