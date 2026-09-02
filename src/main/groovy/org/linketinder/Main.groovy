@@ -1,6 +1,6 @@
 package org.linketinder
 import org.linketinder.controller.Controller
-import org.linketinder.dao.Banco
+import org.linketinder.database.Banco
 import org.linketinder.service.Service
 import org.linketinder.view.terminal.TermView
 

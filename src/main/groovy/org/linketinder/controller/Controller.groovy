@@ -34,7 +34,7 @@ class Controller {
                 break
 
             case "listar candidatos":
-                service.bd.candidatos.each {
+                service.bd.read.get_lista_candidatos().each {
                     String rep = tv.candidatoView.representacao(it)
                     tv.send_message rep
                 }

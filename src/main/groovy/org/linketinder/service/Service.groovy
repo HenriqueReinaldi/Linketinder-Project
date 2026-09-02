@@ -1,7 +1,7 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.dao.Banco
+import org.linketinder.database.Banco
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Empresa

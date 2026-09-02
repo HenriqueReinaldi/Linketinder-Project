@@ -1,4 +1,4 @@
-package org.linketinder.dao
+package org.linketinder.database
 
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -10,6 +10,7 @@ class Banco {
     static String nome_banco;
     static Connection conn;
     Create create = new Create();
+    Read read = new Read();
 
     static void conectar(){
         Properties props = new Properties();
@@ -37,33 +38,13 @@ class Banco {
 
     Banco(String nome_banco){
         this.nome_banco = nome_banco;
+
         conectar()
 
         create.conn = conn;
+        read.conn = conn;
 
-        teste()
-    }
-
-    static void teste(){
-        String busca = "select * from candidato";
-
-        try{
-            PreparedStatement candidatos = conn.prepareStatement(
-                    busca,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            )
-
-            ResultSet res = candidatos.executeQuery();
-
-            while (res.next()) {
-                System.out.println(res.getString("id"));
-            }
-
-            res.close();
-            candidatos.close();
-        }
-        catch (Exception ignored) {}
+       // println read.get_lista_candidatos()
     }
 }
 
