@@ -110,4 +110,7 @@ class Service {
         return bd.create.cadastrar_vaga(vaga)
     }
 
+
+
+    boolean deletar_candidato(){}
 }

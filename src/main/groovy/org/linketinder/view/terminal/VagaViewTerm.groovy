@@ -20,6 +20,7 @@ class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
            |Estado      : ${objeto.endereco.estado}
            |Empresa     : ${objeto.empresa.nome}
            |Competencias: ${competencias}
+           |id          : ${objeto.id}
         """.stripMargin()
     }
 

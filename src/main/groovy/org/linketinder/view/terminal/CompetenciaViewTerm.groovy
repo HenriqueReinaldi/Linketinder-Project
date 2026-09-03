@@ -6,7 +6,7 @@ import org.linketinder.view.traits.Representavel
 class CompetenciaViewTerm implements Representavel<Competencia>{
     @Override
     String representacao(Competencia objeto) {
-        "Competencia: ${objeto.tecnologia}"
+        "Competencia: ${objeto.tecnologia} - id: ${objeto.id}"
     }
 
     @Override

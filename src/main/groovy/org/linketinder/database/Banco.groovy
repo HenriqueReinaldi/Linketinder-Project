@@ -10,10 +10,12 @@ import static java.sql.DriverManager.getConnection as getConnection
 import static java.sql.DriverManager.println
 
 class Banco {
-    static String nome_banco;
-    static Connection conn;
-    Create create = new Create();
-    Read read = new Read();
+    static String nome_banco
+    static Connection conn
+
+    Create create = new Create()
+    Read read = new Read()
+    Delete delete = new Delete()
 
     static void conectar(){
         Properties props = new Properties();
@@ -40,12 +42,12 @@ class Banco {
     }
 
     Banco(String nome_banco){
-        this.nome_banco = nome_banco;
-
+        this.nome_banco = nome_banco
         conectar()
 
-        create.conn = conn;
-        read.conn = conn;
+        create.conn = conn
+        read.conn = conn
+        delete.conn = conn
 
     }
 }

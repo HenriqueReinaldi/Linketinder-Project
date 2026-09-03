@@ -13,6 +13,31 @@ class Controller {
     TermView tv
     Service service
 
+    void listar_candidatos(){
+        service.bd.read.get_lista_candidatos().each {
+            String rep = tv.candidato_view.representacao(it)
+            tv.send_message rep
+        }
+    }
+    void listar_empresas(){
+        service.bd.read.get_lista_empresas().each {
+            String rep = tv.empresa_view.representacao(it)
+            tv.send_message rep
+        }
+    }
+    void listar_vagas(){
+        service.bd.read.get_lista_vagas().each {
+            String rep = tv.vaga_view.representacao(it)
+            tv.send_message rep
+        }
+    }
+    void listar_competencias(){
+        service.bd.read.get_lista_competencias().each {
+            String rep = tv.competencia_view.representacao(it)
+            tv.send_message rep
+        }
+    }
+
     boolean cadastrar_candidato(){
         Map<String, String> ci = tv.candidato_view.capturar_dados()
         return service.cadastrar_candidato(ci)
@@ -25,46 +50,75 @@ class Controller {
         Map<String, String> vi = tv.vaga_view.capturar_dados()
         return service.cadastrar_vaga(vi)
     }
-    
+
+    boolean deletar_candidato(){
+        try{
+            int id = Integer.parseInt(tv.get_input("id:"))
+
+            return service.bd.delete.delete_candidato_by_id(id)
+        }catch (Exception ignored) {}
+
+        return false
+    }
+    boolean deletar_empresa(){
+        try{
+            int id = Integer.parseInt(tv.get_input("id:"))
+
+            return service.bd.delete.delete_empresa_by_id(id)
+        }catch (Exception ignored) {}
+
+        return false
+    }
+    boolean deletar_vaga(){
+        try{
+            int id = Integer.parseInt(tv.get_input("id:"))
+
+            return service.bd.delete.delete_vaga_by_id(id)
+        }catch (Exception ignored) {}
+
+        return false
+    }
+    boolean deletar_competencia(){
+        try{
+            int id = Integer.parseInt(tv.get_input("id:"))
+
+            return service.bd.delete.delete_competencia_by_id(id)
+        }catch (Exception ignored) {}
+
+        return false
+    }
+
     int receber_input(String input){
         switch (input){
             case "?":
                 tv.send_message "Comandos read:"
-                tv.send_message "listar <candidatos / empresas / vagas / candidatos>\n"
+                tv.send_message "listar <candidatos / empresas / vagas / competencias>\n"
 
                 tv.send_message "Comandos create:"
-                tv.send_message "cadastrar <candidato / empresa>\n"
+                tv.send_message "cadastrar <candidato / empresa / vaga>"
+                tv.send_message "nota: competencias são criadas automaticamente por demanda.\n"
+
+                tv.send_message "Comandos delete:"
+                tv.send_message "deletar <candidato / empresa / vaga / competencia>\n"
 
                 tv.send_message "Outros:"
                 tv.send_message "sair                 | fecha o programa"
                 break
 
             case "listar candidatos":
-                service.bd.read.get_lista_candidatos().each {
-                    String rep = tv.candidato_view.representacao(it)
-                    tv.send_message rep
-                }
+                listar_candidatos()
                 break
 
             case "listar empresas":
-                service.bd.read.get_lista_empresas().each {
-                    String rep = tv.empresa_view.representacao(it)
-                    tv.send_message rep
-                }
+                listar_empresas()
                 break
 
             case "listar vagas":
-                service.bd.read.get_lista_vagas().each {
-                    String rep = tv.vaga_view.representacao(it)
-                    tv.send_message rep
-                }
+                listar_vagas()
                 break
 
             case "listar competencias":
-                service.bd.read.get_lista_competencias().each {
-                    String rep = tv.competencia_view.representacao(it)
-                    tv.send_message rep
-                }
+                listar_competencias()
                 break
 
             case "cadastrar candidato":
@@ -77,6 +131,22 @@ class Controller {
 
             case "cadastrar vaga":
                 cadastrar_vaga()
+                break
+
+            case "deletar candidato":
+                deletar_candidato()
+                break
+
+            case "deletar empresa":
+                deletar_empresa()
+                break
+
+            case "deletar vaga":
+                deletar_vaga()
+                break
+
+            case "deletar competencia":
+                deletar_competencia()
                 break
 
             case "sair":
