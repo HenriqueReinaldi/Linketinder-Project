@@ -224,6 +224,7 @@ class Controller {
     }
 
     void init() {
+        tv.send_message "Digite ? para ajuda\n"
         while (true){
             String res = tv.get_input "@>"
             if (receber_input(res)) break
