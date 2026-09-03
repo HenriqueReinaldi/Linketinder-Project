@@ -24,3 +24,11 @@ select c.nome, e.cep, p.nome as pais
 from candidato as c 
 join endereco as e on c.endereco_id = e.id
 join pais as p on p.id = e.pais_id;
+
+
+-------------------------------------------
+select c.nome, e.cep, p.nome as pais, es.nome as estado
+from candidato as c
+join endereco as e on c.endereco_id = e.id
+join pais as p on p.id = e.pais_id
+join estado as es on es.id = e.estado_id;
