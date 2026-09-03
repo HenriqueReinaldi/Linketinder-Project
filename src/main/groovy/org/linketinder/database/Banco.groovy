@@ -1,5 +1,7 @@
 package org.linketinder.database
 
+import org.linketinder.model.objetos.Endereco
+
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -45,7 +47,6 @@ class Banco {
         create.conn = conn;
         read.conn = conn;
 
-       // println read.get_lista_candidatos()
     }
 }
 

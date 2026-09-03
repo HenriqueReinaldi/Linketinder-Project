@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourcePerFileMappings">
-    <file url="file://$PROJECT_DIR$/src/main/groovy/org/linketinder/database/Create.groovy" value="51e373c0-a12b-45db-9aea-af215606647c" />
+    <file url="file://$PROJECT_DIR$/banco_de_dados/entrega.sql" value="5b5bb090-114f-4c7e-827e-0de4a5f0e82e" />
+    <file url="file://$PROJECT_DIR$/src/main/groovy/org/linketinder/database/Read.groovy" value="5b5bb090-114f-4c7e-827e-0de4a5f0e82e" />
   </component>
 </project>

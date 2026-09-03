@@ -6,6 +6,7 @@ import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
+import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor
 class Service {
@@ -18,12 +19,12 @@ class Service {
         try{
             List<Competencia> competencias = ci["competencias"]
                 .tokenize()
-                .collect{new Competencia(it.trim())}
+                .collect{new Competencia(tecnologia: it.trim())}
 
             Endereco endereco = new Endereco(
                 CEP: ci.CEP,
                 pais: null,
-                estado: ci.estado
+                estado: ci.estado,
             )
 
             candidato = new Candidato(
@@ -36,7 +37,7 @@ class Service {
                 email: ci.email,
                 descricao: ci.descricao,
                 senha: ci.senha,
-                endereco: endereco
+                endereco: endereco,
             )
         }
         catch (Exception e) {
@@ -73,4 +74,40 @@ class Service {
 
         return bd.create.cadastrar_empresa(empresa);
     }
+
+    //vi = vagfa_info
+    boolean cadastrar_vaga(Map<String, String> vi){
+        Vaga vaga = null;
+
+        try{
+            List<Competencia> competencias = vi["competencias_desejadas"]
+                .tokenize()
+                .collect{new Competencia(tecnologia: it.trim())}
+
+            Endereco endereco = new Endereco(
+                CEP: vi.CEP,
+                pais: vi.pais,
+                estado: vi.estado,
+            )
+
+            int emp_id = bd.read.get_empresa_id_by_CNPJ(vi.empresa_CNPJ)
+            if (emp_id == -1) return false
+
+            Empresa empresa = bd.read.get_empresa_by_id(emp_id.toString())
+
+            vaga = new Vaga(
+                competencias_desejadas: competencias,
+                nome: vi.nome,
+                descricao: vi.descricao,
+                endereco: endereco,
+                empresa: empresa
+            )
+        }
+        catch (Exception e) {
+            e.printStackTrace(); return false
+        }
+
+        return bd.create.cadastrar_vaga(vaga)
+    }
+
 }

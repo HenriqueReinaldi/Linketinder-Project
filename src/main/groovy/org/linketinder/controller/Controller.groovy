@@ -14,34 +14,55 @@ class Controller {
     Service service
 
     boolean cadastrar_candidato(){
-        Map<String, String> ci = tv.candidatoView.capturar_dados()
+        Map<String, String> ci = tv.candidato_view.capturar_dados()
         return service.cadastrar_candidato(ci)
     }
     boolean cadastrar_empresa(){
-        Map<String, String> ei = tv.empresaView.capturar_dados()
+        Map<String, String> ei = tv.empresa_view.capturar_dados()
         return service.cadastrar_empresa(ei)
+    }
+    boolean cadastrar_vaga(){
+        Map<String, String> vi = tv.vaga_view.capturar_dados()
+        return service.cadastrar_vaga(vi)
     }
     
     int receber_input(String input){
         switch (input){
             case "?":
-                tv.send_message "listar candidatos    | mostra todos os candidatos"
-                tv.send_message "listar empresas      | mostra todos as empresas"
-                tv.send_message "cadastrar candidato  | "
-                tv.send_message "cadastrar empresa    | "
+                tv.send_message "Comandos read:"
+                tv.send_message "listar <candidatos / empresas / vagas / candidatos>\n"
+
+                tv.send_message "Comandos create:"
+                tv.send_message "cadastrar <candidato / empresa>\n"
+
+                tv.send_message "Outros:"
                 tv.send_message "sair                 | fecha o programa"
                 break
 
             case "listar candidatos":
                 service.bd.read.get_lista_candidatos().each {
-                    String rep = tv.candidatoView.representacao(it)
+                    String rep = tv.candidato_view.representacao(it)
                     tv.send_message rep
                 }
                 break
 
             case "listar empresas":
                 service.bd.read.get_lista_empresas().each {
-                    String rep = tv.empresaView.representacao(it)
+                    String rep = tv.empresa_view.representacao(it)
+                    tv.send_message rep
+                }
+                break
+
+            case "listar vagas":
+                service.bd.read.get_lista_vagas().each {
+                    String rep = tv.vaga_view.representacao(it)
+                    tv.send_message rep
+                }
+                break
+
+            case "listar competencias":
+                service.bd.read.get_lista_competencias().each {
+                    String rep = tv.competencia_view.representacao(it)
                     tv.send_message rep
                 }
                 break
@@ -52,6 +73,10 @@ class Controller {
 
             case "cadastrar empresa":
                 cadastrar_empresa()
+                break
+
+            case "cadastrar vaga":
+                cadastrar_vaga()
                 break
 
             case "sair":

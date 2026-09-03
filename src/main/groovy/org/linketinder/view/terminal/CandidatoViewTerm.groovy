@@ -14,6 +14,7 @@ class CandidatoViewTerm implements Representavel<Candidato>, Cadastravel<Candida
             ?: ""
 
         """Candidato ${objeto.nome} ${objeto.sobrenome}:
+           |Descrição   : ${objeto.descricao}
            |Idade       : ${objeto.idade}
            |Email       : ${objeto.email}
            |Estado      : ${objeto.endereco.estado}

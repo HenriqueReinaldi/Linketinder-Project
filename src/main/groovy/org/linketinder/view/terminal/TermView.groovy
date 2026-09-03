@@ -3,8 +3,10 @@ package org.linketinder.view.terminal
 class TermView {
     static final Scanner scan = new Scanner(System.in)
 
-    final CandidatoViewTerm candidatoView = new CandidatoViewTerm()
-    final EmpresaViewTerm empresaView = new EmpresaViewTerm()
+    final CandidatoViewTerm candidato_view = new CandidatoViewTerm()
+    final EmpresaViewTerm empresa_view = new EmpresaViewTerm()
+    final VagaViewTerm vaga_view = new VagaViewTerm()
+    final CompetenciaViewTerm competencia_view = new CompetenciaViewTerm()
 
     static void send_message(String message){
         println message

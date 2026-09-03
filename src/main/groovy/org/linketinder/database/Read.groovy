@@ -77,7 +77,7 @@ class Read {
             res.beforeFirst()
             if (res.next()) {
                 endereco = new Endereco(
-                    id: res.getString("endereco_id"),
+                    id: res.getInt("endereco_id"),
                     pais: res.getString("pais_nome"),
                     estado: res.getString("estado_nome"),
                     CEP: res.getString("CEP"),
@@ -91,12 +91,12 @@ class Read {
 
         return endereco;
     }
-    static List<Competencia> get_competencias(String entidade, String entidade_id){
+    static List<Competencia> get_competencias(String entidade, int entidade_id){
         List<Competencia> competencias = []
         String busca = "select * from ${entidade}_competencias where ${entidade}_id = ?"
         try{
             PreparedStatement pst = conn.prepareStatement( busca, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY )
-            pst.setInt(1, Integer.parseInt(entidade_id))
+            pst.setInt(1, entidade_id)
             ResultSet res = pst.executeQuery()
 
             res.beforeFirst()
@@ -118,8 +118,9 @@ class Read {
         return competencias
     }
 
-    //melhoria futura?
-    static <Generico> List<Generico> get_lista_tabela(String busca, Closure<Generico> construtor){
+    //closeure que deve retornar objeto Generico pra colocar na lista, ResultSet como parametro
+    //closure de busca_args para preparar a busca corretamente
+    static <Generico> List<Generico> get_lista_tabela(String busca, Closure busca_args, Closure<Generico> construtor){
         List<Generico> genericos = [];
         try{
             PreparedStatement pst = conn.prepareStatement(
@@ -127,6 +128,7 @@ class Read {
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             )
+            busca_args(pst)
             ResultSet res = pst.executeQuery();
             res.beforeFirst()
             while (res.next()) {
@@ -139,8 +141,6 @@ class Read {
         catch (Exception e) { e.printStackTrace()}
         return genericos;
     }
-
-
 
     static List<Candidato> get_lista_candidatos(){
         List<Candidato> candidatos = [];
@@ -166,7 +166,7 @@ class Read {
                     id: id,
                     CPF: res.getString("CPF"),
                     idade: idade,
-                    competencias: get_competencias("candidato", id.toString()),
+                    competencias: get_competencias("candidato", id),
                     nome: res.getString("nome"),
                     sobrenome: res.getString("sobrenome"),
                     data_nascimento: data_nascimento,
@@ -241,12 +241,15 @@ class Read {
 
             res.beforeFirst()
             while (res.next()) {
+                int id = res.getInt("vaga_id")
+
                 Vaga v = new Vaga(
-                    id: res.getInt("vaga_id"),
+                    id: id,
                     nome: res.getString("vaga_nome"),
                     descricao: res.getString("vaga_descricao"),
                     endereco: get_endereco_by_id(res.getString("vaga_endereco_id")),
-                    empresa_id: res.getInt("empresa_id")
+                    empresa: get_empresa_by_id(res.getString("empresa_id")),
+                    competencias_desejadas: get_competencias("vaga", id)
                 )
                 vagas << v;
             }
@@ -258,10 +261,8 @@ class Read {
 
         return vagas;
     }
-
-    //uso teste da funcao generica
     static List<Competencia> get_lista_competencias(){
-        List<Competencia> competencias = get_lista_tabela("select * from competencia") { ResultSet res ->
+        List<Competencia> competencias = get_lista_tabela("select * from competencia", {}) { ResultSet res ->
             return new Competencia(
                 id: res.getInt("id"),
                 tecnologia: res.getString("tecnologia"),
@@ -270,4 +271,75 @@ class Read {
         return competencias
     }
 
+    static int get_candidato_id_by_CPF(String CPF){
+        String busca = "select id from candidato where CPF = ?"
+
+        List<Integer> id = get_lista_tabela(busca, {
+            PreparedStatement pst -> pst.setString(1, CPF)
+        }) {
+            ResultSet res -> return res.getInt("id")
+        }
+
+        if (!id) return -1
+        return id[0]
+    }
+    static int get_empresa_id_by_CNPJ(String CNPJ){
+        String busca = "select id from empresa where CNPJ = ?"
+
+        List<Integer> id = get_lista_tabela(busca, {
+            PreparedStatement pst -> pst.setString(1, CNPJ)
+        }) {
+            ResultSet res -> return res.getInt("id")
+        }
+
+        if (!id) return -1
+        return id[0]
+    }
+
+
+    static int get_endereco_id(Endereco e){
+        String busca = """
+            select 
+                e.id as id,
+                p.nome as pais_nome,
+                es.nome as estado_nome,
+                CEP
+            from endereco as e
+            join pais p on e.pais_id = p.id 
+            join estado es on e.estado_id = es.id
+            where CEP = ?
+            and p.nome = ?
+            and es.nome = ?
+        """
+
+        List<Integer> endereco = get_lista_tabela(busca, {
+            PreparedStatement pst ->
+                pst.setString(1, e.CEP)
+                pst.setString(2, e.pais)
+                pst.setString(3, e.estado)
+        }) { ResultSet res -> return res.getInt("id")}
+
+        if (!endereco) return -1
+        return endereco[0]
+    }
+    static Empresa get_empresa_by_id(String id){
+        String busca = "select * from empresa where id = ?"
+
+        List<Empresa> empresas = get_lista_tabela(busca, {
+            PreparedStatement pst -> pst.setInt(1, Integer.parseInt(id))
+        }) { ResultSet res ->
+            return new Empresa(
+                id: res.getInt("id"),
+                CNPJ: res.getString("CNPJ"),
+                nome: res.getString("nome"),
+                email: res.getString("e_mail"),
+                descricao: res.getString("descricao"),
+                senha: res.getString("senha"),
+                endereco: get_endereco_by_id(res.getString("endereco_id"))
+            )
+        }
+
+        if (!empresas) return null
+        return empresas[0]
+    }
 }
