@@ -1,12 +1,12 @@
 -- esse arquivo cria e coloca dados no banco.
 create table pais(
 	id serial primary key,
-	nome character varying(50) not null
+	nome character varying(50) unique not null
 );
 
 create table estado(
    id serial primary key,
-   nome character varying(100) not null
+   nome character varying(100) unique not null
 );
 
 create table endereco(
@@ -34,7 +34,7 @@ create table candidato(
 
 create table competencia(
 	id serial primary key,
-	tecnologia character varying(100) not null
+	tecnologia character varying(100) unique not null
 );
 
 create table candidato_competencias(

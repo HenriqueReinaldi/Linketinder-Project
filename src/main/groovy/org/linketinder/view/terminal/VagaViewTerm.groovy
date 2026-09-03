@@ -1,25 +1,31 @@
 package org.linketinder.view.terminal
 
-import org.linketinder.model.objetos.Empresa
+import org.linketinder.model.objetos.Vaga
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
-class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
+class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
 
     @Override
-    String representacao(Empresa objeto) {
-        """Empresa ${objeto.nome}:
+    String representacao(Vaga objeto) {
+        String competencias = objeto.competencias_desejadas
+            .collect{ it.tecnologia }
+            .join(", ")
+            ?: ""
+
+        """Vaga ${objeto.nome}:
            |Descrição   : ${objeto.descricao}
            |Pais        : ${objeto.endereco.pais}
-           |Email       : ${objeto.email}
-           |Estado      : ${objeto.endereco.estado}
            |CEP         : ${objeto.endereco.CEP}
-           |CNPJ        : ${objeto.CNPJ}
+           |Estado      : ${objeto.endereco.estado}
+           |Empresa     : ${objeto.empresa.nome}
+           |Competencias: ${competencias}
            |id          : ${objeto.id}
         """.stripMargin()
     }
 
-    void exibir(Empresa objeto){
+    @Override
+    void exibir(Vaga objeto) {
         println representacao(objeto)
     }
 
@@ -34,13 +40,12 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
 
         Map<String, String> campos = [
             "nome" : "Nome:",
-            "email" : "Email:",
-            "estado" : "Estado:",
-            "CEP" : "CEP:",
             "descricao" : "Descrição:",
-            "CNPJ" : "CNPJ:",
+            "CEP" : "CEP:",
             "pais": "pais:",
-            "senha": "Senha:"
+            "estado" : "Estado:",
+            "competencias_desejadas": "Competencias:",
+            "empresa_CNPJ" : "CNPJ da empresa:"
         ]
 
         campos.each {e ->

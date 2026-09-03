@@ -13,13 +13,16 @@ class CandidatoViewTerm implements Representavel<Candidato>, Cadastravel<Candida
             .join(", ")
             ?: ""
 
-        """Candidato ${objeto.nome}:
+        """Candidato ${objeto.nome} ${objeto.sobrenome}:
+           |Descrição   : ${objeto.descricao}
            |Idade       : ${objeto.idade}
            |Email       : ${objeto.email}
            |Estado      : ${objeto.endereco.estado}
            |CEP         : ${objeto.endereco.CEP}
            |CPF         : ${objeto.CPF}
            |Competencias: ${competencias}
+           |Nascimento  : ${objeto.data_nascimento}
+           |id          : ${objeto.id}
         """.stripMargin()
     }
 
@@ -38,6 +41,8 @@ class CandidatoViewTerm implements Representavel<Candidato>, Cadastravel<Candida
 
         Map<String, String> campos = [
             "nome" : "Nome:",
+            "sobrenome": "Sobrenome:",
+            "nascimento": "Data de nascimento:",
             "email" : "Email:",
             "estado" : "Estado:",
             "CEP" : "CEP:",

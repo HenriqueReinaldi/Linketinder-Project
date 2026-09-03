@@ -7,5 +7,7 @@ import groovy.transform.TupleConstructor
 @TupleConstructor(includeSuperProperties = true)
 
 class Endereco{
+    int id = -1
+
     String CEP, pais, estado
 }
