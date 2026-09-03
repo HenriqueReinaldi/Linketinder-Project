@@ -4,15 +4,16 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
 ## BACKEND:
 
 ### Para executar:
-
-    1. Execute na raiz do projeto o seguinte comando:
+    1. Crie um banco de dados PostgreSQL nomeado 'linketinder'
+    2. Utilize o script de criação em banco_de_dados/entrega.sql para criar as tabelas e popular o banco.
+    3. Execute na raiz do projeto o seguinte comando:
 
         ./gradlew run -q --console=plain
 
     ALTERNATIVAMENTE
 
-    2. Abra o projeto no Intellij IDEA.
-    3 Vá para src/main/groovy/org/linketinder/Main.groovy e clique no botão RUN do método main()
+    4. Abra o projeto no Intellij IDEA.
+    5 Vá para src/main/groovy/org/linketinder/Main.groovy e clique no botão RUN do método main()
 
 ## FRONTEND:
 
@@ -36,6 +37,16 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
         │                                           │
         └───────────────────────────────────────────┘
          
+## BANCO DE DADOS:
+
+Para juntar o novo banco de dados com o aplicativo, tive que re-estruturar algumas (várias) coisas tanto no código quanto no modelo do banco. Como exemplo, movi "competencias desejadas" da classe Empresa para uma nova classe "Vaga".<br>
+Antes dessa junção, tentei também refatorar o projeto com a arquitetura MVCS (minha primeira vez usando ela).<br>
+Uma ferramenta que serviu grande auxílio foi o próprio Intellij, que permitiu uma conexão com o banco para fazer queries de forma rápida e adicionar IntelliSense a strings SQL.
+
+
+<br>
+<br>
+<br>
 
 ### Informações pertinentes:
 
