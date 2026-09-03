@@ -295,8 +295,6 @@ class Read {
         if (!id) return -1
         return id[0]
     }
-
-
     static int get_endereco_id(Endereco e){
         String busca = """
             select 
@@ -322,6 +320,8 @@ class Read {
         if (!endereco) return -1
         return endereco[0]
     }
+
+
     static Empresa get_empresa_by_id(String id){
         String busca = "select * from empresa where id = ?"
 
@@ -341,5 +341,29 @@ class Read {
 
         if (!empresas) return null
         return empresas[0]
+    }
+    static Empresa get_candidato_by_id(String id){
+        String busca = "select * from candidato where id = ?"
+
+        List<Candidato> candidatos = get_lista_tabela(busca, {
+            PreparedStatement pst -> pst.setInt(1, Integer.parseInt(id))
+        }) { ResultSet res ->
+            return new Candidato(
+                id: id,
+                CPF: res.getString("CPF"),
+                idade: idade,
+                competencias: get_competencias("candidato", id),
+                nome: res.getString("nome"),
+                sobrenome: res.getString("sobrenome"),
+                data_nascimento: data_nascimento,
+                email: res.getString("e_mail"),
+                descricao: res.getString("descricao"),
+                senha: res.getString("senha"),
+                endereco: get_endereco_by_id(res.getString("endereco_id"))
+            )
+        }
+
+        if (!candidatos) return null
+        return candidatos[0]
     }
 }

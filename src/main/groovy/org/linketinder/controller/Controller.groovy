@@ -5,6 +5,7 @@ import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
+import org.linketinder.model.objetos.Vaga
 import org.linketinder.service.Service
 import org.linketinder.view.terminal.TermView
 
@@ -40,15 +41,18 @@ class Controller {
 
     boolean cadastrar_candidato(){
         Map<String, String> ci = tv.candidato_view.capturar_dados()
-        return service.cadastrar_candidato(ci)
+        Candidato c = service.assemble_candidato(ci)
+        return service.bd.create.cadastrar_candidato(c)
     }
     boolean cadastrar_empresa(){
         Map<String, String> ei = tv.empresa_view.capturar_dados()
-        return service.cadastrar_empresa(ei)
+        Empresa m = service.assemble_empresa(ei)
+        return service.bd.create.cadastrar_empresa(m);
     }
     boolean cadastrar_vaga(){
         Map<String, String> vi = tv.vaga_view.capturar_dados()
-        return service.cadastrar_vaga(vi)
+        Vaga v = service.assemble_vaga(vi)
+        return service.bd.create.cadastrar_vaga(v)
     }
 
     boolean deletar_candidato(){
@@ -88,6 +92,51 @@ class Controller {
         return false
     }
 
+    boolean update_candidato(){
+        int id = -1
+        try{
+            id = Integer.parseInt(tv.get_input("id:"))
+        }catch (Exception ignored) {return false}
+
+        Map<String, String> ci = tv.candidato_view.capturar_dados()
+        Candidato c = service.assemble_candidato(ci)
+        c.id = id
+        return service.bd.update.update_candidato(c)
+    }
+    boolean update_vaga(){
+        int id = -1
+        try{
+            id = Integer.parseInt(tv.get_input("id:"))
+        }catch (Exception ignored) {return false}
+
+        Map<String, String> vi = tv.vaga_view.capturar_dados()
+        Vaga v = service.assemble_vaga(vi)
+        v.id = id
+        return service.bd.update.update_vaga(v)
+    }
+    boolean update_empresa(){
+        int id = -1
+        try{
+            id = Integer.parseInt(tv.get_input("id:"))
+        }catch (Exception ignored) {return false}
+
+        Map<String, String> vi = tv.empresa_view.capturar_dados()
+        Empresa m = service.assemble_empresa(vi)
+        m.id = id
+        return service.bd.update.update_empresa(m)
+    }
+    boolean update_competencia(){
+        int id = -1
+        try{
+            id = Integer.parseInt(tv.get_input("id:"))
+        }catch (Exception ignored) {return false}
+
+        String tecnologia = tv.get_input("tecnologia:")
+
+        Competencia c = new Competencia(tecnologia: tecnologia, id: id)
+        return service.bd.update.update_competencia(c)
+    }
+
     int receber_input(String input){
         switch (input){
             case "?":
@@ -101,8 +150,11 @@ class Controller {
                 tv.send_message "Comandos delete:"
                 tv.send_message "deletar <candidato / empresa / vaga / competencia>\n"
 
+                tv.send_message "Comandos update:"
+                tv.send_message "update <candidato / empresa / vaga / competencia>\n"
+
                 tv.send_message "Outros:"
-                tv.send_message "sair                 | fecha o programa"
+                tv.send_message "sair"
                 break
 
             case "listar candidatos":
@@ -147,6 +199,22 @@ class Controller {
 
             case "deletar competencia":
                 deletar_competencia()
+                break
+
+            case "update candidato":
+                update_candidato()
+                break
+
+            case "update vaga":
+                update_vaga()
+                break
+
+            case "update empresa":
+                update_empresa()
+                break
+
+            case "update competencia":
+                update_competencia()
                 break
 
             case "sair":

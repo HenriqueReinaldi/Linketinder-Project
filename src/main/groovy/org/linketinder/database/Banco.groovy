@@ -15,6 +15,7 @@ class Banco {
 
     Create create = new Create()
     Read read = new Read()
+    Update update = new Update()
     Delete delete = new Delete()
 
     static void conectar(){
@@ -47,8 +48,8 @@ class Banco {
 
         create.conn = conn
         read.conn = conn
+        update.conn = conn
         delete.conn = conn
-
     }
 }
 
