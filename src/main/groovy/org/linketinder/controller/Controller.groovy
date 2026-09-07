@@ -3,6 +3,7 @@ package org.linketinder.controller
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
@@ -13,46 +14,49 @@ import org.linketinder.view.terminal.TermView
 class Controller {
     TermView tv
     Service service
+    AssembleModel am
 
     void listar_candidatos(){
         service.bd.read.get_lista_candidatos().each {
-            String rep = tv.candidato_view.representacao(it)
-            tv.send_message rep
+            tv.candidato_view.exibir(it)
         }
     }
     void listar_empresas(){
         service.bd.read.get_lista_empresas().each {
-            String rep = tv.empresa_view.representacao(it)
-            tv.send_message rep
+            tv.empresa_view.exibir(it)
         }
     }
     void listar_vagas(){
         service.bd.read.get_lista_vagas().each {
-            String rep = tv.vaga_view.representacao(it)
-            tv.send_message rep
+            tv.vaga_view.exibir(it)
         }
     }
     void listar_competencias(){
         service.bd.read.get_lista_competencias().each {
-            String rep = tv.competencia_view.representacao(it)
-            tv.send_message rep
+            tv.competencia_view.exibir(it)
+        }
+    }
+    void listar_curtidas(){
+        service.bd.read.get_lista_curtidas().each {
+            tv.curtida_view.exibir(it)
         }
     }
 
-    boolean cadastrar_candidato(){
+
+    void cadastrar_candidato(){
         Map<String, String> ci = tv.candidato_view.capturar_dados()
-        Candidato c = service.assemble_candidato(ci)
-        return service.bd.create.cadastrar_candidato(c)
+        Candidato c = am.assemble_candidato(ci)
+        service.bd.create.cadastrar_candidato(c)
     }
-    boolean cadastrar_empresa(){
+    void cadastrar_empresa(){
         Map<String, String> ei = tv.empresa_view.capturar_dados()
-        Empresa m = service.assemble_empresa(ei)
-        return service.bd.create.cadastrar_empresa(m);
+        Empresa m = am.assemble_empresa(ei)
+        service.bd.create.cadastrar_empresa(m);
     }
     boolean cadastrar_vaga(){
         Map<String, String> vi = tv.vaga_view.capturar_dados()
-        Vaga v = service.assemble_vaga(vi)
-        return service.bd.create.cadastrar_vaga(v)
+        Vaga v = am.assemble_vaga(vi)
+        service.bd.create.cadastrar_vaga(v)
     }
 
     boolean deletar_candidato(){
@@ -99,7 +103,7 @@ class Controller {
         }catch (Exception ignored) {return false}
 
         Map<String, String> ci = tv.candidato_view.capturar_dados()
-        Candidato c = service.assemble_candidato(ci)
+        Candidato c = am.assemble_candidato(ci)
         c.id = id
         return service.bd.update.update_candidato(c)
     }
@@ -110,7 +114,7 @@ class Controller {
         }catch (Exception ignored) {return false}
 
         Map<String, String> vi = tv.vaga_view.capturar_dados()
-        Vaga v = service.assemble_vaga(vi)
+        Vaga v = am.assemble_vaga(vi)
         v.id = id
         return service.bd.update.update_vaga(v)
     }
@@ -121,7 +125,7 @@ class Controller {
         }catch (Exception ignored) {return false}
 
         Map<String, String> vi = tv.empresa_view.capturar_dados()
-        Empresa m = service.assemble_empresa(vi)
+        Empresa m = am.assemble_empresa(vi)
         m.id = id
         return service.bd.update.update_empresa(m)
     }
@@ -137,21 +141,37 @@ class Controller {
         return service.bd.update.update_competencia(c)
     }
 
+    void candidato_curtir(){
+        Map<String, String> ci = tv.curtida_view.capturar_dados()
+        Curtida c = am.assemble_curtida(ci)
+        service.bd.create.cadastrar_curtida(c)
+
+    }
+    void empresa_curtir(){
+        Map<String, String> ci = tv.curtida_view.capturar_dados()
+        Curtida c = am.assemble_curtida(ci)
+        service.bd.update.empresa_curtir(c)
+    }
+
     int receber_input(String input){
         switch (input){
             case "?":
+                tv.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
+
                 tv.send_message "Comandos read:"
-                tv.send_message "listar <candidatos / empresas / vagas / competencias>\n"
+                tv.send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
 
                 tv.send_message "Comandos create:"
                 tv.send_message "cadastrar <candidato / empresa / vaga>"
+                tv.send_message "candidato.curtir"
                 tv.send_message "nota: competencias são criadas automaticamente por demanda.\n"
 
                 tv.send_message "Comandos delete:"
                 tv.send_message "deletar <candidato / empresa / vaga / competencia>\n"
 
                 tv.send_message "Comandos update:"
-                tv.send_message "update <candidato / empresa / vaga / competencia>\n"
+                tv.send_message "update <candidato / empresa / vaga / competencia>"
+                tv.send_message "empresa.curtir\n"
 
                 tv.send_message "Outros:"
                 tv.send_message "sair"
@@ -171,6 +191,10 @@ class Controller {
 
             case "listar competencias":
                 listar_competencias()
+                break
+
+            case "listar curtidas":
+                listar_curtidas()
                 break
 
             case "cadastrar candidato":
@@ -217,6 +241,14 @@ class Controller {
                 update_competencia()
                 break
 
+            case "candidato.curtir":
+                candidato_curtir()
+                break
+
+            case "empresa.curtir":
+                empresa_curtir()
+                break
+
             case "sair":
                 return 1
         }
@@ -224,6 +256,8 @@ class Controller {
     }
 
     void init() {
+        am = new AssembleModel(service: service)
+
         tv.send_message "Digite ? para ajuda\n"
         while (true){
             String res = tv.get_input "@>"

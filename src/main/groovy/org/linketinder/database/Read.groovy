@@ -2,6 +2,7 @@ package org.linketinder.database
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
@@ -270,6 +271,17 @@ class Read {
         }
         return competencias
     }
+    static List<Curtida> get_lista_curtidas(){
+        List<Curtida> curtidas = get_lista_tabela("select * from curtida", {}) { ResultSet res ->
+            return new Curtida(
+                candidato: get_candidato_by_id(res.getString("candidato_id")),
+                vaga: get_vaga_by_id(res.getString("vaga_id")),
+                empresa_curtiu: res.getBoolean("empresa_curtiu")
+            )
+        }
+        return curtidas
+    }
+
 
     static int get_candidato_id_by_CPF(String CPF){
         String busca = "select id from candidato where CPF = ?"
@@ -342,28 +354,54 @@ class Read {
         if (!empresas) return null
         return empresas[0]
     }
-    static Empresa get_candidato_by_id(String id){
+    static Candidato get_candidato_by_id(String id){
         String busca = "select * from candidato where id = ?"
 
         List<Candidato> candidatos = get_lista_tabela(busca, {
             PreparedStatement pst -> pst.setInt(1, Integer.parseInt(id))
         }) { ResultSet res ->
+            String data_nascimento = res.getString("data_nascimento")
+            LocalDate data_nascimento_t = LocalDate.parse(data_nascimento)
+            LocalDate hoje = LocalDate.now()
+            int idade = ChronoUnit.YEARS.between(data_nascimento_t, hoje) as int
+
+            int cid = res.getInt("id")
             return new Candidato(
-                id: id,
-                CPF: res.getString("CPF"),
-                idade: idade,
-                competencias: get_competencias("candidato", id),
-                nome: res.getString("nome"),
-                sobrenome: res.getString("sobrenome"),
-                data_nascimento: data_nascimento,
-                email: res.getString("e_mail"),
-                descricao: res.getString("descricao"),
-                senha: res.getString("senha"),
-                endereco: get_endereco_by_id(res.getString("endereco_id"))
+                    id: cid,
+                    CPF: res.getString("CPF"),
+                    idade: idade,
+                    competencias: get_competencias("candidato", cid),
+                    nome: res.getString("nome"),
+                    sobrenome: res.getString("sobrenome"),
+                    data_nascimento: data_nascimento,
+                    email: res.getString("e_mail"),
+                    descricao: res.getString("descricao"),
+                    senha: res.getString("senha"),
+                    endereco: get_endereco_by_id(res.getString("endereco_id"))
             )
         }
 
         if (!candidatos) return null
         return candidatos[0]
+    }
+    static Vaga get_vaga_by_id(String id){
+        String busca = "select * from vaga where id = ?"
+
+        List<Vaga> vagas = get_lista_tabela(busca, {
+            PreparedStatement pst -> pst.setInt(1, Integer.parseInt(id))
+        }) { ResultSet res ->
+            int vid = res.getInt("id")
+            return new Vaga(
+                id: vid,
+                nome: res.getString("nome"),
+                descricao: res.getString("descricao"),
+                endereco: get_endereco_by_id(res.getString("endereco_id")),
+                empresa: get_empresa_by_id(res.getString("empresa_id")),
+                competencias_desejadas: get_competencias("vaga", vid)
+            )
+        }
+
+        if (!vagas) return null
+        return vagas[0]
     }
 }
