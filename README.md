@@ -43,6 +43,7 @@ Para juntar o novo banco de dados com o aplicativo, tive que re-estruturar algum
 Antes dessa junção, tentei também refatorar o projeto com a arquitetura MVCS (minha primeira vez usando ela).<br>
 Uma ferramenta que serviu grande auxílio foi o próprio Intellij, que permitiu uma conexão com o banco para fazer queries de forma rápida e adicionar IntelliSense a strings SQL.
 
+![DER](banco_de_dados/image.png)
 
 <br>
 <br>
@@ -59,7 +60,10 @@ Uma ferramenta que serviu grande auxílio foi o próprio Intellij, que permitiu 
 7. Banco de dados feito com PostgreSQL
 8. Modelo DER feito com [dbdiagram](https://dbdiagram.io/home)
 
+    ### Sistema de curtidas:
 
-### Diagrama Entidade-Relacionamento:
+    Funciona por meio da tabela "curtida" no banco de dados, onde é feita uma chave primaria composta pelo ID do candidato e o ID da vaga (já que o candidato é aquele quem inicia o processo de match).
+    Quando a empresa dona da vaga quer fazer o match, é trocado o valor de "empresa_curtiu" na tabela de falso para verdadeiro.
 
-![DER](banco_de_dados/image.png)
+
+
