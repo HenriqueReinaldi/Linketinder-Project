@@ -7,6 +7,7 @@ class TermView {
     final EmpresaViewTerm empresa_view = new EmpresaViewTerm()
     final VagaViewTerm vaga_view = new VagaViewTerm()
     final CompetenciaViewTerm competencia_view = new CompetenciaViewTerm()
+    final CurtidaViewTerm curtida_view = new CurtidaViewTerm()
 
     static void send_message(String message){
         println message

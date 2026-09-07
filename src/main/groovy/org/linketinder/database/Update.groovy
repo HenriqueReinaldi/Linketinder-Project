@@ -2,6 +2,7 @@ package org.linketinder.database
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 
@@ -128,6 +129,18 @@ class Update {
         boolean status = execute_update_busca(busca) { PreparedStatement pst ->
             pst.setString(1, c.tecnologia)
             pst.setInt(2, c.id)
+        }
+
+        return status
+    }
+
+
+    static boolean empresa_curtir(Curtida c){
+        String busca = "update curtida set empresa_curtiu = true where candidato_id = ? and vaga_id = ?"
+
+        boolean status = execute_update_busca(busca) { PreparedStatement pst ->
+            pst.setInt(1, c.candidato.id)
+            pst.setInt(2, c.vaga.id)
         }
 
         return status

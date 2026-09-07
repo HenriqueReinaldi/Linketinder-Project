@@ -70,3 +70,11 @@ create table vaga_competencias(
 	
 	primary key(vaga_id, competencia_id)
 );
+
+create table curtida(
+    candidato_id int not null references candidato(id) on delete cascade,
+    vaga_id int not null references vaga(id) on delete cascade,
+    empresa_curtiu boolean default false,
+
+    primary key(vaga_id, candidato_id)
+);

@@ -2,6 +2,7 @@ package org.linketinder.database;
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga;
@@ -196,4 +197,20 @@ class Create {
             pst.setInt(2, id_competencia)
         }
     }
+
+    static void cadastrar_curtida(Curtida c){
+        if (c == null) return
+
+        String busca = """
+            insert into curtida (candidato_id, vaga_id) 
+            values (?, ?) on conflict (candidato_id, vaga_id) do nothing
+        """
+
+        execute_busca(busca) {PreparedStatement pst ->
+            pst.setInt(1, c.candidato.id)
+            pst.setInt(2, c.vaga.id)
+        }
+
+    }
+
 }
