@@ -1,6 +1,8 @@
 package org.linketinder.view.terminal
 
-class TermView {
+import org.linketinder.view.View
+
+class TermView extends View {
     static final Scanner scan = new Scanner(System.in)
 
     final CandidatoViewTerm candidato_view = new CandidatoViewTerm()
@@ -9,11 +11,11 @@ class TermView {
     final CompetenciaViewTerm competencia_view = new CompetenciaViewTerm()
     final CurtidaViewTerm curtida_view = new CurtidaViewTerm()
 
-    static void send_message(String message){
+    void send_message(String message){
         println message
     }
 
-    static String get_input(String message){
+    String get_input(String message){
         print message
         String input = scan.nextLine()
         input

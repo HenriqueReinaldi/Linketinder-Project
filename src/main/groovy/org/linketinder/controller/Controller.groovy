@@ -2,266 +2,127 @@ package org.linketinder.controller
 
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
-import org.linketinder.model.objetos.Competencia
-import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
-import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.service.Service
-import org.linketinder.view.terminal.TermView
+import org.linketinder.view.View
 
 @TupleConstructor
 class Controller {
-    TermView tv
+    View view
     Service service
-    AssembleModel am
+    AssembleModel assemble_model
 
-    void listar_candidatos(){
-        service.bd.read.get_lista_candidatos().each {
-            tv.candidato_view.exibir(it)
-        }
-    }
-    void listar_empresas(){
-        service.bd.read.get_lista_empresas().each {
-            tv.empresa_view.exibir(it)
-        }
-    }
-    void listar_vagas(){
-        service.bd.read.get_lista_vagas().each {
-            tv.vaga_view.exibir(it)
-        }
-    }
-    void listar_competencias(){
-        service.bd.read.get_lista_competencias().each {
-            tv.competencia_view.exibir(it)
-        }
-    }
-    void listar_curtidas(){
-        service.bd.read.get_lista_curtidas().each {
-            tv.curtida_view.exibir(it)
-        }
-    }
+    Map<String, Runnable> inputs = [
+            "?": this.&citar_ajuda,
+            "listar candidatos":   service.&listar_candidatos,
+            "listar empresas":     service.&listar_empresas,
+            "listar vagas":        service.&listar_vagas,
+            "listar competencias": service.&listar_competencias,
+            "listar curtidas":     service.&listar_curtidas,
 
+            "cadastrar candidato": this.&cadastrar_candidato,
+            "cadastrar empresa":   this.&cadastrar_empresa,
+            "cadastrar vaga":      this.&cadastrar_vaga,
+    ]
 
-    void cadastrar_candidato(){
-        Map<String, String> ci = tv.candidato_view.capturar_dados()
-        Candidato c = am.assemble_candidato(ci)
-        service.bd.create.cadastrar_candidato(c)
+    private void cadastrar_candidato(){
+        Map<String, String> candidato_info = view.candidato_view.capturar_dados()
+        Candidato c = assemble_info.assemble_candidato(candidato_info)
+        service.cadastrar_candidato(c)
     }
-    void cadastrar_empresa(){
-        Map<String, String> ei = tv.empresa_view.capturar_dados()
-        Empresa m = am.assemble_empresa(ei)
-        service.bd.create.cadastrar_empresa(m);
+    private void cadastrar_empresa(){
+        Map<String, String> empresa_info = view.empresa_view.capturar_dados()
+        Empresa m = assemble_info.assemble_empresa(empresa_info)
+        service.cadastrar_empresa(m)
     }
-    boolean cadastrar_vaga(){
-        Map<String, String> vi = tv.vaga_view.capturar_dados()
-        Vaga v = am.assemble_vaga(vi)
-        service.bd.create.cadastrar_vaga(v)
+    private void cadastrar_vaga(){
+        Map<String, String> vaga_info = view.vaga_view.capturar_dados()
+        Vaga v = assemble_info.assemble_vaga(vaga_info)
+        service.cadastrar_vaga(v)
     }
 
-    boolean deletar_candidato(){
-        try{
-            int id = Integer.parseInt(tv.get_input("id:"))
 
-            return service.bd.delete.delete_candidato_by_id(id)
-        }catch (Exception ignored) {}
 
-        return false
-    }
-    boolean deletar_empresa(){
-        try{
-            int id = Integer.parseInt(tv.get_input("id:"))
+    private void citar_ajuda(){
+        view.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
-            return service.bd.delete.delete_empresa_by_id(id)
-        }catch (Exception ignored) {}
+        view.send_message "Comandos read:"
+        view.send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
 
-        return false
-    }
-    boolean deletar_vaga(){
-        try{
-            int id = Integer.parseInt(tv.get_input("id:"))
+        view.send_message "Comandos create:"
+        view.send_message "cadastrar <candidato / empresa / vaga>"
+        view.send_message "candidato.curtir"
+        view.send_message "nota: competencias são criadas automaticassemble_modelente por demanda.\n"
 
-            return service.bd.delete.delete_vaga_by_id(id)
-        }catch (Exception ignored) {}
+        view.send_message "Comandos delete:"
+        view.send_message "deletar <candidato / empresa / vaga / competencia>\n"
 
-        return false
-    }
-    boolean deletar_competencia(){
-        try{
-            int id = Integer.parseInt(tv.get_input("id:"))
+        view.send_message "Comandos update:"
+        view.send_message "update <candidato / empresa / vaga / competencia>"
+        view.send_message "empresa.curtir\n"
 
-            return service.bd.delete.delete_competencia_by_id(id)
-        }catch (Exception ignored) {}
-
-        return false
+        view.send_message "Outros:"
+        view.send_message "sair"
     }
 
-    boolean update_candidato(){
-        int id = -1
-        try{
-            id = Integer.parseInt(tv.get_input("id:"))
-        }catch (Exception ignored) {return false}
+    private void interpretar_input(String input){
+        inputs[input]?.call()
 
-        Map<String, String> ci = tv.candidato_view.capturar_dados()
-        Candidato c = am.assemble_candidato(ci)
-        c.id = id
-        return service.bd.update.update_candidato(c)
-    }
-    boolean update_vaga(){
-        int id = -1
-        try{
-            id = Integer.parseInt(tv.get_input("id:"))
-        }catch (Exception ignored) {return false}
 
-        Map<String, String> vi = tv.vaga_view.capturar_dados()
-        Vaga v = am.assemble_vaga(vi)
-        v.id = id
-        return service.bd.update.update_vaga(v)
-    }
-    boolean update_empresa(){
-        int id = -1
-        try{
-            id = Integer.parseInt(tv.get_input("id:"))
-        }catch (Exception ignored) {return false}
-
-        Map<String, String> vi = tv.empresa_view.capturar_dados()
-        Empresa m = am.assemble_empresa(vi)
-        m.id = id
-        return service.bd.update.update_empresa(m)
-    }
-    boolean update_competencia(){
-        int id = -1
-        try{
-            id = Integer.parseInt(tv.get_input("id:"))
-        }catch (Exception ignored) {return false}
-
-        String tecnologia = tv.get_input("tecnologia:")
-
-        Competencia c = new Competencia(tecnologia: tecnologia, id: id)
-        return service.bd.update.update_competencia(c)
-    }
-
-    void candidato_curtir(){
-        Map<String, String> ci = tv.curtida_view.capturar_dados()
-        Curtida c = am.assemble_curtida(ci)
-        service.bd.create.cadastrar_curtida(c)
-
-    }
-    void empresa_curtir(){
-        Map<String, String> ci = tv.curtida_view.capturar_dados()
-        Curtida c = am.assemble_curtida(ci)
-        service.bd.update.empresa_curtir(c)
-    }
-
-    int receber_input(String input){
-        switch (input){
-            case "?":
-                tv.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
-
-                tv.send_message "Comandos read:"
-                tv.send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
-
-                tv.send_message "Comandos create:"
-                tv.send_message "cadastrar <candidato / empresa / vaga>"
-                tv.send_message "candidato.curtir"
-                tv.send_message "nota: competencias são criadas automaticamente por demanda.\n"
-
-                tv.send_message "Comandos delete:"
-                tv.send_message "deletar <candidato / empresa / vaga / competencia>\n"
-
-                tv.send_message "Comandos update:"
-                tv.send_message "update <candidato / empresa / vaga / competencia>"
-                tv.send_message "empresa.curtir\n"
-
-                tv.send_message "Outros:"
-                tv.send_message "sair"
-                break
-
-            case "listar candidatos":
-                listar_candidatos()
-                break
-
-            case "listar empresas":
-                listar_empresas()
-                break
-
-            case "listar vagas":
-                listar_vagas()
-                break
-
-            case "listar competencias":
-                listar_competencias()
-                break
-
-            case "listar curtidas":
-                listar_curtidas()
-                break
-
-            case "cadastrar candidato":
-                cadastrar_candidato()
-                break
-
-            case "cadastrar empresa":
-                cadastrar_empresa()
-                break
-
-            case "cadastrar vaga":
-                cadastrar_vaga()
-                break
-
-            case "deletar candidato":
-                deletar_candidato()
-                break
-
-            case "deletar empresa":
-                deletar_empresa()
-                break
-
-            case "deletar vaga":
-                deletar_vaga()
-                break
-
-            case "deletar competencia":
-                deletar_competencia()
-                break
-
-            case "update candidato":
-                update_candidato()
-                break
-
-            case "update vaga":
-                update_vaga()
-                break
-
-            case "update empresa":
-                update_empresa()
-                break
-
-            case "update competencia":
-                update_competencia()
-                break
-
-            case "candidato.curtir":
-                candidato_curtir()
-                break
-
-            case "empresa.curtir":
-                empresa_curtir()
-                break
-
-            case "sair":
-                return 1
-        }
-        0
+//            case "deletar candidato":
+//                service.deletar_candidato()
+//                break
+//
+//            case "deletar empresa":
+//                service.deletar_empresa()
+//                break
+//
+//            case "deletar vaga":
+//                service.deletar_vaga()
+//                break
+//
+//            case "deletar competencia":
+//                service.deletar_competencia()
+//                break
+//
+//            case "update candidato":
+//                service.update_candidato()
+//                break
+//
+//            case "update vaga":
+//                service.update_vaga()
+//                break
+//
+//            case "update empresa":
+//                service.update_empresa()
+//                break
+//
+//            case "update competencia":
+//                service.update_competencia()
+//                break
+//
+//            case "candidato.curtir":
+//                service.candidato_curtir()
+//                break
+//
+//            case "empresa.curtir":
+//                service.empresa_curtir()
+//                break
+//
+//            case "sair":
+//                return 1
+//        }
+//        return 0
     }
 
     void init() {
-        am = new AssembleModel(service: service)
+        assemble_model = new AssembleModel(service: service)
 
-        tv.send_message "Digite ? para ajuda\n"
+        view.send_message "Digite ? para ajuda\n"
         while (true){
-            String res = tv.get_input "@>"
-            if (receber_input(res)) break
+            String resposta = view.get_input "@>"
+            interpretar_input(resposta)
         }
     }
 }
