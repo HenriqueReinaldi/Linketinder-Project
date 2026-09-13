@@ -131,7 +131,7 @@ class Controller {
 
     private Curtida get_curtida(){
         Map<String, String> curtida_info = view.curtida_view.capturar_dados()
-        retun assemble_model.assemble_curtida(curtida_info)
+        return assemble_model.assemble_curtida(curtida_info)
     }
     private void candidato_curtir(){
         Curtida c = get_curtida()

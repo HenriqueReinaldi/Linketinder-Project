@@ -1,6 +1,7 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
+import groovy.transform.Undefined.EXCEPTION
 import org.linketinder.controller.AssembleModel
 import org.linketinder.database.Banco
 import org.linketinder.model.objetos.Candidato
@@ -23,11 +24,12 @@ class Service {
         catch (Exception e){
             println "erro executando operação:"
             println "    " + e.message
-            e.printStackTrace()
             println ""
+            //e.printStackTrace()
         }
         return null
     }
+
 
     <GENERICO> List<GENERICO> get_lista_generico(String entidade){
         executar_com_seguranca {
@@ -57,16 +59,30 @@ class Service {
     void empresa_curtir(Curtida c){
         executar_com_seguranca {bd.update.empresa_curtir(c)}
     }
+    void candidato_curtir(Curtida c){
+        executar_com_seguranca {
+            bd.create.cadastrar_curtida(c)
+        }
+    }
+
+
     Empresa get_empresa_by_CNPJ(String CNPJ){
-        int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
-        if (emp_id == -1) return null
-        return bd.read.get_empresa_by_id(emp_id.toString())
+        executar_com_seguranca {
+            int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
+            if (emp_id == -1) return null
+            bd.read.get_empresa_by_id(emp_id)
+        }
     }
     Candidato get_candidato_by_id(String id){
-        bd.read.get_candidato_by_id(id)
+        executar_com_seguranca {
+            bd.read.get_candidato_by_id(Integer.parseInt(id))
+        }
+
     }
     Vaga get_vaga_by_id(String id){
-        bd.read.get_vaga_by_id(id)
+        executar_com_seguranca {
+            bd.read.get_vaga_by_id(Integer.parseInt(id))
+        }
     }
 
 }
