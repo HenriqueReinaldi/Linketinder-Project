@@ -62,7 +62,6 @@ class AssembleModel {
                     senha: empresa_info.senha,
                     endereco: endereco
             )
-
         }
         catch (Exception e) {
             e.printStackTrace(); return null
@@ -84,10 +83,7 @@ class AssembleModel {
                     estado: vaga_info.estado,
             )
 
-            int emp_id = service.bd.read.get_empresa_id_by_CNPJ(vaga_info.empresa_CNPJ)
-            if (emp_id == -1) return false
-
-            Empresa empresa = service.bd.read.get_empresa_by_id(emp_id.toString())
+            Empresa empresa = service.get_empresa_by_CNPJ(vaga_info.empresa_CNPJ)
 
             vaga = new Vaga(
                     competencias_desejadas: competencias,
@@ -98,21 +94,18 @@ class AssembleModel {
             )
         }
         catch (Exception e) {
-            e.printStackTrace(); return null
+            e.printStackTrace(); return vaga
         }
 
-        return  vaga
+        return vaga
     }
 
     Curtida assemble_curtida(Map<String, String> curtida_info){
         Curtida curtida = null
 
         try{
-            String candidato_id = curtida_info["candidato_id"]
-            String vaga_id = curtida_info["vaga_id"]
-
-            Candidato candidato = service.bd.read.get_candidato_by_id(candidato_id)
-            Vaga vaga = service.bd.read.get_vaga_by_id(vaga_id)
+            Candidato candidato = service.get_candidato_by_id(curtida_info["candidato_id"])
+            Vaga vaga = service.get_vaga_by_id(curtida_info["vaga_id"])
 
             curtida = new Curtida(
                 candidato: candidato,

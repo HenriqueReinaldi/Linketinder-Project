@@ -42,31 +42,12 @@ class Controller {
         "empresa.curtir":      this.&empresa_curtir
     ]
 
+
     private <Generico> void listar_generico(String tipo){
-        service."get_lista_${tipo}s"().each {Generico gen ->
+        service.get_lista_generico(tipo).each {Generico gen ->
             view."${tipo}_view".exibir(gen)
         }
     }
-    private <Generico> void cadastrar_generico(String tipo){
-        Map<String, String> generico_info = view."${tipo}_view".capturar_dados()
-        Generico c = assemble_model."assemble_${tipo}"(generico_info)
-        service."cadastrar_${tipo}"(c)
-    }
-    private void deletar_generico(String tipo){
-        try{
-            service."deletar_${tipo}" get_generic_id()
-        } catch(Exception ignored) {}
-    }
-    private <Generico> void update_generico(String tipo){
-        try{
-            Map<String, String> generico_info = view."tipo_${view}".capturar_dados()
-            Generico c = assemble_model."assemble_${tipo}"(generico_info)
-            c.id = get_generic_id()
-
-            service."update_${tipo}"(c)
-        } catch(Exception ignored) {}
-    }
-
     private void listar_candidatos(){
         listar_generico "candidato"
     }
@@ -83,6 +64,12 @@ class Controller {
         listar_generico "curtida"
     }
 
+
+    private <Generico> void cadastrar_generico(String tipo){
+        Map<String, String> generico_info = view."${tipo}_view".capturar_dados()
+        Generico obj = assemble_model."assemble_${tipo}"(generico_info)
+        service.cadastrar_generico(tipo, obj)
+    }
     private void cadastrar_candidato(){
         cadastrar_generico"candidato"
     }
@@ -93,6 +80,12 @@ class Controller {
         cadastrar_generico "vaga"
     }
 
+
+    private void deletar_generico(String tipo){
+        try{
+            service.deletar_generico(tipo, get_generic_id())
+        } catch(Exception ignored) {}
+    }
     private void deletar_candidato(){
         deletar_generico "candidato"
     }
@@ -106,6 +99,16 @@ class Controller {
         deletar_generico "competencia"
     }
 
+
+    private <Generico> void update_generico(String tipo){
+        try{
+            Map<String, String> generico_info = view."${tipo}_view".capturar_dados()
+            Generico obj = assemble_model."assemble_${tipo}"(generico_info)
+            obj.id = get_generic_id()
+
+            service.update_generico(tipo, obj)
+        } catch(Exception ignored) {}
+    }
     private void update_candidato(){
         update_generico "candidato"
     }
@@ -124,6 +127,7 @@ class Controller {
             service.update_competencia(c)
         } catch(Exception ignored) {}
     }
+
 
     private Curtida get_curtida(){
         Map<String, String> curtida_info = view.curtida_view.capturar_dados()

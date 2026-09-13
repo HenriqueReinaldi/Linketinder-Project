@@ -10,66 +10,63 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
 
+import java.sql.SQLException
+
 @TupleConstructor
 class Service {
     Banco bd
 
-    List<Candidato> get_lista_candidatos(){
-        bd.read.get_lista_candidatos()
-    }
-    List<Empresa> get_lista_empresas(){
-        bd.read.get_lista_empresas()
-    }
-    List<Vaga> get_lista_vagas(){
-        bd.read.get_lista_vagas()
-    }
-    List<Competencia> get_lista_competencias(){
-        bd.read.get_lista_competencias()
-    }
-    List<Curtida> get_lista_curtidas(){
-        bd.read.get_lista_curtidas()
+    static <GENERICO> GENERICO executar_com_seguranca(Closure<GENERICO> operacao){
+        try{
+            return operacao()
+        }
+        catch (Exception e){
+            println "erro executando operação:"
+            println "    " + e.message
+            e.printStackTrace()
+            println ""
+        }
+        return null
     }
 
-    void cadastrar_candidato(Candidato c){
-        bd.create.cadastrar_candidato(c)
-    }
-    void cadastrar_empresa(Empresa m){
-        bd.create.cadastrar_empresa(m);
-    }
-    void cadastrar_vaga(Vaga v){
-        bd.create.cadastrar_vaga(v)
+    <GENERICO> List<GENERICO> get_lista_generico(String entidade){
+        executar_com_seguranca {
+            bd.read."get_lista_${entidade}"()
+        }
     }
 
-    void deletar_candidato(int id){
-        bd.delete.delete_candidato_by_id(id)
-    }
-    void deletar_empresa(int id){
-        bd.delete.delete_empresa_by_id(id)
-    }
-    void deletar_vaga(int id){
-        bd.delete.delete_vaga_by_id(id)
-    }
-    void deletar_competencia(int id){
-        bd.delete.delete_competencia_by_id(id)
+    <GENERICO> void cadastrar_generico(String entidade, GENERICO entidade_objeto){
+        executar_com_seguranca {
+            bd.create."cadastrar_${entidade}_if_not_exists"(entidade_objeto)
+        }
     }
 
-    void update_candidato(Candidato c){
-        bd.update.update_candidato(c)
-    }
-    void update_vaga(Vaga v){
-        bd.update.update_vaga(v)
-    }
-    void update_empresa(Empresa m){
-        bd.update.update_empresa(m)
-    }
-    void update_competencia(Competencia c){
-        bd.update.update_competencia(c)
+    void deletar_generico(String entidade, int id_entidade){
+        executar_com_seguranca {
+            bd.delete."delete_${entidade}_by_id"(id_entidade)
+        }
     }
 
-    void candidato_curtir(Curtida c){
-        bd.create.cadastrar_curtida(c)
+    <GENERICO> void update_generico(String entidade, GENERICO entidade_objeto){
+        executar_com_seguranca {
+            bd.update."update_${entidade}"(entidade_objeto)
+        }
     }
+
+
     void empresa_curtir(Curtida c){
-        bd.update.empresa_curtir(c)
+        executar_com_seguranca {bd.update.empresa_curtir(c)}
     }
+    Empresa get_empresa_by_CNPJ(String CNPJ){
+        int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
+        if (emp_id == -1) return null
+        return bd.read.get_empresa_by_id(emp_id.toString())
+    }
+    Candidato get_candidato_by_id(String id){
+        bd.read.get_candidato_by_id(id)
+    }
+    Vaga get_vaga_by_id(String id){
+        bd.read.get_vaga_by_id(id)
+    }
+
 }

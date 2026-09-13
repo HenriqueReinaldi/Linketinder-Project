@@ -5,6 +5,7 @@ import org.linketinder.model.objetos.Endereco
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.SQLException
 
 import static java.sql.DriverManager.getConnection as getConnection
 import static java.sql.DriverManager.println
@@ -18,28 +19,20 @@ class Banco {
     Update update = new Update()
     Delete delete = new Delete()
 
-    static void conectar(){
-        Properties props = new Properties();
-            props.setProperty("user", "postgres");
-            props.setProperty("password", "postgres");
-            props.setProperty("ssl", "false");
-            String URL_SERV = "jdbc:postgresql://localhost:5432/${nome_banco}";
+    static void conectar() throws SQLException{
+        Properties props = new Properties()
+            props.setProperty("user", "postgres")
+            props.setProperty("password", "postgres")
+            props.setProperty("ssl", "false")
+            String URL_SERV = "jdbc:postgresql://localhost:5432/${nome_banco}"
             //extremamente seguro.
-        try{
-            conn = getConnection(URL_SERV, props);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.exit(-42);
-        }
+
+        conn = getConnection(URL_SERV, props)
     }
-    static void desconectar(){
-        if (conn != null){
-            try{
-                conn.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+    static void desconectar() throws SQLException{
+        if (conn == null) return
+
+        conn.close();
     }
 
     Banco(String nome_banco){

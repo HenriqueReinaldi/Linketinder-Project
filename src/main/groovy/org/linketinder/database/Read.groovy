@@ -143,7 +143,7 @@ class Read {
         return genericos;
     }
 
-    static List<Candidato> get_lista_candidatos(){
+    static List<Candidato> get_lista_candidato(){
         List<Candidato> candidatos = [];
         String busca = "select * from candidato";
 
@@ -186,7 +186,7 @@ class Read {
 
         return candidatos;
     }
-    static List<Empresa> get_lista_empresas(){
+    static List<Empresa> get_lista_empresa(){
         List<Empresa> empresas = [];
         String busca = "select * from empresa";
 
@@ -220,7 +220,7 @@ class Read {
 
         return empresas;
     }
-    static List<Vaga> get_lista_vagas(){
+    static List<Vaga> get_lista_vaga(){
         List<Vaga> vagas = [];
         String busca = """
             select 
@@ -262,7 +262,7 @@ class Read {
 
         return vagas;
     }
-    static List<Competencia> get_lista_competencias(){
+    static List<Competencia> get_lista_competencia(){
         List<Competencia> competencias = get_lista_tabela("select * from competencia", {}) { ResultSet res ->
             return new Competencia(
                 id: res.getInt("id"),
@@ -271,7 +271,7 @@ class Read {
         }
         return competencias
     }
-    static List<Curtida> get_lista_curtidas(){
+    static List<Curtida> get_lista_curtida(){
         List<Curtida> curtidas = get_lista_tabela("select * from curtida", {}) { ResultSet res ->
             return new Curtida(
                 candidato: get_candidato_by_id(res.getString("candidato_id")),

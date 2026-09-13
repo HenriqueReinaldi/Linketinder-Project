@@ -49,7 +49,6 @@ class Delete {
         return execute_delete_busca(busca, {PreparedStatement pst -> pst.setInt(1, id)})
     }
 
-
     static boolean deletar_entidade_competencias_by_entidadeid(String entidade, int id){
         String busca = """
             delete from ${entidade}_competencias where ${entidade}_id = ?
