@@ -38,7 +38,6 @@ class AssembleModel {
 
             return new Candidato(
                     CPF: candidato_info.CPF,
-                    idade: candidato_info.idade.toInteger(),
                     competencias: competencias,
                     nome: candidato_info.nome,
                     sobrenome: candidato_info.sobrenome,

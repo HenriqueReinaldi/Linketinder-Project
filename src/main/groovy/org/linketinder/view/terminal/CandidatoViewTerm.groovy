@@ -48,7 +48,6 @@ class CandidatoViewTerm implements Representavel<Candidato>, Cadastravel<Candida
             "CEP" : "CEP:",
             "descricao" : "Descrição:",
             "CPF" : "CPF:",
-            "idade": "idade:",
             "competencias": "Competencias:",
             "senha": "Senha:"
         ]
