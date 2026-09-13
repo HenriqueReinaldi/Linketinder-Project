@@ -2,47 +2,141 @@ package org.linketinder.controller
 
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
+import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.service.Service
 import org.linketinder.view.View
 
-@TupleConstructor
+@TupleConstructor()
 class Controller {
     View view
     Service service
     AssembleModel assemble_model
 
-    Map<String, Runnable> inputs = [
-            "?": this.&citar_ajuda,
-            "listar candidatos":   service.&listar_candidatos,
-            "listar empresas":     service.&listar_empresas,
-            "listar vagas":        service.&listar_vagas,
-            "listar competencias": service.&listar_competencias,
-            "listar curtidas":     service.&listar_curtidas,
+    private final Map<String, Runnable> inputs = [
+        "?": this.&citar_ajuda,
 
-            "cadastrar candidato": this.&cadastrar_candidato,
-            "cadastrar empresa":   this.&cadastrar_empresa,
-            "cadastrar vaga":      this.&cadastrar_vaga,
+        "listar candidatos":   this.&listar_candidatos,
+        "listar empresas":     this.&listar_empresas,
+        "listar vagas":        this.&listar_vagas,
+        "listar competencias": this.&listar_competencias,
+        "listar curtidas":     this.&listar_curtidas,
+
+        "cadastrar candidato": this.&cadastrar_candidato,
+        "cadastrar empresa":   this.&cadastrar_empresa,
+        "cadastrar vaga":      this.&cadastrar_vaga,
+
+        "deletar candidato":   this.&deletar_candidato,
+        "deletar empresa":     this.&deletar_empresa,
+        "deletar vaga":        this.&deletar_vaga,
+        "deletar competencia": this.&deletar_competencia,
+
+        "update candidato":    this.&update_candidato,
+        "update vaga":         this.&update_vaga,
+        "update empresa":      this.&update_empresa,
+        "update competencia":  this.&update_competencia,
+
+        "candidato.curtir":    this.&candidato_curtir,
+        "empresa.curtir":      this.&empresa_curtir
     ]
 
+    private <Generico> void listar_generico(String tipo){
+        service."get_lista_${tipo}s"().each {Generico gen ->
+            view."${tipo}_view".exibir(gen)
+        }
+    }
+    private <Generico> void cadastrar_generico(String tipo){
+        Map<String, String> generico_info = view."${tipo}_view".capturar_dados()
+        Generico c = assemble_model."assemble_${tipo}"(generico_info)
+        service."cadastrar_${tipo}"(c)
+    }
+    private void deletar_generico(String tipo){
+        try{
+            service."deletar_${tipo}" get_generic_id()
+        } catch(Exception ignored) {}
+    }
+    private <Generico> void update_generico(String tipo){
+        try{
+            Map<String, String> generico_info = view."tipo_${view}".capturar_dados()
+            Generico c = assemble_model."assemble_${tipo}"(generico_info)
+            c.id = get_generic_id()
+
+            service."update_${tipo}"(c)
+        } catch(Exception ignored) {}
+    }
+
+    private void listar_candidatos(){
+        listar_generico "candidato"
+    }
+    private void listar_empresas(){
+        listar_generico "empresa"
+    }
+    private void listar_vagas(){
+        listar_generico "vaga"
+    }
+    private void listar_competencias(){
+        listar_generico "competencia"
+    }
+    private void listar_curtidas(){
+        listar_generico "curtida"
+    }
+
     private void cadastrar_candidato(){
-        Map<String, String> candidato_info = view.candidato_view.capturar_dados()
-        Candidato c = assemble_info.assemble_candidato(candidato_info)
-        service.cadastrar_candidato(c)
+        cadastrar_generico"candidato"
     }
     private void cadastrar_empresa(){
-        Map<String, String> empresa_info = view.empresa_view.capturar_dados()
-        Empresa m = assemble_info.assemble_empresa(empresa_info)
-        service.cadastrar_empresa(m)
+        cadastrar_generico"empresa"
     }
     private void cadastrar_vaga(){
-        Map<String, String> vaga_info = view.vaga_view.capturar_dados()
-        Vaga v = assemble_info.assemble_vaga(vaga_info)
-        service.cadastrar_vaga(v)
+        cadastrar_generico "vaga"
     }
 
+    private void deletar_candidato(){
+        deletar_generico "candidato"
+    }
+    private void deletar_empresa(){
+        deletar_generico "empresa"
+    }
+    private void deletar_vaga(){
+        deletar_generico "vaga"
+    }
+    private void deletar_competencia(){
+        deletar_generico "competencia"
+    }
 
+    private void update_candidato(){
+        update_generico "candidato"
+    }
+    private void update_empresa(){
+        update_generico "empresa"
+    }
+    private void update_vaga(){
+        update_generico "vaga"
+    }
+    private void update_competencia(){
+        try{
+            Competencia c = new Competencia(
+                tecnologia: view.get_input("tecnologia:"),
+                id: get_generic_id()
+            )
+            service.update_competencia(c)
+        } catch(Exception ignored) {}
+    }
+
+    private Curtida get_curtida(){
+        Map<String, String> curtida_info = view.curtida_view.capturar_dados()
+        retun assemble_model.assemble_curtida(curtida_info)
+    }
+    private void candidato_curtir(){
+        Curtida c = get_curtida()
+        service.candidato_curtir(c)
+    }
+    private void empresa_curtir(){
+        Curtida c = get_curtida()
+        service.empresa_curtir(c)
+    }
 
     private void citar_ajuda(){
         view.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
@@ -66,63 +160,24 @@ class Controller {
         view.send_message "sair"
     }
 
-    private void interpretar_input(String input){
+    private boolean interpretar_input(String input){
+        if (input == "sair") return false
         inputs[input]?.call()
+        return true
+    }
 
-
-//            case "deletar candidato":
-//                service.deletar_candidato()
-//                break
-//
-//            case "deletar empresa":
-//                service.deletar_empresa()
-//                break
-//
-//            case "deletar vaga":
-//                service.deletar_vaga()
-//                break
-//
-//            case "deletar competencia":
-//                service.deletar_competencia()
-//                break
-//
-//            case "update candidato":
-//                service.update_candidato()
-//                break
-//
-//            case "update vaga":
-//                service.update_vaga()
-//                break
-//
-//            case "update empresa":
-//                service.update_empresa()
-//                break
-//
-//            case "update competencia":
-//                service.update_competencia()
-//                break
-//
-//            case "candidato.curtir":
-//                service.candidato_curtir()
-//                break
-//
-//            case "empresa.curtir":
-//                service.empresa_curtir()
-//                break
-//
-//            case "sair":
-//                return 1
-//        }
-//        return 0
+    private int get_generic_id() throws NumberFormatException{
+        Integer.parseInt(view.get_input("id:"))
     }
 
     void init() {
         assemble_model = new AssembleModel(service: service)
 
         view.send_message "Digite ? para ajuda\n"
+
         while (true){
             String resposta = view.get_input "@>"
-            interpretar_input(resposta)
+            if (! interpretar_input(resposta)) break
         }
     }
 }
