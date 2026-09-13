@@ -25,7 +25,6 @@ class Service {
             println "erro executando operação:"
             println "    " + e.message
             println ""
-            //e.printStackTrace()
         }
         return null
     }
