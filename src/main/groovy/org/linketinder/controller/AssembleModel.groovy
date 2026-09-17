@@ -7,12 +7,16 @@ import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
+import org.linketinder.service.CandidatoService
 import org.linketinder.service.EmpresaService
-import org.linketinder.service.Service
+
+import org.linketinder.service.VagaService
 
 @TupleConstructor
 class AssembleModel {
     EmpresaService empresa_service
+    CandidatoService candidato_service
+    VagaService vaga_service
 
     static <GENERICO> GENERICO assemble_com_seguranca(Closure<GENERICO> operacao){
         try{
@@ -48,6 +52,7 @@ class AssembleModel {
                     descricao: candidato_info.descricao,
                     senha: candidato_info.senha,
                     endereco: endereco,
+                    id: candidato_info.id?:-1
             )
         }
     }
@@ -66,7 +71,17 @@ class AssembleModel {
                     email: empresa_info.email,
                     descricao: empresa_info.descricao,
                     senha: empresa_info.senha,
-                    endereco: endereco
+                    endereco: endereco,
+                    id: empresa_info.id?:-1
+            )
+        }
+    }
+
+    static Competencia assemble_competencia(Map<String, String> competencia_info){
+        return assemble_com_seguranca {
+            return new Competencia(
+                tecnologia: competencia_info.tecnologia,
+                id: competencia_info.id?:-1
             )
         }
     }
@@ -90,19 +105,21 @@ class AssembleModel {
                     nome: vaga_info.nome,
                     descricao: vaga_info.descricao,
                     endereco: endereco,
-                    empresa: empresa
+                    empresa: empresa,
+                    id: vaga_info.id?:-1
             )
         }
     }
 
     Curtida assemble_curtida(Map<String, String> curtida_info){
         return assemble_com_seguranca{
-            Candidato candidato = service.get_candidato_by_id(curtida_info["candidato_id"])
-            Vaga vaga = service.get_vaga_by_id(curtida_info["vaga_id"])
+            Candidato candidato = candidato_service.get_by_id(curtida_info["candidato_id"])
+            Vaga vaga = vaga_service.get_by_id(curtida_info["vaga_id"])
 
             return new Curtida(
                 candidato: candidato,
                 vaga: vaga,
+                id: curtida_info.id?:-1
             )
         }
     }

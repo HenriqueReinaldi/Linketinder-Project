@@ -30,7 +30,7 @@ class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
     }
 
     @Override
-    Map<String, String> capturar_dados() {
+    Map<String, String> capturar_dados(boolean com_id) {
         Scanner scan = new Scanner(System.in);
 
         Closure pergunta = { String pergunta ->
@@ -47,6 +47,8 @@ class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
             "competencias_desejadas": "Competencias:",
             "empresa_CNPJ" : "CNPJ da empresa:"
         ]
+
+        if (com_id) campos["id"] = "ID:"
 
         campos.each {e ->
             campos[e.key] = pergunta(e.value)

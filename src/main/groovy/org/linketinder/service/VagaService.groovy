@@ -25,4 +25,26 @@ class VagaService {
         }
         catch (Exception ignored) {}
     }
+
+    void deletar(int id){
+        try{
+            bd.delete.delete_vaga_by_id(id)
+        }
+        catch (Exception ignored) {}
+    }
+
+    void update(Vaga v){
+        try{
+            bd.update.update_vaga(v)
+        }
+        catch (Exception ignored) {}
+    }
+
+    Vaga get_by_id(String id){
+        try{
+            bd.read.get_vaga_by_id(Integer.parseInt(id))
+        } catch (Exception ignored){
+            return null
+        }
+    }
 }

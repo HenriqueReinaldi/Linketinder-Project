@@ -10,7 +10,7 @@ import org.linketinder.service.CandidatoService
 import org.linketinder.service.CompetenciaService
 import org.linketinder.service.CurtidaService
 import org.linketinder.service.EmpresaService
-import org.linketinder.service.Service
+
 import org.linketinder.service.VagaService
 
 @TupleConstructor
@@ -22,7 +22,6 @@ class Controller {
     CompetenciaService competencia_service
     CurtidaService curtida_service
     VagaService vaga_service
-
 
 
     List<Candidato> get_lista_candidato(){
@@ -56,6 +55,45 @@ class Controller {
     }
 
 
+    void deletar_candidato(int id){
+        candidato_service.deletar(id)
+    }
+    void deletar_empresa(int id){
+        empresa_service.deletar(id)
+    }
+    void deletar_vaga(int id){
+        vaga_service.deletar(id)
+    }
+    void deletar_competencia(int id){
+        competencia_service.deletar(id)
+    }
 
 
+    void update_candidato(ModelData modelo){
+        Candidato c = assemble_model.assemble_candidato(modelo.data)
+        candidato_service.update(c)
+    }
+    void update_empresa(ModelData modelo){
+        Empresa m = assemble_model.assemble_empresa(modelo.data)
+        empresa_service.update(m)
+    }
+    void update_vaga(ModelData modelo){
+        Vaga v = assemble_model.assemble_vaga(modelo.data)
+        vaga_service.update(v)
+    }
+    void update_competencia(ModelData modelo){
+        Competencia c = assemble_model.assemble_competencia(modelo.data)
+        competencia_service.update(v)
+    }
+
+
+    void candidato_curtir(ModelData modelo){
+        Curtida c = assemble_model.assemble_curtida(modelo.data)
+        candidato_service.curtir(c)
+
+    }
+    void empresa_curtir(ModelData modelo){
+        Curtida c = assemble_model.assemble_curtida(modelo.data)
+        empresa_service.curtir(c)
+    }
 }

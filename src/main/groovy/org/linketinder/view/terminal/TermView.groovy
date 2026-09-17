@@ -20,7 +20,6 @@ class TermView extends View {
     Controller controller
     PrefTree comandos = new PrefTree()
 
-
     void listar(String entidade){
         switch (entidade){
             case "candidatos":
@@ -65,20 +64,61 @@ class TermView extends View {
         }
     }
 
-    static void deletar(String entidade){
+    void deletar(String entidade){
+        int id = get_generic_id()
         switch (entidade){
             case "candidato":
+                controller.deletar_candidato(id)
+                break
+            case "empresa":
+                controller.deletar_empresa(id)
+                break
+            case "vaga":
+                controller.deletar_vaga(id)
+                break
+            case "competencia":
+                controller.deletar_competencia(id)
                 break
         }
     }
 
-    static void update(String entidade){
+    void update(String entidade){
+        ModelData md = new ModelData()
+
         switch (entidade){
             case "candidato":
+                md.data = candidato_view.capturar_dados(true)
+                controller.update_candidato(md)
+                break
+            case "empresa":
+                md.data = empresa_view.capturar_dados(true)
+                controller.update_empresa(md)
+                break
+            case "vaga":
+                md.data = vaga_view.capturar_dados(true)
+                controller.update_vaga(md)
+                break
+            case "competencia":
+                md.data = competencia_view.capturar_dados(true)
+                controller.update_competencia(md)
                 break
         }
     }
 
+    void curtir_pela_perspectiva(String entidade){
+        ModelData md = new ModelData()
+
+        switch (entidade){
+            case "candidato":
+                md.data = curtida_view.capturar_dados()
+                controller.candidato_curtir(md)
+                break
+            case "empresa":
+                md.data = curtida_view.capturar_dados()
+                controller.empresa_curtir(md)
+                break
+        }
+    }
 
     TermView(Controller controller){
         this.controller = controller
@@ -89,8 +129,8 @@ class TermView extends View {
         comandos.inserir("deletar ", this.&deletar)
         comandos.inserir("update ", this.&update)
 
-        comandos.inserir("candidato.", {})
-        comandos.inserir("empresa.", {})
+        comandos.inserir("curtir como ", this.&curtir_pela_perspectiva)
+        comandos.inserir("curtir como ", this.&curtir_pela_perspectiva)
 
         send_message "Digite ? para ajuda\n"
     }
@@ -101,7 +141,9 @@ class TermView extends View {
         if (input == "sair") return false
 
         Closure executor = comandos.buscar(input)
-        executor(input.tokenize()[1] ?: "")
+        List<String> args = input.tokenize()
+
+        executor(args[args.size()-1] ?: "")
 
         return true
     }
@@ -126,7 +168,7 @@ class TermView extends View {
 
         send_message "Comandos create:"
         send_message "cadastrar <candidato / empresa / vaga>"
-        send_message "candidato.curtir"
+        send_message "curtir como candidato"
         send_message "nota: competencias são criadas automaticassemble_modelente por demanda.\n"
 
         send_message "Comandos delete:"
@@ -134,7 +176,7 @@ class TermView extends View {
 
         send_message "Comandos update:"
         send_message "update <candidato / empresa / vaga / competencia>"
-        send_message "empresa.curtir\n"
+        send_message "curtir como empresa\n"
 
         send_message "Outros:"
         send_message "sair"

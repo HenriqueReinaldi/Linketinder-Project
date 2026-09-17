@@ -24,7 +24,7 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
     }
 
     @Override
-    Map<String, String> capturar_dados() {
+    Map<String, String> capturar_dados(boolean com_id) {
         Scanner scan = new Scanner(System.in);
 
         Closure pergunta = { String pergunta ->
@@ -42,6 +42,8 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
             "pais": "pais:",
             "senha": "Senha:"
         ]
+
+        if (com_id) campos["id"] = "ID:"
 
         campos.each {e ->
             campos[e.key] = pergunta(e.value)

@@ -6,7 +6,7 @@ import org.linketinder.view.traits.Representavel
 
 class CurtidaViewTerm implements Representavel<Curtida>, Cadastravel<Curtida> {
     @Override
-    Map<String, String> capturar_dados() {
+    Map<String, String> capturar_dados(boolean com_id) {
         Scanner scan = new Scanner(System.in);
 
         Closure pergunta = { String pergunta ->
@@ -18,6 +18,8 @@ class CurtidaViewTerm implements Representavel<Curtida>, Cadastravel<Curtida> {
             "candidato_id" : "ID do Candidato:",
             "vaga_id" : "ID da da Vaga:"
         ]
+
+        if (com_id) campos["id"] = "ID:"
 
         campos.each {e ->
             campos[e.key] = pergunta(e.value)
