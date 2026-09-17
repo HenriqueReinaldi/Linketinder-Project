@@ -4,7 +4,12 @@ package org.linketinder
 import org.linketinder.controller.AssembleModel
 import org.linketinder.controller.Controller
 import org.linketinder.DAO.Banco
+import org.linketinder.service.CandidatoService
+import org.linketinder.service.CompetenciaService
+import org.linketinder.service.CurtidaService
+import org.linketinder.service.EmpresaService
 import org.linketinder.service.Service
+import org.linketinder.service.VagaService
 import org.linketinder.view.PrefTree
 import org.linketinder.view.terminal.TermView
 
@@ -22,31 +27,23 @@ static <GENERICO> GENERICO exit_on_exception(String msg, Closure<GENERICO> codig
 }
 
 static void main(String[] args) {
-//    Banco bd;
-//    bd = exit_on_exception("erro conectando com banco!") {
-//        new Banco("linketinder")
-//    }
-//
-//    Service service = new Service(bd)
-//    AssembleModel assemble_model = new AssembleModel(service: service)
-//    Controller controller = new Controller(service: service, assemble_model: assemble_model)
-//    TermView view = new TermView(controller: controller)
-//
-//
-//    view.send_message "Digite ? para ajuda\n"
-//    while (view.run()) {}
-//
-//    exit_on_exception("erro desconectando com banco!") {
-//        bd.desconectar()
-//    }
+    Banco bd;
+    bd = exit_on_exception("erro conectando com banco!") { new Banco("linketinder") }
 
 
-    PrefTree pt = new PrefTree()
 
-    pt.inserir("carro", {println "carro"})
-    pt.inserir("carta", {println "carta"})
+    CandidatoService candidato_service = new CandidatoService(bd)
+    EmpresaService empresa_service = new EmpresaService(bd)
+    CompetenciaService competencia_service = new CompetenciaService(bd)
+    CurtidaService curtida_service = new CurtidaService(bd)
+    VagaService vaga_service = new VagaService(bd)
 
-    pt.get_closure("carro")()
-    pt.get_closure("laura")()
-    pt.get_closure("carta")()
+    AssembleModel assemble_model = new AssembleModel(empresa_service)
+
+    Controller controller = new Controller(assemble_model, candidato_service, empresa_service, competencia_service, curtida_service, vaga_service)
+    TermView view = new TermView(controller)
+
+    while (view.run()) {}
+
+    exit_on_exception("erro desconectando com banco!") { bd.desconectar() }
 }

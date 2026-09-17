@@ -6,7 +6,7 @@ class PrefTree {
     PrefTree(){
         raiz = new PrefNode()
         raiz.letra = '.'
-        raiz.valor = {println "raiz!"}
+        raiz.valor = {}
         raiz.filhos = []
     }
 
@@ -28,7 +28,7 @@ class PrefTree {
 
             PrefNode novo = new PrefNode()
             novo.letra = letra
-            novo.valor = {println "?"}
+            novo.valor = {}
             novo.filhos = []
             nivel_atual.filhos << novo
             nivel_atual = novo
@@ -36,7 +36,7 @@ class PrefTree {
         nivel_atual.valor = acao
     }
 
-    Closure get_closure(String busca){
+    Closure buscar(String busca){
         PrefNode nivel_atual = raiz
 
         for (int i = 0; i < busca.length(); i++){
@@ -52,13 +52,9 @@ class PrefTree {
             }
             if (proximo) continue
 
-            return {println "nao encontrado no trie"}
+            return nivel_atual.valor
         }
 
         return nivel_atual.valor
-    }
-
-    void funcao(){
-        raiz.valor()
     }
 }

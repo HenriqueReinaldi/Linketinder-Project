@@ -59,13 +59,7 @@ class Service {
     }
 
 
-    Empresa get_empresa_by_CNPJ(String CNPJ){
-        executar_com_seguranca {
-            int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
-            if (emp_id == -1) return null
-            bd.read.get_empresa_by_id(emp_id)
-        }
-    }
+
     Candidato get_candidato_by_id(String id){
         executar_com_seguranca {
             bd.read.get_candidato_by_id(Integer.parseInt(id))

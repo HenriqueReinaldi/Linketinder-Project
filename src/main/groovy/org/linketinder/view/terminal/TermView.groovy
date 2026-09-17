@@ -1,19 +1,114 @@
 package org.linketinder.view.terminal
 
 import org.linketinder.controller.Controller
+import org.linketinder.controller.ModelData
+import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
+import org.linketinder.model.objetos.Empresa
+import org.linketinder.model.objetos.Vaga
+import org.linketinder.view.PrefTree
 import org.linketinder.view.View
 
 class TermView extends View {
     static final Scanner scan = new Scanner(System.in)
-
     final CandidatoViewTerm candidato_view = new CandidatoViewTerm()
     final EmpresaViewTerm empresa_view = new EmpresaViewTerm()
     final VagaViewTerm vaga_view = new VagaViewTerm()
     final CompetenciaViewTerm competencia_view = new CompetenciaViewTerm()
     final CurtidaViewTerm curtida_view = new CurtidaViewTerm()
+    Controller controller
+    PrefTree comandos = new PrefTree()
 
+
+    void listar(String entidade){
+        switch (entidade){
+            case "candidatos":
+                List<Candidato> candidatos = controller.get_lista_candidato()
+                candidatos.forEach {Candidato c -> candidato_view.exibir(c)}
+                break
+            case "empresas":
+                List<Empresa> empresas = controller.get_lista_empresa()
+                empresas.forEach {Empresa m -> empresa_view.exibir(m)}
+                break
+            case "vagas":
+                List<Vaga> vagas = controller.get_lista_vaga()
+                vagas.forEach {Vaga v -> vaga_view.exibir(v)}
+                break
+            case "curtidas":
+                List<Curtida> curtidas = controller.get_lista_curtida()
+                curtidas.forEach {Curtida c -> curtida_view.exibir(c)}
+                break
+            case "competencias":
+                List<Competencia> competencias = controller.get_lista_competencia()
+                competencias.forEach {Competencia c -> competencia_view.exibir(c)}
+                break
+        }
+    }
+
+    void cadastrar(String entidade){
+        ModelData md = new ModelData()
+
+        switch (entidade){
+            case "candidato":
+                md.data = candidato_view.capturar_dados()
+                controller.cadastrar_candidato(md)
+                break
+            case "empresa":
+                md.data = empresa_view.capturar_dados()
+                controller.cadastrar_empresa(md)
+                break
+            case "vaga":
+                md.data = vaga_view.capturar_dados()
+                controller.cadastrar_vaga(md)
+                break
+        }
+    }
+
+    static void deletar(String entidade){
+        switch (entidade){
+            case "candidato":
+                break
+        }
+    }
+
+    static void update(String entidade){
+        switch (entidade){
+            case "candidato":
+                break
+        }
+    }
+
+
+    TermView(Controller controller){
+        this.controller = controller
+
+        comandos.inserir("?", {citar_ajuda()})
+        comandos.inserir("listar ", this.&listar)
+        comandos.inserir("cadastrar ", this.&cadastrar)
+        comandos.inserir("deletar ", this.&deletar)
+        comandos.inserir("update ", this.&update)
+
+        comandos.inserir("candidato.", {})
+        comandos.inserir("empresa.", {})
+
+        send_message "Digite ? para ajuda\n"
+    }
+
+    boolean run() {
+        String input = get_input "@>"
+
+        if (input == "sair") return false
+
+        Closure executor = comandos.buscar(input)
+        executor(input.tokenize()[1] ?: "")
+
+        return true
+    }
+
+    private int get_generic_id() throws NumberFormatException{
+        Integer.parseInt(get_input("id:"))
+    }
     void send_message(String message){
         println message
     }
@@ -22,37 +117,6 @@ class TermView extends View {
         String input = scan.nextLine()
         input
     }
-
-    Controller controller
-
-    private final Map<String, Closure> inputs = [
-        "?": this.&citar_ajuda,
-
-        "listar candidatos":   this.&listar_candidatos,
-        "listar empresas":     this.&listar_empresas,
-        "listar vagas":        this.&listar_vagas,
-        "listar competencias": this.&listar_competencias,
-        "listar curtidas":     this.&listar_curtidas,
-
-        "cadastrar candidato": this.&cadastrar_candidato,
-        "cadastrar empresa":   this.&cadastrar_empresa,
-        "cadastrar vaga":      this.&cadastrar_vaga,
-
-        "deletar candidato":   this.&deletar_candidato,
-        "deletar empresa":     this.&deletar_empresa,
-        "deletar vaga":        this.&deletar_vaga,
-        "deletar competencia": this.&deletar_competencia,
-
-        "update candidato":    this.&update_candidato,
-        "update vaga":         this.&update_vaga,
-        "update empresa":      this.&update_empresa,
-        "update competencia":  this.&update_competencia,
-
-        "candidato.curtir":    this.&candidato_curtir,
-        "empresa.curtir":      this.&empresa_curtir
-    ]
-
-
 
     private void citar_ajuda(){
         send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
@@ -75,25 +139,4 @@ class TermView extends View {
         send_message "Outros:"
         send_message "sair"
     }
-
-
-
-    private boolean interpretar_input(String input){
-        if (input == "sair") return false
-        inputs[input]?.call()
-        return true
-    }
-
-
-
-    boolean run() {
-        String resposta = get_input "@>"
-        return interpretar_input(resposta)
-    }
-
-
-    private int get_generic_id() throws NumberFormatException{
-        Integer.parseInt(get_input("id:"))
-    }
-
 }

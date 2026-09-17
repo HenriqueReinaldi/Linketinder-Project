@@ -1,23 +1,25 @@
 package org.linketinder.controller
 
-
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
+import org.linketinder.service.EmpresaService
 import org.linketinder.service.Service
 
+@TupleConstructor
 class AssembleModel {
-    Service service
+    EmpresaService empresa_service
 
     static <GENERICO> GENERICO assemble_com_seguranca(Closure<GENERICO> operacao){
         try{
             return operacao()
         }
         catch (Exception e){
-            println "erro executando operação:"
+            println "erro criando o modelo:"
             println "    " + e.message
             println ""
         }
@@ -81,7 +83,7 @@ class AssembleModel {
                     estado: vaga_info.estado,
             )
 
-            Empresa empresa = service.get_empresa_by_CNPJ(vaga_info.empresa_CNPJ)
+            Empresa empresa = empresa_service.get_by_CNPJ(vaga_info.empresa_CNPJ)
 
             return new Vaga(
                     competencias_desejadas: competencias,
