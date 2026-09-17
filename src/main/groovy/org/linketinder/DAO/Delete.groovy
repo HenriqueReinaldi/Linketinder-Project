@@ -1,4 +1,4 @@
-package org.linketinder.database
+package org.linketinder.DAO
 
 import java.sql.Connection
 import java.sql.PreparedStatement

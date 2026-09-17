@@ -1,17 +1,11 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import groovy.transform.Undefined.EXCEPTION
-import org.linketinder.controller.AssembleModel
-import org.linketinder.database.Banco
+import org.linketinder.DAO.Banco
 import org.linketinder.model.objetos.Candidato
-import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
-import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
-
-import java.sql.SQLException
 
 @TupleConstructor
 class Service {

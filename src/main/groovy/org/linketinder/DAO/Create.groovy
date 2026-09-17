@@ -1,4 +1,4 @@
-package org.linketinder.database;
+package org.linketinder.DAO;
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.time.LocalDate;
 
 class Create {
     static Connection conn

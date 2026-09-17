@@ -8,3 +8,5 @@ mudancas:
 - Funcoes read que recebiam como parametro ID(string) agora recebem ID(int)
 - mudancas de nomes globalmente para melhorar leitura do codigo
 - refatoramento geral dos testes unitarios
+
+- revisao MVSC

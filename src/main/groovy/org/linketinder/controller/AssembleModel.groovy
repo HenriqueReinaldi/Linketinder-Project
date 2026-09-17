@@ -1,6 +1,6 @@
 package org.linketinder.controller
 
-import org.linketinder.database.Banco
+
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida

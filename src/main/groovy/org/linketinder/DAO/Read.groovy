@@ -1,4 +1,4 @@
-package org.linketinder.database
+package org.linketinder.DAO
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
@@ -93,6 +93,7 @@ class Read {
         }
         return empresas;
     }
+
     static List<Vaga> get_lista_vaga() throws SQLException{
         List<Vaga> vagas = get_lista_tabela("""
             select 

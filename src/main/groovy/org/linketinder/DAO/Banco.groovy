@@ -1,14 +1,10 @@
-package org.linketinder.database
+package org.linketinder.DAO
 
-import org.linketinder.model.objetos.Endereco
 
 import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.SQLException
 
 import static java.sql.DriverManager.getConnection as getConnection
-import static java.sql.DriverManager.println
 
 class Banco {
     static String nome_banco

@@ -1,5 +1,5 @@
 package org.linketinder.view.traits
 
-trait Cadastravel<Generic> {
+trait Cadastravel<GENERICO> {
     abstract Map<String, String> capturar_dados();
 }

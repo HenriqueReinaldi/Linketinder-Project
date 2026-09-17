@@ -1,4 +1,4 @@
-package org.linketinder.database
+package org.linketinder.DAO
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
