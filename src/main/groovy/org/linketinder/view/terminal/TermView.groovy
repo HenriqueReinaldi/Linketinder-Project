@@ -9,14 +9,21 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.view.PrefTree
 import org.linketinder.view.View
+import org.linketinder.view.shared.CandidatoView
+import org.linketinder.view.shared.CompetenciaView
+import org.linketinder.view.shared.CurtidaView
+import org.linketinder.view.shared.EmpresaView
+import org.linketinder.view.shared.VagaView
 
 class TermView extends View {
     static final Scanner scan = new Scanner(System.in)
-    final CandidatoViewTerm candidato_view = new CandidatoViewTerm()
-    final EmpresaViewTerm empresa_view = new EmpresaViewTerm()
-    final VagaViewTerm vaga_view = new VagaViewTerm()
-    final CompetenciaViewTerm competencia_view = new CompetenciaViewTerm()
-    final CurtidaViewTerm curtida_view = new CurtidaViewTerm()
+
+    final CandidatoView candidato_view = new CandidatoView(this)
+    final EmpresaView empresa_view = new EmpresaView(this)
+    final VagaView vaga_view = new VagaView(this)
+    final CompetenciaView competencia_view = new CompetenciaView(this)
+    final CurtidaView curtida_view = new CurtidaView(this)
+
     Controller controller
     PrefTree comandos = new PrefTree()
 
@@ -151,6 +158,7 @@ class TermView extends View {
     private int get_generic_id() throws NumberFormatException{
         Integer.parseInt(get_input("id:"))
     }
+
     void send_message(String message){
         println message
     }

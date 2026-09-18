@@ -1,10 +1,15 @@
-package org.linketinder.view.terminal
+package org.linketinder.view.shared
 
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.view.View
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
-class CompetenciaViewTerm implements Representavel<Competencia>, Cadastravel{
+@TupleConstructor
+class CompetenciaView implements Representavel<Competencia>, Cadastravel{
+    View view
+
     @Override
     String representacao(Competencia objeto) {
         "Competencia: ${objeto.tecnologia} - id: ${objeto.id}"
@@ -12,15 +17,13 @@ class CompetenciaViewTerm implements Representavel<Competencia>, Cadastravel{
 
     @Override
     void exibir(Competencia objeto) {
-        println representacao(objeto)
+        view.send_message(representacao objeto)
     }
 
     @Override
     Map<String, String> capturar_dados(boolean com_id) {
-        Scanner scan = new Scanner(System.in);
         Closure pergunta = { String pergunta ->
-            print pergunta
-            scan.nextLine()
+            view.get_input(pergunta)
         }
 
         Map<String, String> campos = [
@@ -33,6 +36,6 @@ class CompetenciaViewTerm implements Representavel<Competencia>, Cadastravel{
             campos[e.key] = pergunta(e.value)
         }
 
-        return campos;
+        return campos
     }
 }
