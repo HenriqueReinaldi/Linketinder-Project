@@ -150,7 +150,12 @@ class TermView extends View {
         Closure executor = comandos.buscar(input)
         List<String> args = input.tokenize()
 
-        executor(args[args.size()-1] ?: "")
+        if (args.size()-1 < 0){
+            executor("")
+        }
+        else{
+            executor(args[args.size()-1] ?: "")
+        }
 
         return true
     }

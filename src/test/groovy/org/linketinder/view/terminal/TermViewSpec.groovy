@@ -83,7 +83,7 @@ class TermViewSpec extends Specification {
         "competencia" | "update_competencia"
     }
 
-    def "curtir pela perspectiva chama o controller certo"(){
+    def "curtir pela perspectiva chama o controller certo"() {
         given:
         TermView termView = Spy(TermView, constructorArgs: [controller])
         termView.get_input(*_) >> "input"
@@ -95,9 +95,24 @@ class TermViewSpec extends Specification {
         1 * controller."$metodo"(_ as ModelData)
 
         where:
-        input         | metodo
-        "candidato"   | "candidato_curtir"
-        "empresa"     | "empresa_curtir"
+        input       | metodo
+        "candidato" | "candidato_curtir"
+        "empresa"   | "empresa_curtir"
     }
 
+    def "funcao run retorna falso quando input for sair"() {
+        given:
+        TermView termView = Spy(TermView, constructorArgs: [controller])
+        termView.get_input(*_) >> saida
+
+        expect:
+        termView.run() == esperado
+
+        where:
+        saida                | esperado
+        "comando"            | true
+        "sair"               | false
+        "outros fdsaf asd"   | true
+        " "                  | true
+    }
 }

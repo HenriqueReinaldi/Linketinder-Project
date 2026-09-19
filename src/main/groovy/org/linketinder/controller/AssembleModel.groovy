@@ -30,7 +30,7 @@ class AssembleModel {
         return null
     }
 
-    static Candidato assemble_candidato(Map<String, String> candidato_info){
+    Candidato assemble_candidato(Map<String, String> candidato_info){
         return assemble_com_seguranca {
             List<Competencia> competencias = candidato_info["competencias"]
                     .tokenize()
@@ -52,12 +52,12 @@ class AssembleModel {
                     descricao: candidato_info.descricao,
                     senha: candidato_info.senha,
                     endereco: endereco,
-                    id: candidato_info.id?:-1
+                    id: candidato_info.id ? candidato_info.id.toInteger() : -1
             )
         }
     }
 
-    static Empresa assemble_empresa(Map<String, String> empresa_info){
+    Empresa assemble_empresa(Map<String, String> empresa_info){
         return assemble_com_seguranca {
             Endereco endereco = new Endereco(
                     CEP: empresa_info.CEP,
@@ -72,16 +72,16 @@ class AssembleModel {
                     descricao: empresa_info.descricao,
                     senha: empresa_info.senha,
                     endereco: endereco,
-                    id: empresa_info.id?:-1
+                    id: empresa_info.id ? empresa_info.id.toInteger() : -1
             )
         }
     }
 
-    static Competencia assemble_competencia(Map<String, String> competencia_info){
+    Competencia assemble_competencia(Map<String, String> competencia_info){
         return assemble_com_seguranca {
             return new Competencia(
                 tecnologia: competencia_info.tecnologia,
-                id: competencia_info.id?:-1
+                id: competencia_info.id ? competencia_info.id.toInteger() : -1
             )
         }
     }
@@ -106,7 +106,7 @@ class AssembleModel {
                     descricao: vaga_info.descricao,
                     endereco: endereco,
                     empresa: empresa,
-                    id: vaga_info.id?:-1
+                    id: vaga_info.id ? vaga_info.id.toInteger() : -1
             )
         }
     }
@@ -119,7 +119,7 @@ class AssembleModel {
             return new Curtida(
                 candidato: candidato,
                 vaga: vaga,
-                id: curtida_info.id?:-1
+                id: curtida_info.id ? curtida_info.id.toInteger() : -1
             )
         }
     }

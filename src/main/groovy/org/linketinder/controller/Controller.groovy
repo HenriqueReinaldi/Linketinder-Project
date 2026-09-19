@@ -83,7 +83,7 @@ class Controller {
     }
     void update_competencia(ModelData modelo){
         Competencia c = assemble_model.assemble_competencia(modelo.data)
-        competencia_service.update(v)
+        competencia_service.update(c)
     }
 
 
