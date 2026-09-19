@@ -24,7 +24,7 @@ class AssembleModel {
         }
         catch (Exception e){
             println "erro criando o modelo:"
-            println "    " + e.message
+            println "    " + e.printStackTrace()
             println ""
         }
         return null
