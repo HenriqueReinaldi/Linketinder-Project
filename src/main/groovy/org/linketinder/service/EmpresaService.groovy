@@ -27,11 +27,12 @@ class EmpresaService {
     }
 
     Empresa get_by_CNPJ(String CNPJ){
-        executar_com_seguranca {
+        try {
             int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
             if (emp_id == -1) return null
             bd.read.get_empresa_by_id(emp_id)
         }
+        catch (Exception ignored) { return null }
     }
 
     void deletar(int id){
