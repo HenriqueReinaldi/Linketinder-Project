@@ -85,7 +85,6 @@ function update_localstorage(): void {
     localStorage.setItem("lista_candidatos", JSON.stringify(lista_candidatos));
     localStorage.setItem("lista_empresas", JSON.stringify(lista_empresas));
     localStorage.setItem("lista_vagas", JSON.stringify(lista_vagas));
-
 }
 function fetch_localstorage(): void {
     let lista_candidatos_string = localStorage.getItem("lista_candidatos");
