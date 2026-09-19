@@ -1,10 +1,15 @@
-package org.linketinder.view.terminal
+package org.linketinder.view.shared
 
+import groovy.transform.TupleConstructor
+import org.codehaus.groovy.ast.expr.TupleExpression
 import org.linketinder.model.objetos.Vaga
+import org.linketinder.view.View
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
-class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
+@TupleConstructor
+class VagaView implements Representavel<Vaga>, Cadastravel<Vaga>{
+    View view
 
     @Override
     String representacao(Vaga objeto) {
@@ -26,16 +31,13 @@ class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
 
     @Override
     void exibir(Vaga objeto) {
-        println representacao(objeto)
+        view.send_message(representacao objeto)
     }
 
     @Override
-    Map<String, String> capturar_dados() {
-        Scanner scan = new Scanner(System.in);
-
+    Map<String, String> capturar_dados(boolean com_id) {
         Closure pergunta = { String pergunta ->
-            print pergunta
-            scan.nextLine()
+            view.get_input(pergunta)
         }
 
         Map<String, String> campos = [
@@ -47,6 +49,8 @@ class VagaViewTerm implements Representavel<Vaga>, Cadastravel<Vaga>{
             "competencias_desejadas": "Competencias:",
             "empresa_CNPJ" : "CNPJ da empresa:"
         ]
+
+        if (com_id) campos["id"] = "ID:"
 
         campos.each {e ->
             campos[e.key] = pergunta(e.value)

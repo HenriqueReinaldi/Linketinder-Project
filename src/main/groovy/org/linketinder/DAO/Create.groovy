@@ -1,4 +1,4 @@
-package org.linketinder.database;
+package org.linketinder.DAO;
 
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
@@ -10,46 +10,39 @@ import org.linketinder.model.objetos.Vaga;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet
-import java.time.LocalDate;
+import java.sql.SQLException
 
 class Create {
     static Connection conn
 
-    //funcao "generica" que toma como parametros uma busca, e uma closure para inserir na busca os valores necessarios.
-    //retorna o valor "id" da busca
-    static int return_id_from_busca(String busca, Closure busca_args){
+    static int return_id_from_busca(String busca, Closure busca_args) throws SQLException{
+        //retorna o campo "id" resultante da busca SQL
         String id = ""
-        try{
-            PreparedStatement pst = conn.prepareStatement( busca, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY )
-            busca_args(pst)
-            ResultSet res = pst.executeQuery()
+        PreparedStatement pst = conn.prepareStatement( busca, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY )
+        busca_args(pst)
+        ResultSet res = pst.executeQuery()
 
-            res.beforeFirst()
-            if (res.next()) id = res.getString("id")
+        res.beforeFirst()
+        if (res.next()) id = res.getString("id")
 
-            res.close()
-            pst.close()
+        res.close()
+        pst.close()
+
+        try {
+            return Integer.parseInt(id)
+        } catch (Exception ignored){
+            throw new SQLException("retornado id não numérico")
         }
-        catch (Exception e) { e.printStackTrace() }
-
-        if (id) return Integer.parseInt(id)
-
-        return -1
     }
-    //so executa a busca, mais nada.
-    static void execute_busca(String busca, Closure busca_args){
-        try{
-            PreparedStatement pst = conn.prepareStatement( busca )
-            busca_args(pst)
-            pst.execute()
-            pst.close()
-        }
-        catch (Exception e) { e.printStackTrace() }
+    static void execute_busca(String busca, Closure busca_args) throws SQLException{
+        PreparedStatement pst = conn.prepareStatement( busca )
+        busca_args(pst)
+        pst.execute()
+        pst.close()
     }
 
-
-    //retornam o ID da entrada. Se entrada ja existe, retornam o id da existente
-    static int create_if_not_exists_pais(String nome){
+    //As seguintes funções retornam o ID da entrada. Se uma correspondente já existir, retorna o id existente
+    static int create_if_not_exists_pais(String nome) throws SQLException{
         String busca = """
             insert into pais (nome) values (?)
             on conflict (nome) do update set nome = pais.nome 
@@ -59,7 +52,7 @@ class Create {
             pst.setString(1, nome)
         }
     }
-    static int create_if_not_exists_estado(String nome){
+    static int create_if_not_exists_estado(String nome) throws SQLException{
         String busca = """
             insert into estado (nome) values (?)
             on conflict (nome) do update set nome = estado.nome 
@@ -69,7 +62,7 @@ class Create {
             pst.setString(1, nome)
         }
     }
-    static int create_if_not_exists_competencia(String tecnologia){
+    static int create_if_not_exists_competencia(String tecnologia) throws SQLException{
         String busca = """
             insert into competencia (tecnologia) values (?)
             on conflict (tecnologia) do update set tecnologia = competencia.tecnologia 
@@ -80,7 +73,7 @@ class Create {
         }
     }
 
-    static int cadastrar_endereco_if_not_exists(Endereco e){
+    static int cadastrar_endereco_if_not_exists(Endereco e) throws SQLException{
         if (e == null) return -1
 
         if (e.pais == null) e.pais = "default"
@@ -99,8 +92,7 @@ class Create {
             pst.setInt(3, estado_id)
         }
     }
-
-    static int cadastrar_candidato(Candidato c){
+    static int cadastrar_candidato_if_not_exists(Candidato c) throws SQLException{
         if (c == null) return -1;
         int id = Read.get_candidato_id_by_CPF(c.CPF)
         if (id != -1) return id
@@ -135,8 +127,7 @@ class Create {
 
         return id_novo
     }
-
-    static int cadastrar_empresa(Empresa m){
+    static int cadastrar_empresa_if_not_exists(Empresa m) throws SQLException{
         if (m == null) return -1;
         int id = Read.get_empresa_id_by_CNPJ(m.CNPJ)
         if (id != -1) return id
@@ -156,8 +147,7 @@ class Create {
             pst.setInt(6, endereco_id)
         }
     }
-
-    static int cadastrar_vaga(Vaga v){
+    static int cadastrar_vaga_if_not_exists(Vaga v) throws SQLException{
         if (v == null) return -1
 
         int endereco_id = cadastrar_endereco_if_not_exists(v.endereco)
@@ -186,7 +176,7 @@ class Create {
         return id_novo
     }
 
-    static void cadastrar_competencias_entidade(String entidade, int id_entidade, int id_competencia){
+    static void cadastrar_competencias_entidade(String entidade, int id_entidade, int id_competencia) throws SQLException{
         String busca = """
             insert into ${entidade}_competencias (${entidade}_id, competencia_id) values (?, ?)
             on conflict (${entidade}_id, competencia_id) do nothing
@@ -198,7 +188,7 @@ class Create {
         }
     }
 
-    static void cadastrar_curtida(Curtida c){
+    static void cadastrar_curtida(Curtida c) throws SQLException{
         if (c == null) return
 
         String busca = """

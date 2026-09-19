@@ -1,0 +1,44 @@
+package org.linketinder.DAO
+
+
+import java.sql.Connection
+import java.sql.SQLException
+
+import static java.sql.DriverManager.getConnection as getConnection
+
+class Banco {
+    static String nome_banco
+    static Connection conn
+
+    Create create = new Create()
+    Read read = new Read()
+    Update update = new Update()
+    Delete delete = new Delete()
+
+    static void conectar() throws SQLException{
+        Properties props = new Properties()
+            props.setProperty("user", "postgres")
+            props.setProperty("password", "postgres")
+            props.setProperty("ssl", "false")
+            String URL_SERV = "jdbc:postgresql://localhost:5432/${nome_banco}"
+            //extremamente seguro.
+
+        conn = getConnection(URL_SERV, props)
+    }
+    static void desconectar() throws SQLException{
+        if (conn == null) return
+
+        conn.close();
+    }
+
+    Banco(String nome_banco){
+        this.nome_banco = nome_banco
+        conectar()
+
+        create.conn = conn
+        read.conn = conn
+        update.conn = conn
+        delete.conn = conn
+    }
+}
+

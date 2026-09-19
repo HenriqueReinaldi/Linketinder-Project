@@ -1,20 +1,37 @@
 package org.linketinder.controller
 
-import org.linketinder.database.Banco
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
-import org.linketinder.service.Service
+import org.linketinder.service.CandidatoService
+import org.linketinder.service.EmpresaService
 
+import org.linketinder.service.VagaService
+
+@TupleConstructor
 class AssembleModel {
-    Service service
-    
-    static Candidato assemble_candidato(Map<String, String> candidato_info){
-        Candidato candidato = null;
+    EmpresaService empresa_service
+    CandidatoService candidato_service
+    VagaService vaga_service
+
+    static <GENERICO> GENERICO assemble_com_seguranca(Closure<GENERICO> operacao){
         try{
+            return operacao()
+        }
+        catch (Exception e){
+            println "erro criando o modelo:"
+            println "    " + e.message
+            println ""
+        }
+        return null
+    }
+
+    Candidato assemble_candidato(Map<String, String> candidato_info){
+        return assemble_com_seguranca {
             List<Competencia> competencias = candidato_info["competencias"]
                     .tokenize()
                     .collect{new Competencia(tecnologia: it.trim())}
@@ -25,9 +42,8 @@ class AssembleModel {
                     estado: candidato_info.estado,
             )
 
-            candidato = new Candidato(
+            return new Candidato(
                     CPF: candidato_info.CPF,
-                    idade: candidato_info.idade.toInteger(),
                     competencias: competencias,
                     nome: candidato_info.nome,
                     sobrenome: candidato_info.sobrenome,
@@ -36,44 +52,42 @@ class AssembleModel {
                     descricao: candidato_info.descricao,
                     senha: candidato_info.senha,
                     endereco: endereco,
+                    id: candidato_info.id ? candidato_info.id.toInteger() : -1
             )
         }
-        catch (Exception e) {
-            e.printStackTrace(); return null
-        }
-        return candidato
     }
 
-    static Empresa assemble_empresa(Map<String, String> empresa_info){
-        Empresa empresa = null;
-
-        try{
+    Empresa assemble_empresa(Map<String, String> empresa_info){
+        return assemble_com_seguranca {
             Endereco endereco = new Endereco(
                     CEP: empresa_info.CEP,
                     pais: empresa_info.pais,
                     estado: empresa_info.estado
             )
 
-            empresa = new Empresa(
+            return new Empresa(
                     CNPJ: empresa_info.CNPJ,
                     nome: empresa_info.nome,
                     email: empresa_info.email,
                     descricao: empresa_info.descricao,
                     senha: empresa_info.senha,
-                    endereco: endereco
+                    endereco: endereco,
+                    id: empresa_info.id ? empresa_info.id.toInteger() : -1
             )
+        }
+    }
 
+    Competencia assemble_competencia(Map<String, String> competencia_info){
+        return assemble_com_seguranca {
+            return new Competencia(
+                tecnologia: competencia_info.tecnologia,
+                id: competencia_info.id ? competencia_info.id.toInteger() : -1
+            )
         }
-        catch (Exception e) {
-            e.printStackTrace(); return null
-        }
-        return empresa
     }
 
     Vaga assemble_vaga(Map<String, String> vaga_info){
-        Vaga vaga = null;
-
-        try{
+        return assemble_com_seguranca{
             List<Competencia> competencias = vaga_info["competencias_desejadas"]
                     .tokenize()
                     .collect{new Competencia(tecnologia: it.trim())}
@@ -84,45 +98,29 @@ class AssembleModel {
                     estado: vaga_info.estado,
             )
 
-            int emp_id = service.bd.read.get_empresa_id_by_CNPJ(vaga_info.empresa_CNPJ)
-            if (emp_id == -1) return false
+            Empresa empresa = empresa_service.get_by_CNPJ(vaga_info.empresa_CNPJ)
 
-            Empresa empresa = service.bd.read.get_empresa_by_id(emp_id.toString())
-
-            vaga = new Vaga(
+            return new Vaga(
                     competencias_desejadas: competencias,
                     nome: vaga_info.nome,
                     descricao: vaga_info.descricao,
                     endereco: endereco,
-                    empresa: empresa
+                    empresa: empresa,
+                    id: vaga_info.id ? vaga_info.id.toInteger() : -1
             )
         }
-        catch (Exception e) {
-            e.printStackTrace(); return null
-        }
-
-        return  vaga
     }
 
     Curtida assemble_curtida(Map<String, String> curtida_info){
-        Curtida curtida = null
+        return assemble_com_seguranca{
+            Candidato candidato = candidato_service.get_by_id(curtida_info["candidato_id"])
+            Vaga vaga = vaga_service.get_by_id(curtida_info["vaga_id"])
 
-        try{
-            String candidato_id = curtida_info["candidato_id"]
-            String vaga_id = curtida_info["vaga_id"]
-
-            Candidato candidato = service.bd.read.get_candidato_by_id(candidato_id)
-            Vaga vaga = service.bd.read.get_vaga_by_id(vaga_id)
-
-            curtida = new Curtida(
+            return new Curtida(
                 candidato: candidato,
                 vaga: vaga,
+                id: curtida_info.id ? curtida_info.id.toInteger() : -1
             )
         }
-        catch (Exception e) {
-            e.printStackTrace(); return null
-        }
-
-        return curtida
     }
 }

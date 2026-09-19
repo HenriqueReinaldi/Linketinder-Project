@@ -20,6 +20,7 @@ function status_deuruim(){
     status.innerHTML = "Falha com cadastro!";
 }
 
+
 submit.onclick = (evento: MouseEvent) => {
     evento.preventDefault();
 

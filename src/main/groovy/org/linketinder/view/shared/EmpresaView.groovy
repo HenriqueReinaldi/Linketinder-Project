@@ -1,10 +1,14 @@
-package org.linketinder.view.terminal
+package org.linketinder.view.shared
 
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Empresa
+import org.linketinder.view.View
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
-class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
+@TupleConstructor
+class EmpresaView implements Representavel<Empresa>, Cadastravel<Empresa> {
+    View view
 
     @Override
     String representacao(Empresa objeto) {
@@ -20,16 +24,13 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
     }
 
     void exibir(Empresa objeto){
-        println representacao(objeto)
+        view.send_message(representacao objeto)
     }
 
     @Override
-    Map<String, String> capturar_dados() {
-        Scanner scan = new Scanner(System.in);
-
+    Map<String, String> capturar_dados(boolean com_id) {
         Closure pergunta = { String pergunta ->
-            print pergunta
-            scan.nextLine()
+            view.get_input(pergunta)
         }
 
         Map<String, String> campos = [
@@ -42,6 +43,8 @@ class EmpresaViewTerm implements Representavel<Empresa>, Cadastravel<Empresa> {
             "pais": "pais:",
             "senha": "Senha:"
         ]
+
+        if (com_id) campos["id"] = "ID:"
 
         campos.each {e ->
             campos[e.key] = pergunta(e.value)

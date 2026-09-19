@@ -2,7 +2,6 @@ import { get_lista_candidatos } from "../service/dados.js";
 import { Candidato } from "../model/candidato.js";
 declare const Chart: any;
 
-
 const campo_candidatos: HTMLFieldSetElement = document.getElementById("campo") as HTMLFieldSetElement;
 const grafico:HTMLCanvasElement = document.getElementById("grafico") as HTMLCanvasElement;
 
