@@ -155,7 +155,7 @@ class TermView extends View {
         return true
     }
 
-    private int get_generic_id() throws NumberFormatException{
+    int get_generic_id() throws NumberFormatException{
         Integer.parseInt(get_input("id:"))
     }
 
@@ -168,7 +168,7 @@ class TermView extends View {
         input
     }
 
-    private void citar_ajuda(){
+    void citar_ajuda(){
         send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
         send_message "Comandos read:"
