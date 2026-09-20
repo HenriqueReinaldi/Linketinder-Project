@@ -1,5 +1,9 @@
 package org.linketinder.DAO
 
+import org.linketinder.DAO.old.Create
+import org.linketinder.DAO.old.Delete
+import org.linketinder.DAO.old.Read
+import org.linketinder.DAO.old.Update
 
 import java.sql.Connection
 import java.sql.SQLException
@@ -14,6 +18,7 @@ class Banco {
     Read read = new Read()
     Update update = new Update()
     Delete delete = new Delete()
+
 
     static void conectar() throws SQLException{
         Properties props = new Properties()
