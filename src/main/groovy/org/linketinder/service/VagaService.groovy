@@ -2,6 +2,8 @@ package org.linketinder.service
 
 import groovy.transform.TupleConstructor
 import org.linketinder.DAO.Banco
+import org.linketinder.DAO.EnderecoDAO
+import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Vaga
@@ -10,9 +12,18 @@ import org.linketinder.model.objetos.Vaga
 class VagaService {
     Banco bd
 
+    VagaDAO dao
+    EnderecoDAO endereco_dao
+
     List<Vaga> get_lista(){
         try{
-            return bd.read.get_lista_vaga()
+            List<Vaga> vagas = dao.get_lista_vaga()
+
+            vagas.each {Vaga vaga ->
+                vaga.endereco = endereco_dao.get_endereco_by_id(vaga.endereco.id)
+            }
+
+            return vagas
         }
         catch (Exception ignored){
             return null
@@ -46,5 +57,11 @@ class VagaService {
         } catch (Exception ignored){
             return null
         }
+    }
+
+    VagaService(Banco bd){
+        this.bd = bd
+        this.dao = new VagaDAO(bd)
+        this.endereco_dao = new EnderecoDAO(bd)
     }
 }

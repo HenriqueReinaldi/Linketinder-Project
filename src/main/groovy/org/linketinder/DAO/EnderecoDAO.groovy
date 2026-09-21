@@ -1,5 +1,6 @@
 package org.linketinder.DAO
 
+import groovy.transform.TupleConstructor
 import org.linketinder.DAO.old.Read
 import org.linketinder.model.objetos.Endereco
 
@@ -8,10 +9,11 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
+@TupleConstructor
 class EnderecoDAO {
-    static Banco banco
+    Banco banco
 
-    static int create_if_not_exists_pais(String nome) throws SQLException{
+    int create_if_not_exists_pais(String nome) throws SQLException{
         String busca = """
             insert into pais (nome) values (?)
             on conflict (nome) do update set nome = pais.nome 
@@ -21,7 +23,7 @@ class EnderecoDAO {
             pst.setString(1, nome)
         }
     }
-    static int create_if_not_exists_estado(String nome) throws SQLException{
+    int create_if_not_exists_estado(String nome) throws SQLException{
         String busca = """
             insert into estado (nome) values (?)
             on conflict (nome) do update set nome = estado.nome 
@@ -31,7 +33,7 @@ class EnderecoDAO {
             pst.setString(1, nome)
         }
     }
-    static int cadastrar_endereco_if_not_exists(Endereco e) throws SQLException{
+    int cadastrar_endereco_se_nao_existe(Endereco e) throws SQLException{
         if (e == null) return -1
 
         if (e.pais == null) e.pais = "default"
@@ -51,7 +53,7 @@ class EnderecoDAO {
         }
     }
 
-    static int get_endereco_id(Endereco e) throws SQLException{
+    int get_endereco_id(Endereco e) throws SQLException{
         String busca = """
             select 
                 e.id as id,
@@ -76,7 +78,7 @@ class EnderecoDAO {
         if (!endereco) return -1
         return endereco[0]
     }
-    static Endereco get_endereco_by_id(int id) throws SQLException{
+    Endereco get_endereco_by_id(int id) throws SQLException{
         String busca = """
             select 
                 e.id as endereco_id,

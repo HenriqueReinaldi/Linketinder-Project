@@ -1,5 +1,6 @@
 package org.linketinder.DAO
 
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Competencia
 
 import java.sql.Connection
@@ -7,10 +8,11 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
+@TupleConstructor
 class CompetenciaDAO {
-    static Banco banco
+    Banco banco
 
-    static int create_if_not_exists_competencia(String tecnologia) throws SQLException{
+    int create_if_not_exists_competencia(String tecnologia) throws SQLException{
         String busca = """
             insert into competencia (tecnologia) values (?)
             on conflict (tecnologia) do update set tecnologia = competencia.tecnologia 
@@ -20,7 +22,7 @@ class CompetenciaDAO {
             pst.setString(1, tecnologia)
         }
     }
-    static void cadastrar_competencias_entidade(String entidade, int id_entidade, int id_competencia) throws SQLException{
+    void cadastrar_competencias_entidade(String entidade, int id_entidade, int id_competencia) throws SQLException{
         String busca = """
             insert into ${entidade}_competencias (${entidade}_id, competencia_id) values (?, ?)
             on conflict (${entidade}_id, competencia_id) do nothing
@@ -33,7 +35,7 @@ class CompetenciaDAO {
     }
 
 
-    static List<Competencia> get_lista_competencia() throws SQLException{
+    List<Competencia> get_lista_competencia() throws SQLException{
         List<Competencia> competencias = banco.get_lista_tabela("select * from competencia", {}) { ResultSet res ->
             return new Competencia(
                     id: res.getInt("id"),
@@ -42,7 +44,7 @@ class CompetenciaDAO {
         }
         return competencias
     }
-    static List<Competencia> get_lista_competencias_of_entidade(String entidade, int entidade_id)throws SQLException{
+    List<Competencia> get_lista_competencias_of_entidade(String entidade, int entidade_id)throws SQLException{
         List<Competencia> competencias = banco.get_lista_tabela("select * from ${entidade}_competencias where ${entidade}_id = ?",
                 {PreparedStatement pst -> pst.setInt(1, entidade_id) })
                 { ResultSet res ->
@@ -55,28 +57,28 @@ class CompetenciaDAO {
         return competencias
     }
 
-    static boolean update_competencia(Competencia c) throws SQLException{
+    boolean update_competencia(Competencia c) throws SQLException{
         if (c == null) return false
         String busca = "update competencia set tecnologia = ? where id = ?"
 
-        return banco.execute_update_busca(busca) { PreparedStatement pst ->
+        return banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
             pst.setString(1, c.tecnologia)
             pst.setInt(2, c.id)
         }
     }
 
 
-    static boolean delete_competencia_by_id(int id) throws SQLException{
+    boolean delete_competencia_by_id(int id) throws SQLException{
         String busca = """
             delete from competencia where id = ?
         """
-        return banco.execute_busca_delete(busca, {PreparedStatement pst -> pst.setInt(1, id)})
+        return banco.execute_busca_detect_updates(busca, {PreparedStatement pst -> pst.setInt(1, id)})
     }
 
-    static boolean delete_entidade_competencias_by_entidadeid(String entidade, int id) throws SQLException{
+    boolean delete_entidade_competencias_by_entidadeid(String entidade, int id) throws SQLException{
         String busca = """
             delete from ${entidade}_competencias where ${entidade}_id = ?
         """
-        return banco.execute_busca_delete(busca, {PreparedStatement pst -> pst.setInt(1, id)})
+        return banco.execute_busca_detect_updates(busca, {PreparedStatement pst -> pst.setInt(1, id)})
     }
 }

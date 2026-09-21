@@ -1,5 +1,6 @@
 package org.linketinder.DAO
 
+import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Vaga
@@ -9,10 +10,11 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
+@TupleConstructor
 class CurtidaDAO {
-    static Banco banco
+    Banco banco
 
-    static void cadastrar_curtida(Curtida c) throws SQLException{
+    void cadastrar_curtida(Curtida c) throws SQLException{
         if (c == null) return
 
         String busca = """
@@ -27,7 +29,7 @@ class CurtidaDAO {
 
     }
 
-    static List<Curtida> get_lista_curtida() throws SQLException{
+    List<Curtida> get_lista_curtida() throws SQLException{
         /*
             TODO:
             completar candidato e vaga em service.
@@ -43,10 +45,10 @@ class CurtidaDAO {
         return curtidas
     }
 
-    static boolean empresa_curtir(Curtida c) throws SQLException{
+    boolean empresa_curtir(Curtida c) throws SQLException{
         String busca = "update curtida set empresa_curtiu = true where candidato_id = ? and vaga_id = ?"
 
-        return banco.execute_update_busca(busca) { PreparedStatement pst ->
+        return banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
             pst.setInt(1, c.candidato.id)
             pst.setInt(2, c.vaga.id)
         }

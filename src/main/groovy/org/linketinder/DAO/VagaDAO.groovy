@@ -1,5 +1,6 @@
 package org.linketinder.DAO
 
+import groovy.transform.TupleConstructor
 import org.linketinder.DAO.old.Create
 import org.linketinder.DAO.old.Delete
 import org.linketinder.model.objetos.Competencia
@@ -12,10 +13,11 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
+@TupleConstructor
 class VagaDAO {
-    static Banco banco
+    Banco banco
 
-    static int cadastrar_vaga_if_not_exists(Vaga v) throws SQLException{
+    int cadastrar_vaga_if_not_exists(Vaga v) throws SQLException {
         /*
             TODO:
             CRIACAO DAS TABELAS VAGA_COMPETENCIA EM SERVICE
@@ -28,7 +30,7 @@ class VagaDAO {
             insert into vaga (nome, descricao, endereco_id, empresa_id) 
             values (?, ?, ?, ?) returning id
         """
-        int id_novo = banco.return_id_from_busca(busca) {PreparedStatement pst ->
+        int id_novo = banco.return_id_from_busca(busca) { PreparedStatement pst ->
             pst.setString(1, v.nome)
             pst.setString(2, v.descricao)
             pst.setInt(3, v.endereco.id)
@@ -37,8 +39,7 @@ class VagaDAO {
         return id_novo
     }
 
-
-    static List<Vaga> get_lista_vaga() throws SQLException{
+    List<Vaga> get_lista_vaga() throws SQLException {
         /*
         todo:
         mandar service completar endereco empresa e competencias desejadas
@@ -65,7 +66,8 @@ class VagaDAO {
         }
         return vagas;
     }
-    static Vaga get_vaga_by_id(int id) throws SQLException{
+
+    Vaga get_vaga_by_id(int id) throws SQLException {
         /*
         todo:
         mandar service completar endereco empresa e competencias desejadas
@@ -81,7 +83,7 @@ class VagaDAO {
                     id: vid,
                     nome: res.getString("nome"),
                     descricao: res.getString("descricao"),
-                    endereco: new Endereco(id: res.getInt("vaga_endereco_id")),
+                    endereco: new Endereco(id: res.getInt("endereco_id")),
                     empresa: new Empresa(id: res.getInt("empresa_id")),
                     competencias_desejadas: null
             )
@@ -91,8 +93,7 @@ class VagaDAO {
         return vagas[0]
     }
 
-
-    static boolean update_vaga(Vaga v) throws SQLException{
+    boolean update_vaga(Vaga v) throws SQLException {
         /*
             TODO:
             CRIACAO DAS TABELAS VAGA_COMPETENCIA EM SERVICE
@@ -106,7 +107,7 @@ class VagaDAO {
             where id = ?
         """
 
-        boolean troca_aconteceu = banco.execute_update_busca(busca) { PreparedStatement pst ->
+        boolean troca_aconteceu = banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
             pst.setString(1, v.nome)
             pst.setString(2, v.descricao)
             pst.setInt(3, v.endereco.id)
@@ -117,11 +118,10 @@ class VagaDAO {
         return troca_aconteceu
     }
 
-
-    static boolean delete_vaga_by_id(int id) throws SQLException{
+    boolean delete_vaga_by_id(int id) throws SQLException {
         String busca = """
             delete from vaga where id = ?
         """
-        return banco.execute_busca_delete(busca, {PreparedStatement pst -> pst.setInt(1, id)})
+        return banco.execute_busca_detect_updates(busca, { PreparedStatement pst -> pst.setInt(1, id) })
     }
 }

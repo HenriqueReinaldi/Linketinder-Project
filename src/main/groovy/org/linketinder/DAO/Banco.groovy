@@ -42,15 +42,6 @@ class Banco {
         pst.execute()
         pst.close()
     }
-    static boolean execute_busca_delete(String busca, Closure busca_args) throws SQLException{
-        PreparedStatement pst = conn.prepareStatement( busca )
-        busca_args(pst)
-        int delecoes = pst.executeUpdate()
-        pst.close()
-
-        if (delecoes > 0) return true
-        return false
-    }
     static String get_coluna_from_entrada_id(int id, String tabela, String coluna) throws SQLException{
         String resultado = ""
         String busca = "select * from ${tabela} where id = ?"
@@ -86,7 +77,7 @@ class Banco {
 
         return genericos
     }
-    static boolean execute_update_busca(String busca, Closure busca_args) throws SQLException{
+    static boolean execute_busca_detect_updates(String busca, Closure busca_args) throws SQLException{
         PreparedStatement pst = conn.prepareStatement( busca )
         busca_args(pst)
         int alteracoes = pst.executeUpdate()
@@ -116,11 +107,6 @@ class Banco {
     Banco(String nome_banco){
         this.nome_banco = nome_banco
         conectar()
-
-        create.conn = conn
-        read.conn = conn
-        update.conn = conn
-        delete.conn = conn
     }
 }
 
