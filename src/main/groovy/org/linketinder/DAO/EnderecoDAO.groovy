@@ -13,7 +13,7 @@ import java.sql.SQLException
 class EnderecoDAO {
     Banco banco
 
-    int create_if_not_exists_pais(String nome) throws SQLException{
+    int create_if_not_exists_pais(String nome) throws SQLException {
         String busca = """
             insert into pais (nome) values (?)
             on conflict (nome) do update set nome = pais.nome 
@@ -23,7 +23,8 @@ class EnderecoDAO {
             pst.setString(1, nome)
         }
     }
-    int create_if_not_exists_estado(String nome) throws SQLException{
+
+    int create_if_not_exists_estado(String nome) throws SQLException {
         String busca = """
             insert into estado (nome) values (?)
             on conflict (nome) do update set nome = estado.nome 
@@ -33,7 +34,8 @@ class EnderecoDAO {
             pst.setString(1, nome)
         }
     }
-    int cadastrar_endereco_se_nao_existe(Endereco e) throws SQLException{
+
+    int cadastrar_endereco_se_nao_existe(Endereco e) throws SQLException {
         if (e == null) return -1
 
         if (e.pais == null) e.pais = "default"
@@ -53,7 +55,7 @@ class EnderecoDAO {
         }
     }
 
-    int get_endereco_id(Endereco e) throws SQLException{
+    int get_endereco_id(Endereco e) throws SQLException {
         String busca = """
             select 
                 e.id as id,
@@ -73,12 +75,13 @@ class EnderecoDAO {
                 pst.setString(1, e.CEP)
                 pst.setString(2, e.pais)
                 pst.setString(3, e.estado)
-        }) { ResultSet res -> return res.getInt("id")}
+        }) { ResultSet res -> return res.getInt("id") }
 
         if (!endereco) return -1
         return endereco[0]
     }
-    Endereco get_endereco_by_id(int id) throws SQLException{
+
+    Endereco get_endereco_by_id(int id) throws SQLException {
         String busca = """
             select 
                 e.id as endereco_id,

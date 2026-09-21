@@ -17,14 +17,8 @@ import java.sql.SQLException
 class VagaDAO {
     Banco banco
 
-    int cadastrar_vaga_if_not_exists(Vaga v) throws SQLException {
-        /*
-            TODO:
-            CRIACAO DAS TABELAS VAGA_COMPETENCIA EM SERVICE
-            CRIACAO DO ENDERE4CO EM SERVICE
-         */
+    int cadastrar_vaga(Vaga v) throws SQLException {
         if (v == null) return -1
-
 
         String busca = """
             insert into vaga (nome, descricao, endereco_id, empresa_id) 
@@ -40,11 +34,6 @@ class VagaDAO {
     }
 
     List<Vaga> get_lista_vaga() throws SQLException {
-        /*
-        todo:
-        mandar service completar endereco empresa e competencias desejadas
-         */
-
         List<Vaga> vagas = banco.get_lista_tabela("""
             select 
                 v.id AS vaga_id,
@@ -68,11 +57,6 @@ class VagaDAO {
     }
 
     Vaga get_vaga_by_id(int id) throws SQLException {
-        /*
-        todo:
-        mandar service completar endereco empresa e competencias desejadas
-         */
-
         String busca = "select * from vaga where id = ?"
 
         List<Vaga> vagas = banco.get_lista_tabela(busca, {
@@ -94,12 +78,6 @@ class VagaDAO {
     }
 
     boolean update_vaga(Vaga v) throws SQLException {
-        /*
-            TODO:
-            CRIACAO DAS TABELAS VAGA_COMPETENCIA EM SERVICE
-            CRIACAO DO ENDERE4CO EM SERVICE
-         */
-
         if (v == null) return false
         String busca = """
             update vaga set

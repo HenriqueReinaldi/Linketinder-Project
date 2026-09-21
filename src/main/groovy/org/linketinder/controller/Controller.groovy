@@ -90,7 +90,6 @@ class Controller {
     void candidato_curtir(ModelData modelo){
         Curtida c = assemble_model.assemble_curtida(modelo.data)
         candidato_service.curtir(c)
-
     }
     void empresa_curtir(ModelData modelo){
         Curtida c = assemble_model.assemble_curtida(modelo.data)

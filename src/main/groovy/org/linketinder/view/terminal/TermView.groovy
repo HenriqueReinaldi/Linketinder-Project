@@ -27,35 +27,35 @@ class TermView extends View {
     Controller controller
     PrefTree comandos = new PrefTree()
 
-    void listar(String entidade){
-        switch (entidade){
+    void listar(String entidade) {
+        switch (entidade) {
             case "candidatos":
                 List<Candidato> candidatos = controller.get_lista_candidato()
-                candidatos.forEach {Candidato c -> candidato_view.exibir(c)}
+                candidatos.forEach { Candidato c -> candidato_view.exibir(c) }
                 break
             case "empresas":
                 List<Empresa> empresas = controller.get_lista_empresa()
-                empresas.forEach {Empresa m -> empresa_view.exibir(m)}
+                empresas.forEach { Empresa m -> empresa_view.exibir(m) }
                 break
             case "vagas":
                 List<Vaga> vagas = controller.get_lista_vaga()
-                vagas.forEach {Vaga v -> vaga_view.exibir(v)}
+                vagas.forEach { Vaga v -> vaga_view.exibir(v) }
                 break
             case "curtidas":
                 List<Curtida> curtidas = controller.get_lista_curtida()
-                curtidas.forEach {Curtida c -> curtida_view.exibir(c)}
+                curtidas.forEach { Curtida c -> curtida_view.exibir(c) }
                 break
             case "competencias":
                 List<Competencia> competencias = controller.get_lista_competencia()
-                competencias.forEach {Competencia c -> competencia_view.exibir(c)}
+                competencias.forEach { Competencia c -> competencia_view.exibir(c) }
                 break
         }
     }
 
-    void cadastrar(String entidade){
+    void cadastrar(String entidade) {
         ModelData md = new ModelData()
 
-        switch (entidade){
+        switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados()
                 controller.cadastrar_candidato(md)
@@ -71,9 +71,9 @@ class TermView extends View {
         }
     }
 
-    void deletar(String entidade){
+    void deletar(String entidade) {
         int id = get_generic_id()
-        switch (entidade){
+        switch (entidade) {
             case "candidato":
                 controller.deletar_candidato(id)
                 break
@@ -89,10 +89,10 @@ class TermView extends View {
         }
     }
 
-    void update(String entidade){
+    void update(String entidade) {
         ModelData md = new ModelData()
 
-        switch (entidade){
+        switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados(true)
                 controller.update_candidato(md)
@@ -112,10 +112,10 @@ class TermView extends View {
         }
     }
 
-    void curtir_pela_perspectiva(String entidade){
+    void curtir_pela_perspectiva(String entidade) {
         ModelData md = new ModelData()
 
-        switch (entidade){
+        switch (entidade) {
             case "candidato":
                 md.data = curtida_view.capturar_dados()
                 controller.candidato_curtir(md)
@@ -127,10 +127,10 @@ class TermView extends View {
         }
     }
 
-    TermView(Controller controller){
+    TermView(Controller controller) {
         this.controller = controller
 
-        comandos.inserir("?", {citar_ajuda()})
+        comandos.inserir("?", { citar_ajuda() })
         comandos.inserir("listar ", this.&listar)
         comandos.inserir("cadastrar ", this.&cadastrar)
         comandos.inserir("deletar ", this.&deletar)
@@ -150,30 +150,30 @@ class TermView extends View {
         Closure executor = comandos.buscar(input)
         List<String> args = input.tokenize()
 
-        if (args.size()-1 < 0){
+        if (args.size() - 1 < 0) {
             executor("")
-        }
-        else{
-            executor(args[args.size()-1] ?: "")
+        } else {
+            executor(args[args.size() - 1] ?: "")
         }
 
         return true
     }
 
-    int get_generic_id() throws NumberFormatException{
+    int get_generic_id() throws NumberFormatException {
         Integer.parseInt(get_input("id:"))
     }
 
-    void send_message(String message){
+    void send_message(String message) {
         println message
     }
-    String get_input(String message){
+
+    String get_input(String message) {
         print message
         String input = scan.nextLine()
         input
     }
 
-    void citar_ajuda(){
+    void citar_ajuda() {
         send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
         send_message "Comandos read:"

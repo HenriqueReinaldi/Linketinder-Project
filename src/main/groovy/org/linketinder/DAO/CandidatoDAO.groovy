@@ -21,7 +21,7 @@ class CandidatoDAO {
 
     int cadastrar_candidato_se_nao_existe(Candidato c) throws SQLException {
         if (c == null) return -1
-        if (get_candidato_id_by_CPF(c.CPF) < 0) return -1
+        if (get_candidato_id_by_CPF(c.CPF) >= 0) return -1
 
         String busca = """
             insert into candidato (nome, sobrenome, e_mail, CPF, descricao, data_nascimento, senha, endereco_id) 
@@ -68,11 +68,6 @@ class CandidatoDAO {
                     senha: res.getString("senha"),
                     endereco: new Endereco(id: res.getInt("endereco_id"))
             )
-
-            /*
-            TODO:
-                delegar competencias e endereco para service
-             */
         }
 
         return candidatos;
@@ -103,11 +98,6 @@ class CandidatoDAO {
                     senha: res.getString("senha"),
                     endereco: null,
             )
-
-            /*
-            TODO:
-                delegar competencias e endereco para service
-             */
         }
 
         if (!candidatos) return null
@@ -128,14 +118,9 @@ class CandidatoDAO {
     }
 
     boolean update_candidato(Candidato c) throws SQLException {
-        /*
-            TODO:
-            VERIFICAR SE CANDIDATO JÁ EXISTE EM SERVICE (CPF)
-            RE-CRIACAO(deletar, criar) DAS TABELAS CANDIDATO_COMPETENCIA EM SERVICE
-            CRIACAO DO ENDERE4CO EM SERVICE
-         */
-
         if (c == null) return false
+        //if (get_candidato_id_by_CPF(c.CPF) < 0) return false
+
         String busca = """
             update candidato set
                 nome = ?, sobrenome = ?, e_mail = ?, CPF = ?, descricao = ?,

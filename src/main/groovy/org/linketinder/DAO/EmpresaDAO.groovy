@@ -12,20 +12,15 @@ import java.sql.SQLException
 class EmpresaDAO {
     Banco banco
 
-    int cadastrar_empresa_if_not_exists(Empresa m) throws SQLException{
-        /*
-            TODO:
-            VERIFICAR SE empresa JÁ EXISTE EM SERVICE (CNPJ)
-            CRIACAO DO ENDERE4CO EM SERVICE
-         */
-
+    int cadastrar_empresa_se_nao_existe(Empresa m) throws SQLException {
         if (m == null) return -1;
+        if (get_empresa_id_by_CNPJ(m.CNPJ) >= 0) return -1
 
         String busca = """
             insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) 
             values (?, ?, ?, ?, ?, ?) returning id 
         """
-        return banco.return_id_from_busca(busca) {PreparedStatement pst ->
+        return banco.return_id_from_busca(busca) { PreparedStatement pst ->
             pst.setString(1, m.nome)
             pst.setString(2, m.email)
             pst.setString(3, m.CNPJ)
@@ -35,15 +30,15 @@ class EmpresaDAO {
         }
     }
 
-    boolean delete_empresa_by_id(int id) throws SQLException{
+    boolean delete_empresa_by_id(int id) throws SQLException {
         String busca = """
             delete from empresa where id = ?
         """
-        return banco.execute_busca_detect_updates(busca, {PreparedStatement pst -> pst.setInt(1, id)})
+        return banco.execute_busca_detect_updates(busca, { PreparedStatement pst -> pst.setInt(1, id) })
     }
 
-    List<Empresa> get_lista_empresa() throws SQLException{
-        List<Empresa> empresas = banco.get_lista_tabela("select * from empresa", {}){ ResultSet res ->
+    List<Empresa> get_lista_empresa() throws SQLException {
+        List<Empresa> empresas = banco.get_lista_tabela("select * from empresa", {}) { ResultSet res ->
             int id = res.getInt("id")
             return new Empresa(
                     id: id,
@@ -57,10 +52,8 @@ class EmpresaDAO {
         }
         return empresas;
     }
-    Empresa get_empresa_by_id(int id) throws SQLException{
-        /*
-        TOdo: service completar endereco
-        * */
+
+    Empresa get_empresa_by_id(int id) throws SQLException {
         String busca = "select * from empresa where id = ?"
 
         List<Empresa> empresas = banco.get_lista_tabela(busca, {
@@ -80,7 +73,8 @@ class EmpresaDAO {
         if (!empresas) return null
         return empresas[0]
     }
-    int get_empresa_id_by_CNPJ(String CNPJ) throws SQLException{
+
+    int get_empresa_id_by_CNPJ(String CNPJ) throws SQLException {
         String busca = "select id from empresa where CNPJ = ?"
 
         List<Integer> id = banco.get_lista_tabela(busca, {
@@ -93,14 +87,7 @@ class EmpresaDAO {
         return id[0]
     }
 
-    boolean update_empresa(Empresa m) throws SQLException{
-        /*
-            TODO:
-            VERIFICAR SE empresa JÁ EXISTE EM SERVICE (CNPJ)
-            CRIACAO DO ENDERE4CO EM SERVICE
-         */
-
-
+    boolean update_empresa(Empresa m) throws SQLException {
         if (m == null) return false
         String busca = """
             update empresa set

@@ -11,31 +11,32 @@ class CompetenciaService {
     Banco bd
     CompetenciaDAO dao
 
-    List<Competencia> get_lista(){
-        try{
+    List<Competencia> get_lista() {
+        try {
             return dao.get_lista_competencia()
         }
-        catch (Exception ignored){
+        catch (Exception ignored) {
             return null
         }
     }
 
-    void deletar(int id){
-        try{
-            bd.delete.delete_competencia_by_id(id)
+    void deletar(int id) {
+        try {
+            dao.delete_competencia_by_id(id)
         }
-        catch (Exception ignored) {}
+        catch (Exception ignored) {
+        }
     }
 
-
-    void update(Competencia c){
-        try{
-            bd.update.update_competencia(c)
+    void update(Competencia c) {
+        try {
+            dao.update_competencia(c)
         }
-        catch (Exception ignored) {}
+        catch (Exception ignored) {
+        }
     }
 
-    CompetenciaService(Banco bd){
+    CompetenciaService(Banco bd) {
         this.bd = bd
         this.dao = new CompetenciaDAO(bd)
     }

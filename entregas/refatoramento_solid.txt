@@ -1,2 +1,5 @@
  - separação das classes DAO por entidade ao invés de ação (CRUD) -> (CANDIDATODAO, EMPRESADAO...)
  - separação de responsabilidades DAO - SERVICE
+
+
+ - uso do formatador do INTELLIJ para melhorar consistencia

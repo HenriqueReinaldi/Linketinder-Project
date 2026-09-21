@@ -2,6 +2,7 @@ package org.linketinder.service
 
 import groovy.transform.TupleConstructor
 import org.linketinder.DAO.Banco
+import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.model.objetos.Candidato
@@ -14,6 +15,7 @@ class EmpresaService {
 
     EmpresaDAO dao
     EnderecoDAO endereco_dao
+    CurtidaDAO curtida_dao
 
     List<Empresa> get_lista() {
         try {
@@ -32,7 +34,11 @@ class EmpresaService {
 
     void cadastrar(Empresa m) {
         try {
-            bd.create.cadastrar_empresa_if_not_exists(m)
+            int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(m.endereco)
+            if (endereco_id < 0) return
+            m.endereco.id = endereco_id
+
+            dao.cadastrar_empresa_se_nao_existe(m)
         }
         catch (Exception ignored) {
         }
@@ -40,9 +46,9 @@ class EmpresaService {
 
     Empresa get_by_CNPJ(String CNPJ) {
         try {
-            int emp_id = bd.read.get_empresa_id_by_CNPJ(CNPJ)
+            int emp_id = dao.get_empresa_id_by_CNPJ(CNPJ)
             if (emp_id == -1) return null
-            bd.read.get_empresa_by_id(emp_id)
+            return dao.get_empresa_by_id(emp_id)
         }
         catch (Exception ignored) {
             return null
@@ -51,7 +57,7 @@ class EmpresaService {
 
     void deletar(int id) {
         try {
-            bd.delete.delete_empresa_by_id(id)
+            dao.delete_empresa_by_id(id)
         }
         catch (Exception ignored) {
         }
@@ -59,7 +65,7 @@ class EmpresaService {
 
     void curtir(Curtida c) {
         try {
-            bd.update.empresa_curtir(c)
+            curtida_dao.empresa_curtir(c)
         }
         catch (Exception ignored) {
         }
@@ -67,7 +73,11 @@ class EmpresaService {
 
     void update(Empresa m) {
         try {
-            bd.update.update_empresa(m)
+            int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(m.endereco)
+            if (endereco_id < 0) return
+            m.endereco.id = endereco_id
+
+            dao.update_empresa(m)
         }
         catch (Exception ignored) {
         }
@@ -77,5 +87,6 @@ class EmpresaService {
         this.bd = bd
         this.dao = new EmpresaDAO(bd)
         this.endereco_dao = new EnderecoDAO(bd)
+        this.curtida_dao = new CurtidaDAO(bd)
     }
 }

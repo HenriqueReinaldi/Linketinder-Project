@@ -14,7 +14,7 @@ import java.sql.SQLException
 class CurtidaDAO {
     Banco banco
 
-    void cadastrar_curtida(Curtida c) throws SQLException{
+    void cadastrar_curtida(Curtida c) throws SQLException {
         if (c == null) return
 
         String busca = """
@@ -22,19 +22,14 @@ class CurtidaDAO {
             values (?, ?) on conflict (candidato_id, vaga_id) do nothing
         """
 
-        banco.xecute_busca(busca) {PreparedStatement pst ->
+        banco.execute_busca(busca) { PreparedStatement pst ->
             pst.setInt(1, c.candidato.id)
             pst.setInt(2, c.vaga.id)
         }
 
     }
 
-    List<Curtida> get_lista_curtida() throws SQLException{
-        /*
-            TODO:
-            completar candidato e vaga em service.
-         */
-
+    List<Curtida> get_lista_curtida() throws SQLException {
         List<Curtida> curtidas = banco.get_lista_tabela("select * from curtida", {}) { ResultSet res ->
             return new Curtida(
                     candidato: new Candidato(id: res.getInt("candidato_id")),
@@ -45,7 +40,7 @@ class CurtidaDAO {
         return curtidas
     }
 
-    boolean empresa_curtir(Curtida c) throws SQLException{
+    boolean empresa_curtir(Curtida c) throws SQLException {
         String busca = "update curtida set empresa_curtiu = true where candidato_id = ? and vaga_id = ?"
 
         return banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
