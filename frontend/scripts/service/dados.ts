@@ -5,7 +5,7 @@ import { Vaga } from "../model/vaga.js";
 export var lista_candidatos: Candidato[] = [];
 export var lista_empresas: Empresa[] = [];
 export var lista_vagas: Vaga[] = [];
-
+var VERSAO_PROGRAMA: string = "dois";
 
 function get_random_number(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min);
@@ -58,8 +58,7 @@ function popular_empresas(): void{
                 `CEP${i}`, 
                 `descricao${i}`,
                 `pais${i}`,
-                `CNPJ${i}`,
-                []
+                `CNPJ${i}`
             )
         );
     }
@@ -68,13 +67,15 @@ function popular_vagas(): void{
     //necessita de que lista_empresas nao esteja vazia.
     if (lista_empresas.length == 0) return;
 
-    for (let i: number = 0; i < 5; i++){
+    for (let i: number = 0; i < 10; i++){
         lista_vagas.push(
             new Vaga(
                 `nome${i}`,
                 67*(i+1),
                 `descricao${i}`,
-                lista_empresas[0]
+                lista_empresas[i%5],
+                get_random_competencias()
+
             )
         );
     }
@@ -87,6 +88,16 @@ function update_localstorage(): void {
     localStorage.setItem("lista_vagas", JSON.stringify(lista_vagas));
 }
 function fetch_localstorage(): void {
+    if (localStorage.getItem("VERSAO_PROGRAMA") !== VERSAO_PROGRAMA){
+        localStorage.clear()
+        localStorage.setItem("VERSAO_PROGRAMA", VERSAO_PROGRAMA);
+
+        lista_candidatos = [];
+        lista_empresas = [];
+        lista_vagas = [];
+        return;
+    }
+
     let lista_candidatos_string = localStorage.getItem("lista_candidatos");
     let lista_empresas_string = localStorage.getItem("lista_empresas");
     let lista_vagas_string = localStorage.getItem("lista_vagas");
@@ -104,6 +115,10 @@ export function get_lista_candidatos(): Candidato[]{
     fetch_localstorage();
     return lista_candidatos;
 }
+export function get_lista_empresas(): Empresa[]{
+    fetch_localstorage();
+    return lista_empresas;
+}
 
 
 export function cadastrar_empresa(nome: string, email: string, estado:string, CEP:string, descricao:string, pais:string, CNPJ:string, competencias_desejadas:string[]): boolean{
@@ -111,7 +126,7 @@ export function cadastrar_empresa(nome: string, email: string, estado:string, CE
     
     try{
         let emp: Empresa = new Empresa(
-            nome, email, estado, CEP, descricao, pais, CNPJ, competencias_desejadas
+            nome, email, estado, CEP, descricao, pais, CNPJ
         )
 
         lista_empresas.push(emp);

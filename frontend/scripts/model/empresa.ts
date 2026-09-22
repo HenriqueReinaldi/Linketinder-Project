@@ -10,7 +10,6 @@ export class Empresa extends Pessoa{
 
         public pais: string,
         public CNPJ: string,
-        public competencias_desejadas: string[]
     ){ super(nome, email, estado, CEP, descricao) }
 }
 
