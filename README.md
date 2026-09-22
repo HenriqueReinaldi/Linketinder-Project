@@ -65,5 +65,12 @@ Uma ferramenta que serviu grande auxílio foi o próprio Intellij, que permitiu 
     Funciona por meio da tabela "curtida" no banco de dados, onde é feita uma chave primaria composta pelo ID do candidato e o ID da vaga (já que o candidato é aquele quem inicia o processo de match).
     Quando a empresa dona da vaga quer fazer o match, é trocado o valor de "empresa_curtiu" na tabela de falso para verdadeiro.
 
+    
+    ### Índice de afinidade:
+    
+    O frontend do projeto conta com um sistema de índice de afinidade, tanto para candidatos quanto para empresas.
 
+    Como candidato, ao acessar a listagem de vagas, o sistema conta quantas das competencias desejadas da vaga o candidato tem para mostrar um índice de afinidade.
+
+    Como empresa, ao acessar a listagem de candidatos, o sistema cria um mapa simples de todas as ocorrências de competências desejadas de suas vagas para mostrar uma "afinidade global" com o candidato. (Um candidato que sabe groovy terá afinidade maior em uma empresa que possui 3 vagas que buscam por groovy do que uma empresa que possui apenas 1 vaga que busca por groovy)
 
