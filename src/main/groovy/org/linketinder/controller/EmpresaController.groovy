@@ -3,11 +3,11 @@ package org.linketinder.controller
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
+import org.linketinder.model.objetos.Endereco
 import org.linketinder.service.EmpresaService
 
 @TupleConstructor
 class EmpresaController {
-    AssembleModel assemble_model
     EmpresaService empresa_service
 
     List<Empresa> get_lista_empresa(){
@@ -15,7 +15,7 @@ class EmpresaController {
     }
 
     void cadastrar_empresa(ModelData modelo){
-        Empresa m = assemble_model.assemble_empresa(modelo.data)
+        Empresa m = assemble_empresa(modelo.data)
         empresa_service.cadastrar(m)
     }
 
@@ -24,12 +24,31 @@ class EmpresaController {
     }
 
     void update_empresa(ModelData modelo){
-        Empresa m = assemble_model.assemble_empresa(modelo.data)
+        Empresa m = assemble_empresa(modelo.data)
         empresa_service.update(m)
     }
 
-    void empresa_curtir(ModelData modelo){
-        Curtida c = assemble_model.assemble_curtida(modelo.data)
-        empresa_service.curtir(c)
+
+
+    Empresa assemble_empresa(Map<String, String> empresa_info){
+        try {
+            Endereco endereco = new Endereco(
+                    CEP: empresa_info.CEP,
+                    pais: empresa_info.pais,
+                    estado: empresa_info.estado
+            )
+
+            return new Empresa(
+                    CNPJ: empresa_info.CNPJ,
+                    nome: empresa_info.nome,
+                    email: empresa_info.email,
+                    descricao: empresa_info.descricao,
+                    senha: empresa_info.senha,
+                    endereco: endereco,
+                    id: empresa_info.id ? empresa_info.id.toInteger() : -1
+            )
+        } catch (Exception ignored){
+            return null
+        }
     }
 }

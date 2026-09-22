@@ -3,12 +3,13 @@ package org.linketinder.view.shared
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
 @TupleConstructor
 class CurtidaView implements Representavel<Curtida>, Cadastravel<Curtida> {
-    View view
+    ViewIO view
 
     @Override
     String representacao(Curtida objeto) {

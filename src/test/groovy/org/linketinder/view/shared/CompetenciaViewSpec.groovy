@@ -3,19 +3,20 @@ package org.linketinder.view.shared
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import spock.lang.Shared
 import spock.lang.Specification
 
-class CompetenciaViewSpec extends Specification{
-    View view = Mock()
+class CompetenciaViewSpec extends Specification {
+    ViewIO view = Mock()
 
     @Shared
     Competencia competencia = new Competencia(
-        id: 1,
-        tecnologia: "nome",
+            id: 1,
+            tecnologia: "nome",
     )
 
-    def "capturar_dados usa view.get_input para coletar infos"() {
+    void "capturar_dados usa view.get_input para coletar infos"() {
         given:
         CompetenciaView competencia_view = new CompetenciaView(view)
 
@@ -26,10 +27,10 @@ class CompetenciaViewSpec extends Specification{
         1 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
+    void "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
         given:
         CompetenciaView competencia_view = new CompetenciaView(view)
 
@@ -40,10 +41,10 @@ class CompetenciaViewSpec extends Specification{
         2 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Representacao funciona corretamente"(){
+    void "Representacao funciona corretamente"() {
         given:
         CompetenciaView competencia_view = new CompetenciaView(view)
 
@@ -57,7 +58,7 @@ class CompetenciaViewSpec extends Specification{
         }
     }
 
-    def "Exibir chama representacao e view.send_message"(){
+    void "Exibir chama representacao e view.send_message"() {
         given:
         CompetenciaView competencia_view = Spy(CompetenciaView, constructorArgs: [view])
 

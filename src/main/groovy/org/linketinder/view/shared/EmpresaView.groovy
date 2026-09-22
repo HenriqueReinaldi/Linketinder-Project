@@ -3,12 +3,13 @@ package org.linketinder.view.shared
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
 @TupleConstructor
 class EmpresaView implements Representavel<Empresa>, Cadastravel<Empresa> {
-    View view
+    ViewIO view
 
     @Override
     String representacao(Empresa objeto) {

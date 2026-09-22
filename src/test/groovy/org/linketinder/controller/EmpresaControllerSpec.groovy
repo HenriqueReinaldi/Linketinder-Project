@@ -6,9 +6,8 @@ import org.linketinder.service.EmpresaService
 import spock.lang.Specification
 
 class EmpresaControllerSpec extends Specification {
-    AssembleModel assemble_model = Mock()
     EmpresaService empresa_service = Mock()
-    EmpresaController controller = new EmpresaController(assemble_model, empresa_service)
+    EmpresaController controller = new EmpresaController(empresa_service)
 
     void "get lista empresa chama o service correto"() {
         when:
@@ -21,12 +20,13 @@ class EmpresaControllerSpec extends Specification {
         given:
         ModelData md = new ModelData()
         Empresa empresa = new Empresa(id: 1)
+        EmpresaController controller = Spy(constructorArgs: [empresa_service])
 
         when:
         controller.cadastrar_empresa(md)
 
         then:
-        1 * assemble_model.assemble_empresa(md.data) >> empresa
+        1 * controller.assemble_empresa(md.data) >> empresa
         1 * empresa_service.cadastrar(empresa)
     }
 
@@ -41,25 +41,44 @@ class EmpresaControllerSpec extends Specification {
         given:
         ModelData md = new ModelData()
         Empresa empresa = new Empresa(id: 1)
+        EmpresaController controller = Spy(constructorArgs: [empresa_service])
 
         when:
         controller.update_empresa(md)
 
         then:
-        1 * assemble_model.assemble_empresa(md.data) >> empresa
+        1 * controller.assemble_empresa(md.data) >> empresa
         1 * empresa_service.update(empresa)
     }
 
-    void "empresa curtir chama o service correto e assemblemodel"() {
+    void "assemble empresa monta empresa corretamente"() {
         given:
-        ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        EmpresaController controller = Spy(constructorArgs: [empresa_service])
+        Map<String, String> empresa_info = [
+                "estado"   : "estado",
+                "descricao": "descricao",
+                "CEP"      : "CEP",
+                "pais"     : "pais",
+                "CNPJ"     : "CNPJ",
+                "nome"     : "nome",
+                "email"    : "email",
+                "senha"    : "senha",
+                "id"       : "1"
+        ]
 
         when:
-        controller.empresa_curtir(md)
+        Empresa emp = controller.assemble_empresa(empresa_info)
 
         then:
-        1 * assemble_model.assemble_curtida(md.data) >> curtida
-        1 * empresa_service.curtir(curtida)
+        emp.CNPJ == "CNPJ"
+        emp.nome == "nome"
+        emp.email == "email"
+        emp.descricao == "descricao"
+        emp.senha == "senha"
+        emp.id == 1
+
+        emp.endereco.CEP == "CEP"
+        emp.endereco.pais == "pais"
+        emp.endereco.estado == "estado"
     }
 }

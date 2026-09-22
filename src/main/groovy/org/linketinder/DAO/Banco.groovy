@@ -86,6 +86,7 @@ class Banco {
         return false
     }
 
+
     static void conectar() throws SQLException {
         Properties props = new Properties()
         props.setProperty("user", "postgres")

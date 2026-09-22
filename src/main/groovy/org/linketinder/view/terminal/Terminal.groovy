@@ -2,7 +2,6 @@ package org.linketinder.view.terminal
 
 import org.linketinder.controller.CandidatoController
 import org.linketinder.controller.CompetenciaController
-import org.linketinder.controller.Controller
 import org.linketinder.controller.ControllerBundle
 import org.linketinder.controller.CurtidaController
 import org.linketinder.controller.EmpresaController
@@ -15,6 +14,7 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.view.PrefTree
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import org.linketinder.view.shared.CandidatoView
 import org.linketinder.view.shared.CompetenciaView
 import org.linketinder.view.shared.CurtidaView
@@ -24,8 +24,9 @@ import org.linketinder.view.shared.ViewBundle
 
 import static java.lang.Integer.parseInt
 
-class TermView extends View {
+class Terminal extends View {
     static final Scanner scan = new Scanner(System.in)
+    ViewIO io
 
     CompetenciaView competencia_view
     CompetenciaController competencia_controller
@@ -43,7 +44,6 @@ class TermView extends View {
     VagaController vaga_controller
 
     PrefTree comandos
-
 
     void listar(String entidade) {
         switch (entidade) {
@@ -90,7 +90,7 @@ class TermView extends View {
     }
 
     void deletar(String entidade) {
-        int id = get_generic_id()
+        int id = io.get_generic_id()
 
         switch (entidade) {
             case "candidato":
@@ -137,58 +137,39 @@ class TermView extends View {
         switch (entidade) {
             case "candidato":
                 md.data = curtida_view.capturar_dados()
-                candidato_controller.candidato_curtir(md)
+                curtida_controller.candidato_curtir(md)
                 break
             case "empresa":
                 md.data = curtida_view.capturar_dados()
-                empresa_controller.empresa_curtir(md)
+                curtida_controller.empresa_curtir(md)
                 break
         }
     }
 
-
-    void send_message(String message) {
-        println message
-    }
-
-    String get_input(String message) {
-        print message
-        String input = scan.nextLine()
-        return input
-    }
-
     void citar_ajuda() {
-        send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
+        io.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
-        send_message "Comandos read:"
-        send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
+        io.send_message "Comandos read:"
+        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
 
-        send_message "Comandos create:"
-        send_message "cadastrar <candidato / empresa / vaga>"
-        send_message "curtir como candidato"
-        send_message "nota: competencias são criadas automaticassemble_modelente por demanda.\n"
+        io.send_message "Comandos create:"
+        io.send_message "cadastrar <candidato / empresa / vaga>"
+        io.send_message "curtir como candidato"
+        io.send_message "nota: competencias são criadas automaticassemble_modelente por demanda.\n"
 
-        send_message "Comandos delete:"
-        send_message "deletar <candidato / empresa / vaga / competencia>\n"
+        io.send_message "Comandos delete:"
+        io.send_message "deletar <candidato / empresa / vaga / competencia>\n"
 
-        send_message "Comandos update:"
-        send_message "update <candidato / empresa / vaga / competencia>"
-        send_message "curtir como empresa\n"
+        io.send_message "Comandos update:"
+        io.send_message "update <candidato / empresa / vaga / competencia>"
+        io.send_message "curtir como empresa\n"
 
-        send_message "Outros:"
-        send_message "sair"
-    }
-
-    int get_generic_id() {
-        try {
-            return parseInt(get_input("id:"))
-        } catch (Exception ignored) {
-            return -1
-        }
+        io.send_message "Outros:"
+        io.send_message "sair"
     }
 
     boolean run() {
-        String input = get_input "@>"
+        String input = io.get_input "@>"
 
         if (input == "sair") return false
 
@@ -204,24 +185,20 @@ class TermView extends View {
         return true
     }
 
-    TermView(ControllerBundle controller_bundle, ViewBundle view_bundle) {
+    Terminal(ControllerBundle controller_bundle, ViewBundle view_bundle, ViewIO view_io) {
+        this.io = view_io
+
         this.competencia_view = view_bundle.competencia_view
-        competencia_view.view = this
         this.candidato_view = view_bundle.candidato_view
-        candidato_view.view = this
         this.curtida_view = view_bundle.curtida_view
-        curtida_view.view = this
         this.empresa_view = view_bundle.empresa_view
-        empresa_view.view = this
         this.vaga_view = view_bundle.vaga_view
-        vaga_view.view = this
 
         this.competencia_controller = controller_bundle.competencia_controller
         this.candidato_controller = controller_bundle.candidato_controller
         this.curtida_controller = controller_bundle.curtida_controller
         this.empresa_controller = controller_bundle.empresa_controller
         this.vaga_controller = controller_bundle.vaga_controller
-
 
         comandos = new PrefTree()
         Map<String, Closure> lista_comandos = [
@@ -237,6 +214,6 @@ class TermView extends View {
             comandos.inserir(prefixo, comando)
         }
 
-        send_message "Digite ? para ajuda\n"
+        io.send_message "Digite ? para ajuda\n"
     }
 }

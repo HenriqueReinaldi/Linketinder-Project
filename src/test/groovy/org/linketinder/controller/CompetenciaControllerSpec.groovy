@@ -5,9 +5,8 @@ import org.linketinder.service.CompetenciaService
 import spock.lang.Specification
 
 class CompetenciaControllerSpec extends Specification {
-    AssembleModel assemble_model = Mock()
     CompetenciaService competencia_service = Mock()
-    CompetenciaController controller = new CompetenciaController(assemble_model, competencia_service)
+    CompetenciaController controller = new CompetenciaController(competencia_service)
 
     void "get lista competencia chama o service correto"() {
         when:
@@ -27,12 +26,29 @@ class CompetenciaControllerSpec extends Specification {
         given:
         ModelData md = new ModelData()
         Competencia competencia = new Competencia(id: 1)
+        CompetenciaController controller = Spy(constructorArgs: [competencia_service])
 
         when:
         controller.update_competencia(md)
 
         then:
-        1 * assemble_model.assemble_competencia(md.data) >> competencia
+        1 * controller.assemble_competencia(md.data) >> competencia
         1 * competencia_service.update(competencia)
+    }
+
+    void "assemble competencia monta competencia corretamente"() {
+        given:
+        CompetenciaController controller = Spy(constructorArgs: [competencia_service])
+        Map<String, String> competencia_info = [
+                "tecnologia": "tecnologia",
+                "id"        : "1"
+        ]
+
+        when:
+        Competencia comp = controller.assemble_competencia(competencia_info)
+
+        then:
+        comp.tecnologia == "tecnologia"
+        comp.id == 1
     }
 }

@@ -1,17 +1,13 @@
 package org.linketinder.view.terminal
 
 import org.linketinder.controller.CandidatoController
-import org.linketinder.controller.CandidatoControllerSpec
 import org.linketinder.controller.CompetenciaController
-import org.linketinder.controller.CompetenciaControllerSpec
 import org.linketinder.controller.ControllerBundle
 import org.linketinder.controller.CurtidaController
-import org.linketinder.controller.CurtidaControllerSpec
 import org.linketinder.controller.EmpresaController
-import org.linketinder.controller.EmpresaControllerSpec
 import org.linketinder.controller.ModelData
 import org.linketinder.controller.VagaController
-import org.linketinder.controller.VagaControllerSpec
+import org.linketinder.view.ViewIO
 import org.linketinder.view.shared.CandidatoView
 import org.linketinder.view.shared.CompetenciaView
 import org.linketinder.view.shared.CurtidaView
@@ -38,9 +34,11 @@ class TermViewSpec extends Specification {
             candidato_view, empresa_view, vaga_view, competencia_view, curtida_view
     )
 
-    def "listar chama o controller certo"() {
+    ViewIO view_io = Mock()
+
+    void "listar chama o controller certo"() {
         given:
-        TermView termView = new TermView(controller_bundle, view_bundle)
+        Terminal termView = new Terminal(controller_bundle, view_bundle, view_io)
 
         when:
         termView.listar(input)
@@ -57,9 +55,9 @@ class TermViewSpec extends Specification {
         "competencias" | "competencia_controller" | "get_lista_competencia"
     }
 
-    def "cadastrar chama o controller certo"() {
+    void "cadastrar chama o controller certo"() {
         given:
-        TermView termView = Spy(TermView, constructorArgs: [controller_bundle, view_bundle])
+        Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
         termView.get_input(*_) >> "input"
 
         when:
@@ -75,10 +73,10 @@ class TermViewSpec extends Specification {
         "vaga"      | "vaga_controller"      | "cadastrar_vaga"
     }
 
-    def "deletar chama o controller certo"() {
+    void "deletar chama o controller certo"() {
         given:
-        TermView termView = Spy(TermView, constructorArgs: [controller_bundle, view_bundle])
-        termView.get_generic_id() >> 67
+        Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
+        view_io.get_generic_id() >> 67
 
         when:
         termView.deletar(input)
@@ -94,9 +92,9 @@ class TermViewSpec extends Specification {
         "competencia" | "competencia_controller" | "deletar_competencia"
     }
 
-    def "update chama o controller certo"() {
+    void "update chama o controller certo"() {
         given:
-        TermView termView = Spy(TermView, constructorArgs: [controller_bundle, view_bundle])
+        Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
         termView.get_input(*_) >> "input"
         termView.get_generic_id() >> 67
 
@@ -114,27 +112,27 @@ class TermViewSpec extends Specification {
         "competencia" | "competencia_controller" | "update_competencia"
     }
 
-    def "curtir pela perspectiva chama o controller certo"() {
+    void "curtir pela perspectiva chama o controller certo"() {
         given:
-        TermView termView = Spy(TermView, constructorArgs: [controller_bundle, view_bundle])
+        Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
         termView.get_input(*_) >> "input"
 
         when:
         termView.curtir_pela_perspectiva(input)
 
         then:
-        1 * controller_bundle."$controller"."$metodo"(_ as ModelData)
+        1 * controller_bundle.curtida_controller."$metodo"(_ as ModelData)
 
         where:
-        input         | controller               | metodo
-        "candidato"   | "candidato_controller"   | "candidato_curtir"
-        "empresa"     | "empresa_controller"     | "empresa_curtir"
+        input       | metodo
+        "candidato" | "candidato_curtir"
+        "empresa"   | "empresa_curtir"
     }
 
-    def "funcao run retorna falso quando input for sair"() {
+    void "funcao run retorna falso quando input for sair"() {
         given:
-        TermView termView = Spy(TermView, constructorArgs: [controller_bundle, view_bundle])
-        termView.get_input(*_) >> saida
+        Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
+        view_io.get_input(*_) >> saida
 
         expect:
         termView.run() == esperado

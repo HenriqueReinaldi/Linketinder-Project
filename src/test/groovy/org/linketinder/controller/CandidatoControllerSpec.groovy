@@ -5,10 +5,9 @@ import org.linketinder.model.objetos.Curtida
 import org.linketinder.service.CandidatoService
 import spock.lang.Specification
 
-class CandidatoControllerSpec extends Specification{
-    AssembleModel assemble_model = Mock()
+class CandidatoControllerSpec extends Specification {
     CandidatoService candidato_service = Mock()
-    CandidatoController controller = new CandidatoController(assemble_model, candidato_service)
+    CandidatoController controller = new CandidatoController(candidato_service)
 
 
     void "get lista candidato chama o service correto"() {
@@ -20,6 +19,7 @@ class CandidatoControllerSpec extends Specification{
 
     void "cadastrar candidato chama o service correto e assemblemodel"() {
         given:
+        CandidatoController controller = Spy(constructorArgs: [candidato_service])
         ModelData md = new ModelData()
         Candidato candidato = new Candidato(id: 1)
 
@@ -27,11 +27,11 @@ class CandidatoControllerSpec extends Specification{
         controller.cadastrar_candidato(md)
 
         then:
-        1 * assemble_model.assemble_candidato(md.data) >> candidato
+        1 * controller.assemble_candidato(md.data) >> candidato
         1 * candidato_service.cadastrar(candidato)
     }
 
-    void "deletar candidato chama o service correto"(){
+    void "deletar candidato chama o service correto"() {
         when:
         controller.deletar_candidato(13)
         then:
@@ -42,25 +42,50 @@ class CandidatoControllerSpec extends Specification{
         given:
         ModelData md = new ModelData()
         Candidato candidato = new Candidato(id: 1)
+        CandidatoController controller = Spy(constructorArgs: [candidato_service])
 
         when:
         controller.update_candidato(md)
 
         then:
-        1 * assemble_model.assemble_candidato(md.data) >> candidato
+        1 * controller.assemble_candidato(md.data) >> candidato
         1 * candidato_service.update(candidato)
     }
 
-    void "candidato curtir chama o service correto e assemblemodel"(){
+    void "assemble candidato monta candidato corretamente"() {
         given:
-        ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        CandidatoController controller = Spy(constructorArgs: [candidato_service])
+        Map<String, String> candidato_info = [
+                "competencias": "competencia",
+                "CEP"         : "CEP",
+                "estado"      : "estado",
+                "CPF"         : "CPF",
+                "nome"        : "nome",
+                "sobrenome"   : "sobrenome",
+                "nascimento"  : "nascimento",
+                "email"       : "email",
+                "descricao"   : "descricao",
+                "senha"       : "senha",
+                "id"          : "1"
+        ]
 
         when:
-        controller.candidato_curtir(md)
+        Candidato cand = controller.assemble_candidato(candidato_info)
 
         then:
-        1 * assemble_model.assemble_curtida(md.data) >> curtida
-        1 * candidato_service.curtir(curtida)
+        cand.nome == "nome"
+        cand.sobrenome == "sobrenome"
+        cand.CPF == "CPF"
+        cand.data_nascimento == "nascimento"
+        cand.email == "email"
+        cand.descricao == "descricao"
+        cand.senha == "senha"
+        cand.id == 1
+
+        cand.endereco.CEP == "CEP"
+        cand.endereco.estado == "estado"
+
+        cand.competencias.size() == 1
+        cand.competencias[0].tecnologia == "competencia"
     }
 }

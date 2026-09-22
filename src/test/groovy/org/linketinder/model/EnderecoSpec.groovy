@@ -4,7 +4,7 @@ import org.linketinder.model.objetos.Endereco
 import spock.lang.Shared
 import spock.lang.Specification
 
-class EnderecoSpec extends Specification{
+class EnderecoSpec extends Specification {
 
     @Shared
     List<Integer> numeros = (-20..20)
@@ -12,46 +12,46 @@ class EnderecoSpec extends Specification{
     @Shared
     List<Endereco> enderecos = numeros.collect {
         new Endereco(
-            id: it.toInteger(),
-            CEP: "67${it}",
-            pais: "pais${it}",
-            estado: "estado${it}"
+                id: it.toInteger(),
+                CEP: "67${it}",
+                pais: "pais${it}",
+                estado: "estado${it}"
         )
     }
 
-    def "Metodo getId retorna id"() {
+    void "Metodo getId retorna id"() {
         expect:
-            endereco.getId() == numero.toInteger()
+        endereco.getId() == numero.toInteger()
 
         where:
-            numero << numeros
-            endereco << enderecos
+        numero << numeros
+        endereco << enderecos
     }
 
-    def "Metodo getCEP retorna CEP"() {
+    void "Metodo getCEP retorna CEP"() {
         expect:
-            endereco.getCEP() == "67$numero"
+        endereco.getCEP() == "67$numero"
 
         where:
-            numero << numeros
-            endereco << enderecos
+        numero << numeros
+        endereco << enderecos
     }
 
-    def "Metodo getPas retorna pais"() {
+    void "Metodo getPas retorna pais"() {
         expect:
-            endereco.getPais() == "pais$numero"
+        endereco.getPais() == "pais$numero"
 
         where:
-            numero << numeros
-            endereco << enderecos
+        numero << numeros
+        endereco << enderecos
     }
 
-    def "Metodo getEstado retorna estado"() {
+    void "Metodo getEstado retorna estado"() {
         expect:
-            endereco.getEstado() == "estado$numero"
+        endereco.getEstado() == "estado$numero"
 
         where:
-            numero << numeros
-            endereco << enderecos
+        numero << numeros
+        endereco << enderecos
     }
 }
