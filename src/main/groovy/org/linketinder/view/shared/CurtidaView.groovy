@@ -36,13 +36,13 @@ class CurtidaView implements Representavel<Curtida>, Cadastravel<Curtida> {
         }
 
         Map<String, String> campos = [
-                "candidato_id" : "ID do Candidato:",
-                "vaga_id" : "ID da da Vaga:"
+                "candidato_id": "ID do Candidato:",
+                "vaga_id"     : "ID da da Vaga:"
         ]
 
         if (com_id) campos["id"] = "ID:"
 
-        campos.each {e ->
+        campos.each { e ->
             campos[e.key] = pergunta(e.value)
         }
 

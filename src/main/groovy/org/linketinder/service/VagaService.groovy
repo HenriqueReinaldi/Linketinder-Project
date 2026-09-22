@@ -19,11 +19,11 @@ class VagaService {
     CompetenciaDAO competencia_dao
     EmpresaDAO empresa_dao
 
-    List<Vaga> get_lista(){
-        try{
+    List<Vaga> get_lista() {
+        try {
             List<Vaga> vagas = dao.get_lista_vaga()
 
-            vagas.each {Vaga vaga ->
+            vagas.each { Vaga vaga ->
                 vaga.endereco = endereco_dao.get_endereco_by_id(vaga.endereco.id)
                 vaga.competencias_desejadas = competencia_dao.get_lista_competencias_of_entidade("vaga", vaga.id)
                 vaga.empresa = empresa_dao.get_empresa_by_id(vaga.empresa.id)
@@ -31,13 +31,13 @@ class VagaService {
 
             return vagas
         }
-        catch (Exception ignored){
+        catch (Exception ignored) {
             return null
         }
     }
 
-    void cadastrar(Vaga v){
-        try{
+    void cadastrar(Vaga v) {
+        try {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -45,11 +45,11 @@ class VagaService {
             vaga_id = dao.cadastrar_vaga(v)
             if (vaga_id < 0) return
 
-            List<Integer> competencias_id  = []
-            for (Competencia comp : v.competencias_desejadas){
+            List<Integer> competencias_id = []
+            for (Competencia comp : v.competencias_desejadas) {
                 competencias_id << competencia_dao.create_if_not_exists_competencia(comp.tecnologia)
             }
-            for (int competencia_id : competencias_id){
+            for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("vaga", vaga_id, competencia_id)
             }
         }
@@ -58,15 +58,16 @@ class VagaService {
         }
     }
 
-    void deletar(int id){
-        try{
+    void deletar(int id) {
+        try {
             dao.delete_vaga_by_id(id)
         }
-        catch (Exception ignored) {}
+        catch (Exception ignored) {
+        }
     }
 
-    void update(Vaga v){
-        try{
+    void update(Vaga v) {
+        try {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -74,26 +75,27 @@ class VagaService {
             dao.update_vaga(v)
 
             competencia_dao.delete_entidade_competencias_by_entidadeid("vaga", v.id)
-            List<Integer> competencias_id  = []
-            for (Competencia comp : v.competencias_desejadas){
+            List<Integer> competencias_id = []
+            for (Competencia comp : v.competencias_desejadas) {
                 competencias_id << competencia_dao.create_if_not_exists_competencia(comp.tecnologia)
             }
-            for (int competencia_id : competencias_id){
+            for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("vaga", v.id, competencia_id)
             }
         }
-        catch (Exception ignored) {}
+        catch (Exception ignored) {
+        }
     }
 
-    Vaga get_by_id(String id){
-        try{
+    Vaga get_by_id(String id) {
+        try {
             return dao.get_vaga_by_id(Integer.parseInt(id))
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             return null
         }
     }
 
-    VagaService(Banco bd){
+    VagaService(Banco bd) {
         this.bd = bd
         this.dao = new VagaDAO(bd)
         this.endereco_dao = new EnderecoDAO(bd)

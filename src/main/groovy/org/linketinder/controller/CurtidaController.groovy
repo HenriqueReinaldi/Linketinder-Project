@@ -19,11 +19,13 @@ class CurtidaController {
     List<Curtida> get_lista_curtida() {
         return curtida_service.get_lista()
     }
+
     void candidato_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
         candidato_service.curtir(c)
     }
-    void empresa_curtir(ModelData modelo){
+
+    void empresa_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
         empresa_service.curtir(c)
     }

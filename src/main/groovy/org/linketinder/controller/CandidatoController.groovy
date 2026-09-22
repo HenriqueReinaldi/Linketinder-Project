@@ -30,13 +30,11 @@ class CandidatoController {
     }
 
 
-
-
-    Candidato assemble_candidato(Map<String, String> candidato_info){
+    Candidato assemble_candidato(Map<String, String> candidato_info) {
         try {
             List<Competencia> competencias = candidato_info["competencias"]
                     .tokenize()
-                    .collect{new Competencia(tecnologia: it.trim())}
+                    .collect { new Competencia(tecnologia: it.trim()) }
 
             Endereco endereco = new Endereco(
                     CEP: candidato_info.CEP,
@@ -56,7 +54,7 @@ class CandidatoController {
                     endereco: endereco,
                     id: candidato_info.id ? candidato_info.id.toInteger() : -1
             )
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             return null
         }
     }

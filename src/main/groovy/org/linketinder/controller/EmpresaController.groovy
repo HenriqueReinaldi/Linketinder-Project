@@ -10,27 +10,26 @@ import org.linketinder.service.EmpresaService
 class EmpresaController {
     EmpresaService empresa_service
 
-    List<Empresa> get_lista_empresa(){
+    List<Empresa> get_lista_empresa() {
         return empresa_service.get_lista()
     }
 
-    void cadastrar_empresa(ModelData modelo){
+    void cadastrar_empresa(ModelData modelo) {
         Empresa m = assemble_empresa(modelo.data)
         empresa_service.cadastrar(m)
     }
 
-    void deletar_empresa(int id){
+    void deletar_empresa(int id) {
         empresa_service.deletar(id)
     }
 
-    void update_empresa(ModelData modelo){
+    void update_empresa(ModelData modelo) {
         Empresa m = assemble_empresa(modelo.data)
         empresa_service.update(m)
     }
 
 
-
-    Empresa assemble_empresa(Map<String, String> empresa_info){
+    Empresa assemble_empresa(Map<String, String> empresa_info) {
         try {
             Endereco endereco = new Endereco(
                     CEP: empresa_info.CEP,
@@ -47,7 +46,7 @@ class EmpresaController {
                     endereco: endereco,
                     id: empresa_info.id ? empresa_info.id.toInteger() : -1
             )
-        } catch (Exception ignored){
+        } catch (Exception ignored) {
             return null
         }
     }

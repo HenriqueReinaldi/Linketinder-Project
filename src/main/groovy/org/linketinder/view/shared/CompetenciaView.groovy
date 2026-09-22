@@ -8,7 +8,7 @@ import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
 @TupleConstructor
-class CompetenciaView implements Representavel<Competencia>, Cadastravel{
+class CompetenciaView implements Representavel<Competencia>, Cadastravel {
     ViewIO view
 
     @Override
@@ -28,12 +28,12 @@ class CompetenciaView implements Representavel<Competencia>, Cadastravel{
         }
 
         Map<String, String> campos = [
-            "tecnologia" : "Tecnologia:",
+                "tecnologia": "Tecnologia:",
         ]
 
         if (com_id) campos["id"] = "ID:"
 
-        campos.each {e ->
+        campos.each { e ->
             campos[e.key] = pergunta(e.value)
         }
 

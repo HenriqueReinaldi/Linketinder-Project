@@ -21,7 +21,7 @@ class EmpresaService {
         try {
             List<Empresa> empresas = dao.get_lista_empresa()
 
-            empresas.each {Empresa empresa ->
+            empresas.each { Empresa empresa ->
                 empresa.endereco = endereco_dao.get_endereco_by_id(empresa.endereco.id)
             }
 

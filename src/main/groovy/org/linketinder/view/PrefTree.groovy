@@ -3,22 +3,22 @@ package org.linketinder.view
 class PrefTree {
     PrefNode raiz;
 
-    PrefTree(){
+    PrefTree() {
         raiz = new PrefNode()
         raiz.letra = '.'
         raiz.valor = {}
         raiz.filhos = []
     }
 
-    void inserir(String palavra, Closure acao){
+    void inserir(String palavra, Closure acao) {
         PrefNode nivel_atual = raiz
 
-        for (int i = 0; i < palavra.length(); i++){
+        for (int i = 0; i < palavra.length(); i++) {
             String letra = palavra[i]
             boolean proximo = false
 
-            for (PrefNode node in nivel_atual.filhos){
-                if (node.letra == letra){
+            for (PrefNode node in nivel_atual.filhos) {
+                if (node.letra == letra) {
                     nivel_atual = node
                     proximo = true
                     break
@@ -36,15 +36,15 @@ class PrefTree {
         nivel_atual.valor = acao
     }
 
-    Closure buscar(String busca){
+    Closure buscar(String busca) {
         PrefNode nivel_atual = raiz
 
-        for (int i = 0; i < busca.length(); i++){
+        for (int i = 0; i < busca.length(); i++) {
             String letra = busca[i]
             boolean proximo = false
 
-            for (PrefNode node in nivel_atual.filhos){
-                if (node.letra == letra){
+            for (PrefNode node in nivel_atual.filhos) {
+                if (node.letra == letra) {
                     nivel_atual = node
                     proximo = true
                     break

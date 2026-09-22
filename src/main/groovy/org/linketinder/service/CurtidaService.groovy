@@ -16,8 +16,8 @@ class CurtidaService {
     CandidatoDAO candidato_dao
     VagaDAO vaga_dao
 
-    List<Curtida> get_lista(){
-        try{
+    List<Curtida> get_lista() {
+        try {
             List<Curtida> curtidas = dao.get_lista_curtida()
 
             curtidas.each { Curtida curtida ->
@@ -27,13 +27,13 @@ class CurtidaService {
 
             return curtidas
         }
-        catch (Exception e){
+        catch (Exception e) {
             e.printStackTrace()
             return []
         }
     }
 
-    CurtidaService(Banco bd){
+    CurtidaService(Banco bd) {
         this.bd = bd
         this.dao = new CurtidaDAO(bd)
 
