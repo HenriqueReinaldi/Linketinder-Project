@@ -5,6 +5,7 @@ export class Vaga{
         public nome: string,
         public salario:number,
         public descricao:string,
-        public empresa: Empresa
+        public empresa: Empresa,
+        public competencias_desejadas: string[]
     ){}
 }
