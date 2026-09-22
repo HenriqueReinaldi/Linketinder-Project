@@ -1,7 +1,13 @@
 package org.linketinder.view.terminal
 
+import org.linketinder.controller.CandidatoController
+import org.linketinder.controller.CompetenciaController
 import org.linketinder.controller.Controller
+import org.linketinder.controller.ControllerBundle
+import org.linketinder.controller.CurtidaController
+import org.linketinder.controller.EmpresaController
 import org.linketinder.controller.ModelData
+import org.linketinder.controller.VagaController
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
@@ -14,39 +20,51 @@ import org.linketinder.view.shared.CompetenciaView
 import org.linketinder.view.shared.CurtidaView
 import org.linketinder.view.shared.EmpresaView
 import org.linketinder.view.shared.VagaView
+import org.linketinder.view.shared.ViewBundle
+
+import static java.lang.Integer.parseInt
 
 class TermView extends View {
     static final Scanner scan = new Scanner(System.in)
 
-    final CandidatoView candidato_view = new CandidatoView(this)
-    final EmpresaView empresa_view = new EmpresaView(this)
-    final VagaView vaga_view = new VagaView(this)
-    final CompetenciaView competencia_view = new CompetenciaView(this)
-    final CurtidaView curtida_view = new CurtidaView(this)
+    CompetenciaView competencia_view
+    CompetenciaController competencia_controller
 
-    Controller controller
-    PrefTree comandos = new PrefTree()
+    CandidatoView candidato_view
+    CandidatoController candidato_controller
+
+    CurtidaView curtida_view
+    CurtidaController curtida_controller
+
+    EmpresaView empresa_view
+    EmpresaController empresa_controller
+
+    VagaView vaga_view
+    VagaController vaga_controller
+
+    PrefTree comandos
+
 
     void listar(String entidade) {
         switch (entidade) {
             case "candidatos":
-                List<Candidato> candidatos = controller.get_lista_candidato()
+                List<Candidato> candidatos = candidato_controller.get_lista_candidato()
                 candidatos.forEach { Candidato c -> candidato_view.exibir(c) }
                 break
             case "empresas":
-                List<Empresa> empresas = controller.get_lista_empresa()
+                List<Empresa> empresas = empresa_controller.get_lista_empresa()
                 empresas.forEach { Empresa m -> empresa_view.exibir(m) }
                 break
             case "vagas":
-                List<Vaga> vagas = controller.get_lista_vaga()
+                List<Vaga> vagas = vaga_controller.get_lista_vaga()
                 vagas.forEach { Vaga v -> vaga_view.exibir(v) }
                 break
             case "curtidas":
-                List<Curtida> curtidas = controller.get_lista_curtida()
+                List<Curtida> curtidas = curtida_controller.get_lista_curtida()
                 curtidas.forEach { Curtida c -> curtida_view.exibir(c) }
                 break
             case "competencias":
-                List<Competencia> competencias = controller.get_lista_competencia()
+                List<Competencia> competencias = competencia_controller.get_lista_competencia()
                 competencias.forEach { Competencia c -> competencia_view.exibir(c) }
                 break
         }
@@ -58,33 +76,34 @@ class TermView extends View {
         switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados()
-                controller.cadastrar_candidato(md)
+                candidato_controller.cadastrar_candidato(md)
                 break
             case "empresa":
                 md.data = empresa_view.capturar_dados()
-                controller.cadastrar_empresa(md)
+                empresa_controller.cadastrar_empresa(md)
                 break
             case "vaga":
                 md.data = vaga_view.capturar_dados()
-                controller.cadastrar_vaga(md)
+                vaga_controller.cadastrar_vaga(md)
                 break
         }
     }
 
     void deletar(String entidade) {
         int id = get_generic_id()
+
         switch (entidade) {
             case "candidato":
-                controller.deletar_candidato(id)
+                candidato_controller.deletar_candidato(id)
                 break
             case "empresa":
-                controller.deletar_empresa(id)
+                empresa_controller.deletar_empresa(id)
                 break
             case "vaga":
-                controller.deletar_vaga(id)
+                vaga_controller.deletar_vaga(id)
                 break
             case "competencia":
-                controller.deletar_competencia(id)
+                competencia_controller.deletar_competencia(id)
                 break
         }
     }
@@ -95,19 +114,19 @@ class TermView extends View {
         switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados(true)
-                controller.update_candidato(md)
+                candidato_controller.update_candidato(md)
                 break
             case "empresa":
                 md.data = empresa_view.capturar_dados(true)
-                controller.update_empresa(md)
+                empresa_controller.update_empresa(md)
                 break
             case "vaga":
                 md.data = vaga_view.capturar_dados(true)
-                controller.update_vaga(md)
+                vaga_controller.update_vaga(md)
                 break
             case "competencia":
                 md.data = competencia_view.capturar_dados(true)
-                controller.update_competencia(md)
+                competencia_controller.update_competencia(md)
                 break
         }
     }
@@ -118,50 +137,15 @@ class TermView extends View {
         switch (entidade) {
             case "candidato":
                 md.data = curtida_view.capturar_dados()
-                controller.candidato_curtir(md)
+                candidato_controller.candidato_curtir(md)
                 break
             case "empresa":
                 md.data = curtida_view.capturar_dados()
-                controller.empresa_curtir(md)
+                empresa_controller.empresa_curtir(md)
                 break
         }
     }
 
-    TermView(Controller controller) {
-        this.controller = controller
-
-        comandos.inserir("?", { citar_ajuda() })
-        comandos.inserir("listar ", this.&listar)
-        comandos.inserir("cadastrar ", this.&cadastrar)
-        comandos.inserir("deletar ", this.&deletar)
-        comandos.inserir("update ", this.&update)
-
-        comandos.inserir("curtir como ", this.&curtir_pela_perspectiva)
-        comandos.inserir("curtir como ", this.&curtir_pela_perspectiva)
-
-        send_message "Digite ? para ajuda\n"
-    }
-
-    boolean run() {
-        String input = get_input "@>"
-
-        if (input == "sair") return false
-
-        Closure executor = comandos.buscar(input)
-        List<String> args = input.tokenize()
-
-        if (args.size() - 1 < 0) {
-            executor("")
-        } else {
-            executor(args[args.size() - 1] ?: "")
-        }
-
-        return true
-    }
-
-    int get_generic_id() throws NumberFormatException {
-        Integer.parseInt(get_input("id:"))
-    }
 
     void send_message(String message) {
         println message
@@ -170,7 +154,7 @@ class TermView extends View {
     String get_input(String message) {
         print message
         String input = scan.nextLine()
-        input
+        return input
     }
 
     void citar_ajuda() {
@@ -193,5 +177,66 @@ class TermView extends View {
 
         send_message "Outros:"
         send_message "sair"
+    }
+
+    int get_generic_id() {
+        try {
+            return parseInt(get_input("id:"))
+        } catch (Exception ignored) {
+            return -1
+        }
+    }
+
+    boolean run() {
+        String input = get_input "@>"
+
+        if (input == "sair") return false
+
+        Closure executor = comandos.buscar(input)
+        List<String> args = input.tokenize()
+
+        if (args.size() - 1 < 0) {
+            executor("")
+        } else {
+            executor(args[args.size() - 1] ?: "")
+        }
+
+        return true
+    }
+
+    TermView(ControllerBundle controller_bundle, ViewBundle view_bundle) {
+        this.competencia_view = view_bundle.competencia_view
+        competencia_view.view = this
+        this.candidato_view = view_bundle.candidato_view
+        candidato_view.view = this
+        this.curtida_view = view_bundle.curtida_view
+        curtida_view.view = this
+        this.empresa_view = view_bundle.empresa_view
+        empresa_view.view = this
+        this.vaga_view = view_bundle.vaga_view
+        vaga_view.view = this
+
+        this.competencia_controller = controller_bundle.competencia_controller
+        this.candidato_controller = controller_bundle.candidato_controller
+        this.curtida_controller = controller_bundle.curtida_controller
+        this.empresa_controller = controller_bundle.empresa_controller
+        this.vaga_controller = controller_bundle.vaga_controller
+
+
+        comandos = new PrefTree()
+        Map<String, Closure> lista_comandos = [
+                "?"          : { citar_ajuda() },
+                "listar"     : this.&listar,
+                "cadastrar"  : this.&cadastrar,
+                "deletar"    : this.&deletar,
+                "update"     : this.&update,
+                "curtir como": this.&curtir_pela_perspectiva
+        ]
+
+        lista_comandos.each { String prefixo, Closure comando ->
+            comandos.inserir(prefixo, comando)
+        }
+
+        send_message "Digite ? para ajuda\n"
     }
 }

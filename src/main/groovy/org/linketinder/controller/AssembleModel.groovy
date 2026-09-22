@@ -9,7 +9,7 @@ import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.service.CandidatoService
 import org.linketinder.service.EmpresaService
-
+import org.linketinder.service.ServiceBundle
 import org.linketinder.service.VagaService
 
 @TupleConstructor
@@ -24,7 +24,7 @@ class AssembleModel {
         }
         catch (Exception e){
             println "erro criando o modelo:"
-            println "    " + e.printStackTrace()
+            println "    " + e.message
             println ""
         }
         return null

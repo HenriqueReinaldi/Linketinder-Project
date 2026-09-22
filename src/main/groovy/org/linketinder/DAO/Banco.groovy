@@ -1,9 +1,5 @@
 package org.linketinder.DAO
 
-import org.linketinder.DAO.old.Create
-import org.linketinder.DAO.old.Delete
-import org.linketinder.DAO.old.Read
-import org.linketinder.DAO.old.Update
 
 import java.sql.Connection
 import java.sql.PreparedStatement

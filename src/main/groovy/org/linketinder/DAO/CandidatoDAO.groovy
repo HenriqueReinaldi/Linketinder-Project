@@ -1,14 +1,10 @@
 package org.linketinder.DAO
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.old.Create
-import org.linketinder.DAO.old.Delete
-import org.linketinder.DAO.old.Read
+
 import org.linketinder.model.objetos.Candidato
-import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Endereco
 
-import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException

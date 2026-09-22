@@ -1,4 +1,5 @@
  - separação das classes DAO por entidade ao invés de ação (CRUD) -> (CANDIDATODAO, EMPRESADAO...)
+ - quebra do controller em ModelControllers...
  - separação de responsabilidades DAO - SERVICE
 
 
