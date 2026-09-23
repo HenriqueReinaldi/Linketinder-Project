@@ -20,7 +20,7 @@ class VagaSpec extends Specification{
         )
     }
 
-    def "Metodo getNome retorna nome"() {
+    void "Metodo getNome retorna nome"() {
         expect:
             vaga.getNome() == "nome$numero"
 
@@ -29,7 +29,7 @@ class VagaSpec extends Specification{
             vaga << vagas
     }
 
-    def "Metodo getDescricao retorna descricao"() {
+    void "Metodo getDescricao retorna descricao"() {
         expect:
             vaga.getDescricao() == "descricao$numero"
 
@@ -38,7 +38,7 @@ class VagaSpec extends Specification{
             vaga << vagas
     }
 
-    def "Outros getters retornam seus valores devidamente"() {
+    void "Outros getters retornam seus valores devidamente"() {
         expect:
             verifyAll(vaga) {
                 getEndereco() == null

@@ -3,12 +3,13 @@ package org.linketinder.view.shared
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
 @TupleConstructor
 class EmpresaView implements Representavel<Empresa>, Cadastravel<Empresa> {
-    View view
+    ViewIO view
 
     @Override
     String representacao(Empresa objeto) {
@@ -23,7 +24,7 @@ class EmpresaView implements Representavel<Empresa>, Cadastravel<Empresa> {
         """.stripMargin()
     }
 
-    void exibir(Empresa objeto){
+    void exibir(Empresa objeto) {
         view.send_message(representacao objeto)
     }
 
@@ -34,19 +35,19 @@ class EmpresaView implements Representavel<Empresa>, Cadastravel<Empresa> {
         }
 
         Map<String, String> campos = [
-            "nome" : "Nome:",
-            "email" : "Email:",
-            "estado" : "Estado:",
-            "CEP" : "CEP:",
-            "descricao" : "Descrição:",
-            "CNPJ" : "CNPJ:",
-            "pais": "pais:",
-            "senha": "Senha:"
+                "nome"     : "Nome:",
+                "email"    : "Email:",
+                "estado"   : "Estado:",
+                "CEP"      : "CEP:",
+                "descricao": "Descrição:",
+                "CNPJ"     : "CNPJ:",
+                "pais"     : "pais:",
+                "senha"    : "Senha:"
         ]
 
         if (com_id) campos["id"] = "ID:"
 
-        campos.each {e ->
+        campos.each { e ->
             campos[e.key] = pergunta(e.value)
         }
 

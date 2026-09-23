@@ -6,7 +6,7 @@ import groovy.transform.TupleConstructor
 @ToString(includeSuperProperties = true, includeNames = true)
 @TupleConstructor(includeSuperProperties = true)
 
-class Competencia{
+class Competencia {
     int id = -1
     String tecnologia
 }

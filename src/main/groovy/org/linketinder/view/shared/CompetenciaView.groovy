@@ -3,12 +3,13 @@ package org.linketinder.view.shared
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel
 
 @TupleConstructor
-class CompetenciaView implements Representavel<Competencia>, Cadastravel{
-    View view
+class CompetenciaView implements Representavel<Competencia>, Cadastravel {
+    ViewIO view
 
     @Override
     String representacao(Competencia objeto) {
@@ -27,12 +28,12 @@ class CompetenciaView implements Representavel<Competencia>, Cadastravel{
         }
 
         Map<String, String> campos = [
-            "tecnologia" : "Tecnologia:",
+                "tecnologia": "Tecnologia:",
         ]
 
         if (com_id) campos["id"] = "ID:"
 
-        campos.each {e ->
+        campos.each { e ->
             campos[e.key] = pergunta(e.value)
         }
 

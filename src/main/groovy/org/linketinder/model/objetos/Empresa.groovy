@@ -6,7 +6,7 @@ import org.linketinder.model.Pessoa
 
 @ToString(includeSuperProperties = true, includeNames = true)
 @TupleConstructor(includeSuperProperties = true)
-class Empresa extends Pessoa{
+class Empresa extends Pessoa {
     int id = -1
 
     String CNPJ
