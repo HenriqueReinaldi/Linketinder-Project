@@ -8,12 +8,12 @@ import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
+import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor
 class VagaService {
     Banco bd
-
     VagaDAO dao
     EnderecoDAO endereco_dao
     CompetenciaDAO competencia_dao
@@ -42,7 +42,7 @@ class VagaService {
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
 
-            vaga_id = dao.cadastrar_vaga(v)
+            int vaga_id = dao.cadastrar_vaga(v)
             if (vaga_id < 0) return
 
             List<Integer> competencias_id = []
@@ -95,11 +95,4 @@ class VagaService {
         }
     }
 
-    VagaService(Banco bd) {
-        this.bd = bd
-        this.dao = new VagaDAO(bd)
-        this.endereco_dao = new EnderecoDAO(bd)
-        this.competencia_dao = new CompetenciaDAO(bd)
-        this.empresa_dao = new EmpresaDAO(bd)
-    }
 }

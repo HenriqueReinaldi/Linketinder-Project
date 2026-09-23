@@ -6,6 +6,9 @@
  - distribuição das responsabilidades de AssembleModel nos devidos controllers [S,O,I]
  - mover acoes de curtida de CandidatoCOntroller e EMpresaCOntroller para CurtidaController [S]
  - aplicação da inversão de dependencia onde era necessario [D]
+ - segregação de responsabilidades de curtidas (empresa, candidato services) -> (curtidaservice) [S]
+
+
 
  - uso do formatador do INTELLIJ para melhorar consistencia
  - substituicoes da palavra chave "def"

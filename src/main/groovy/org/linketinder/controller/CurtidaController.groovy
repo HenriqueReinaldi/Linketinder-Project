@@ -14,7 +14,6 @@ class CurtidaController {
     CurtidaService curtida_service
     CandidatoService candidato_service
     VagaService vaga_service
-    EmpresaService empresa_service
 
     List<Curtida> get_lista_curtida() {
         return curtida_service.get_lista()
@@ -22,12 +21,12 @@ class CurtidaController {
 
     void candidato_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
-        candidato_service.curtir(c)
+        curtida_service.curtir_como_candidato(c)
     }
 
     void empresa_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
-        empresa_service.curtir(c)
+        curtida_service.curtir_como_empresa(c)
     }
 
     Curtida assemble_curtida(Map<String, String> curtida_info) {

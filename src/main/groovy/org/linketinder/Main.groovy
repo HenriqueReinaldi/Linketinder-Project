@@ -1,6 +1,11 @@
 package org.linketinder
 
-
+import org.linketinder.DAO.CandidatoDAO
+import org.linketinder.DAO.CompetenciaDAO
+import org.linketinder.DAO.CurtidaDAO
+import org.linketinder.DAO.EmpresaDAO
+import org.linketinder.DAO.EnderecoDAO
+import org.linketinder.DAO.VagaDAO
 import org.linketinder.controller.CandidatoController
 import org.linketinder.controller.CompetenciaController
 
@@ -42,11 +47,11 @@ static <GENERICO> GENERICO exit_on_exception(String msg, Closure<GENERICO> codig
 
 static ServiceBundle inicializar_services(Banco bd) {
     return new ServiceBundle(
-            new CandidatoService(bd),
-            new EmpresaService(bd),
-            new CompetenciaService(bd),
-            new CurtidaService(bd),
-            new VagaService(bd)
+            new CandidatoService(bd, new CandidatoDAO(bd), new CompetenciaDAO(bd), new EnderecoDAO(bd)),
+            new EmpresaService(bd, new EmpresaDAO(bd), new EnderecoDAO(bd)),
+            new CompetenciaService(bd, new CompetenciaDAO(bd)),
+            new CurtidaService(bd, new CurtidaDAO(bd), new CandidatoDAO(bd), new VagaDAO(bd)),
+            new VagaService(bd, new VagaDAO(bd), new EnderecoDAO(bd), new CompetenciaDAO(bd), new EmpresaDAO(bd))
     )
 }
 
@@ -64,7 +69,7 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
     return new ControllerBundle(
             new CompetenciaController(services.competencia_service),
             new CandidatoController(services.candidato_service),
-            new CurtidaController(services.curtida_service, services.candidato_service, services.vaga_service, services.empresa_service),
+            new CurtidaController(services.curtida_service, services.candidato_service, services.vaga_service),
             new EmpresaController(services.empresa_service),
             new VagaController(services.vaga_service, services.empresa_service)
     )

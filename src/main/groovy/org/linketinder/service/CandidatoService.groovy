@@ -13,11 +13,9 @@ import org.linketinder.model.objetos.Curtida
 @TupleConstructor
 class CandidatoService {
     Banco bd
-
     CandidatoDAO dao
     CompetenciaDAO competencia_dao
     EnderecoDAO endereco_dao
-    CurtidaDAO curtida_dao
 
     List<Candidato> get_lista() {
         try {
@@ -87,28 +85,11 @@ class CandidatoService {
         }
     }
 
-    void curtir(Curtida c) {
-        try {
-            curtida_dao.cadastrar_curtida(c)
-        }
-        catch (Exception e) {
-            e.printStackTrace()
-        }
-    }
-
     Candidato get_by_id(String id) {
         try {
             return dao.get_candidato_by_id(Integer.parseInt(id))
         } catch (Exception ignored) {
             return null
         }
-    }
-
-    CandidatoService(Banco bd) {
-        this.bd = bd
-        this.dao = new CandidatoDAO(bd)
-        this.competencia_dao = new CompetenciaDAO(bd)
-        this.endereco_dao = new EnderecoDAO(bd)
-        this.curtida_dao = new CurtidaDAO(bd)
     }
 }

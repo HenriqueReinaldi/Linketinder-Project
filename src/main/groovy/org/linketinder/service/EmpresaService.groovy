@@ -8,14 +8,13 @@ import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
+import org.linketinder.model.objetos.Endereco
 
 @TupleConstructor
 class EmpresaService {
     Banco bd
-
     EmpresaDAO dao
     EnderecoDAO endereco_dao
-    CurtidaDAO curtida_dao
 
     List<Empresa> get_lista() {
         try {
@@ -63,14 +62,6 @@ class EmpresaService {
         }
     }
 
-    void curtir(Curtida c) {
-        try {
-            curtida_dao.empresa_curtir(c)
-        }
-        catch (Exception ignored) {
-        }
-    }
-
     void update(Empresa m) {
         try {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(m.endereco)
@@ -83,10 +74,4 @@ class EmpresaService {
         }
     }
 
-    EmpresaService(Banco bd) {
-        this.bd = bd
-        this.dao = new EmpresaDAO(bd)
-        this.endereco_dao = new EnderecoDAO(bd)
-        this.curtida_dao = new CurtidaDAO(bd)
-    }
 }

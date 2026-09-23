@@ -11,7 +11,6 @@ import org.linketinder.model.objetos.Empresa
 @TupleConstructor
 class CurtidaService {
     Banco bd
-
     CurtidaDAO dao
     CandidatoDAO candidato_dao
     VagaDAO vaga_dao
@@ -33,12 +32,21 @@ class CurtidaService {
         }
     }
 
-    CurtidaService(Banco bd) {
-        this.bd = bd
-        this.dao = new CurtidaDAO(bd)
+    void curtir_como_candidato(Curtida c) {
+        try {
+            dao.cadastrar_curtida(c)
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
 
-        this.candidato_dao = new CandidatoDAO(bd)
-        this.vaga_dao = new VagaDAO(bd)
+    void curtir_como_empresa(Curtida c) {
+        try {
+            dao.empresa_curtir(c)
+        }
+        catch (Exception ignored) {
+        }
     }
 
 }

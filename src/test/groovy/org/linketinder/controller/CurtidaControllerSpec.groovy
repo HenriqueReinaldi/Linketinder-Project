@@ -12,7 +12,6 @@ import spock.lang.Specification
 class CurtidaControllerSpec extends Specification {
     CurtidaService curtida_service = Mock()
     CandidatoService candidato_service = Mock()
-    EmpresaService empresa_service = Mock()
     VagaService vaga_service = Mock()
     CurtidaController controller = new CurtidaController(curtida_service)
 
@@ -27,33 +26,33 @@ class CurtidaControllerSpec extends Specification {
         given:
         ModelData md = new ModelData()
         Curtida curtida = new Curtida(id: 1)
-        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service, empresa_service])
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
         controller.candidato_curtir(md)
 
         then:
         1 * controller.assemble_curtida(md.data) >> curtida
-        1 * candidato_service.curtir(curtida)
+        1 * curtida_service.curtir_como_candidato(curtida)
     }
 
     void "empresa curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
         Curtida curtida = new Curtida(id: 1)
-        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service, empresa_service])
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
         controller.empresa_curtir(md)
 
         then:
         1 * controller.assemble_curtida(md.data) >> curtida
-        1 * empresa_service.curtir(curtida)
+        1 * curtida_service.curtir_como_empresa(curtida)
     }
 
     void "assemble_curtida monta curtida corretamente"() {
         given:
-        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service, empresa_service])
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
         Map<String, String> curtida_info = [
                 "candidato_id": "12",
                 "vaga_id"     : "13",

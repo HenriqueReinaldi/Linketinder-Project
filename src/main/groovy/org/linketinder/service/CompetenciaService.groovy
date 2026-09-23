@@ -36,8 +36,4 @@ class CompetenciaService {
         }
     }
 
-    CompetenciaService(Banco bd) {
-        this.bd = bd
-        this.dao = new CompetenciaDAO(bd)
-    }
 }
