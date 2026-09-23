@@ -10,7 +10,6 @@ import org.linketinder.model.objetos.Empresa
 
 @TupleConstructor
 class CurtidaService {
-    Banco bd
     CurtidaDAO dao
     CandidatoDAO candidato_dao
     VagaDAO vaga_dao

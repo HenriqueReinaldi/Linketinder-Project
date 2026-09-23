@@ -12,7 +12,6 @@ import org.linketinder.model.objetos.Curtida
 
 @TupleConstructor
 class CandidatoService {
-    Banco bd
     CandidatoDAO dao
     CompetenciaDAO competencia_dao
     EnderecoDAO endereco_dao

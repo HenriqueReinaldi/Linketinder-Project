@@ -47,11 +47,11 @@ static <GENERICO> GENERICO exit_on_exception(String msg, Closure<GENERICO> codig
 
 static ServiceBundle inicializar_services(Banco bd) {
     return new ServiceBundle(
-            new CandidatoService(bd, new CandidatoDAO(bd), new CompetenciaDAO(bd), new EnderecoDAO(bd)),
-            new EmpresaService(bd, new EmpresaDAO(bd), new EnderecoDAO(bd)),
-            new CompetenciaService(bd, new CompetenciaDAO(bd)),
-            new CurtidaService(bd, new CurtidaDAO(bd), new CandidatoDAO(bd), new VagaDAO(bd)),
-            new VagaService(bd, new VagaDAO(bd), new EnderecoDAO(bd), new CompetenciaDAO(bd), new EmpresaDAO(bd))
+            new CandidatoService(new CandidatoDAO(bd), new CompetenciaDAO(bd), new EnderecoDAO(bd)),
+            new EmpresaService(new EmpresaDAO(bd), new EnderecoDAO(bd)),
+            new CompetenciaService(new CompetenciaDAO(bd)),
+            new CurtidaService(new CurtidaDAO(bd), new CandidatoDAO(bd), new VagaDAO(bd)),
+            new VagaService(new VagaDAO(bd), new EnderecoDAO(bd), new CompetenciaDAO(bd), new EmpresaDAO(bd))
     )
 }
 

@@ -12,7 +12,6 @@ import org.linketinder.model.objetos.Endereco
 
 @TupleConstructor
 class EmpresaService {
-    Banco bd
     EmpresaDAO dao
     EnderecoDAO endereco_dao
 
@@ -43,17 +42,6 @@ class EmpresaService {
         }
     }
 
-    Empresa get_by_CNPJ(String CNPJ) {
-        try {
-            int emp_id = dao.get_empresa_id_by_CNPJ(CNPJ)
-            if (emp_id == -1) return null
-            return dao.get_empresa_by_id(emp_id)
-        }
-        catch (Exception ignored) {
-            return null
-        }
-    }
-
     void deletar(int id) {
         try {
             dao.delete_empresa_by_id(id)
@@ -74,4 +62,14 @@ class EmpresaService {
         }
     }
 
+    Empresa get_by_CNPJ(String CNPJ) {
+        try {
+            int emp_id = dao.get_empresa_id_by_CNPJ(CNPJ)
+            if (emp_id == -1) return null
+            return dao.get_empresa_by_id(emp_id)
+        }
+        catch (Exception ignored) {
+            return null
+        }
+    }
 }

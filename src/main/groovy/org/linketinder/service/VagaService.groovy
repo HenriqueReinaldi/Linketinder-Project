@@ -13,7 +13,6 @@ import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor
 class VagaService {
-    Banco bd
     VagaDAO dao
     EnderecoDAO endereco_dao
     CompetenciaDAO competencia_dao

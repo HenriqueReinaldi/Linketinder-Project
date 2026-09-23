@@ -8,7 +8,6 @@ import org.linketinder.model.objetos.Competencia
 
 @TupleConstructor
 class CompetenciaService {
-    Banco bd
     CompetenciaDAO dao
 
     List<Competencia> get_lista() {
