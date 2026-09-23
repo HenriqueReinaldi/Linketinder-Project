@@ -4,39 +4,40 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import spock.lang.Shared
 import spock.lang.Specification
 
-class VagaViewSpec extends Specification{
-    View view = Mock()
-    
+class VagaViewSpec extends Specification {
+    ViewIO view = Mock()
+
     @Shared
     Empresa empresa = new Empresa(
-        id: 1,
-        nome: "nome",
-        descricao: "descricao",
-        email: "email",
-        endereco: new Endereco(
-                pais: "pais",
-                estado: "estado",
-                CEP: "CEP"
-        ),
-        CNPJ: "CNPJ"
+            id: 1,
+            nome: "nome",
+            descricao: "descricao",
+            email: "email",
+            endereco: new Endereco(
+                    pais: "pais",
+                    estado: "estado",
+                    CEP: "CEP"
+            ),
+            CNPJ: "CNPJ"
     )
     @Shared
     Vaga vaga = new Vaga(
-        id: 1,
-        nome: "vaga_nome",
-        descricao: "descricao",
-        endereco: new Endereco(
-                estado: "estado",
-                CEP: "CEP"
-        ),
-        empresa: empresa,
-        competencias_desejadas: []
+            id: 1,
+            nome: "vaga_nome",
+            descricao: "descricao",
+            endereco: new Endereco(
+                    estado: "estado",
+                    CEP: "CEP"
+            ),
+            empresa: empresa,
+            competencias_desejadas: []
     )
 
-    def "capturar_dados usa view.get_input para coletar infos"() {
+    void "capturar_dados usa view.get_input para coletar infos"() {
         given:
         VagaView vaga_view = new VagaView(view)
 
@@ -47,10 +48,10 @@ class VagaViewSpec extends Specification{
         7 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
+    void "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
         given:
         VagaView vaga_view = new VagaView(view)
 
@@ -61,10 +62,10 @@ class VagaViewSpec extends Specification{
         8 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Representacao funciona corretamente"(){
+    void "Representacao funciona corretamente"() {
         given:
         VagaView vaga_view = new VagaView(view)
 
@@ -78,7 +79,7 @@ class VagaViewSpec extends Specification{
         }
     }
 
-    def "Exibir chama representacao e view.send_message"(){
+    void "Exibir chama representacao e view.send_message"() {
         given:
         VagaView vaga_view = Spy(VagaView, constructorArgs: [view])
 

@@ -1,0 +1,14 @@
+ - separação das classes DAO por entidade ao invés de ação (CRUD) -> (CANDIDATODAO, EMPRESADAO...)  [S,I]
+    EnderecoDAO ainda manuseia as tabelas pais e estado, dado que todas as 3 tabelas atuam como uma
+ - quebra do controller em ModelControllers... (CandidatoCOntroller) [S,O]
+ - separação de responsabilidades DAO - SERVICE [S]
+ - remocao de dependencia circular entre os modelview e classes view (shared/CandidatoView <-> terminal/Terminal ...) por meio de uma classe ViewIO (no caso, TermIO) [S,I,D]
+ - distribuição das responsabilidades de AssembleModel nos devidos controllers [S,O,I]
+ - mover acoes de curtida de CandidatoCOntroller e EMpresaCOntroller para CurtidaController [S]
+ - aplicação da inversão de dependencia onde era necessario [D]
+ - segregação de responsabilidades de curtidas (empresa, candidato services) -> (curtidaservice) [S]
+
+
+
+ - uso do formatador do INTELLIJ para melhorar consistencia
+ - substituicoes da palavra chave "def"

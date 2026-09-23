@@ -6,62 +6,63 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.view.View
+import org.linketinder.view.ViewIO
 import spock.lang.Shared
 import spock.lang.Specification
 
-class CurtidaViewSpec extends Specification{
-    View view = Mock()
+class CurtidaViewSpec extends Specification {
+    ViewIO view = Mock()
 
     @Shared
     Candidato candidato = new Candidato(
-        id: 1,
-        nome: "candidato_nome",
-        sobrenome: "sobrenome",
-        descricao: "descricao",
-        idade: 1,
-        email: "email",
-        endereco: new Endereco(
-                estado: "estado",
-                CEP: "CEP"
-        ),
-        CPF: "CPF",
-        data_nascimento: "data_nascimento",
-        competencias: []
+            id: 1,
+            nome: "candidato_nome",
+            sobrenome: "sobrenome",
+            descricao: "descricao",
+            idade: 1,
+            email: "email",
+            endereco: new Endereco(
+                    estado: "estado",
+                    CEP: "CEP"
+            ),
+            CPF: "CPF",
+            data_nascimento: "data_nascimento",
+            competencias: []
     )
     @Shared
     Empresa empresa = new Empresa(
-        id: 1,
-        nome: "nome",
-        descricao: "descricao",
-        email: "email",
-        endereco: new Endereco(
-                pais: "pais",
-                estado: "estado",
-                CEP: "CEP"
-        ),
-        CNPJ: "CNPJ"
+            id: 1,
+            nome: "nome",
+            descricao: "descricao",
+            email: "email",
+            endereco: new Endereco(
+                    pais: "pais",
+                    estado: "estado",
+                    CEP: "CEP"
+            ),
+            CNPJ: "CNPJ"
     )
     @Shared
     Vaga vaga = new Vaga(
-        id: 1,
-        nome: "vaga_nome",
-        descricao: "descricao",
-        endereco: new Endereco(
-                estado: "estado",
-                CEP: "CEP"
-        ),
-        empresa: empresa,
-        competencias_desejadas: []
+            id: 1,
+            nome: "vaga_nome",
+            descricao: "descricao",
+            endereco: new Endereco(
+                    estado: "estado",
+                    CEP: "CEP"
+            ),
+            empresa: empresa,
+            competencias_desejadas: []
     )
     @Shared
     Curtida Curtida = new Curtida(
-        id: 1,
-        candidato: candidato,
-        vaga: vaga,
-        empresa_curtiu: false
+            id: 1,
+            candidato: candidato,
+            vaga: vaga,
+            empresa_curtiu: false
     )
 
-    def "capturar_dados usa view.get_input para coletar infos"() {
+    void "capturar_dados usa view.get_input para coletar infos"() {
         given:
         CurtidaView curtida_view = new CurtidaView(view)
 
@@ -72,10 +73,10 @@ class CurtidaViewSpec extends Specification{
         2 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
+    void "Extensão: capturar_dados com ID usa view.get_input para coletar infos"() {
         given:
         CurtidaView curtida_view = new CurtidaView(view)
 
@@ -86,10 +87,10 @@ class CurtidaViewSpec extends Specification{
         3 * view.get_input(_ as String) >> "input"
 
         and:
-        info.every { it.value == "input"}
+        info.every { it.value == "input" }
     }
 
-    def "Representacao funciona corretamente"(){
+    void "Representacao funciona corretamente"() {
         given:
         CurtidaView curtida_view = new CurtidaView(view)
 
@@ -105,7 +106,7 @@ class CurtidaViewSpec extends Specification{
         }
     }
 
-    def "Exibir chama representacao e view.send_message"(){
+    void "Exibir chama representacao e view.send_message"() {
         given:
         CurtidaView curtida_view = Spy(CurtidaView, constructorArgs: [view])
 
