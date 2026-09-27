@@ -1,23 +1,26 @@
 package org.linketinder.DAO
 
+import org.linketinder.DAO.conexoes.Conexao
 import org.linketinder.DAO.conexoes.ProvedorBanco
 import org.linketinder.DAO.conexoes.ProvedorFactory
 
-import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
 
 class Banco {
-    static ProvedorBanco provedor
-    static Connection conn
+    static Conexao conexao
+
+    static void desconectar() throws SQLException {
+        conexao.desconectar()
+    }
 
     static boolean executar_detectar_updates(String busca, Closure busca_args) throws SQLException {
         PreparedStatement pst = null
 
         try {
-            pst = conn.prepareStatement(busca)
+            pst = conexao.get_conexao().prepareStatement(busca)
             busca_args(pst)
 
             if (pst.executeUpdate() > 0) return true
@@ -33,7 +36,7 @@ class Banco {
         ResultSet res = null
 
         try {
-            pst = conn.prepareStatement(busca)
+            pst = conexao.get_conexao().prepareStatement(busca)
             busca_args(pst)
 
             res = pst.executeQuery()
@@ -45,9 +48,10 @@ class Banco {
         }
     }
 
-    Banco(String tipo_banco) throws SQLException {
-        provedor = ProvedorFactory.pegar_provedor(tipo_banco)
-        conn = provedor.conectar()
+    Banco(String tipo_banco) {
+        conexao = Conexao.get_instancia()
+        conexao.set_tipo_banco(tipo_banco)
+        conexao.conectar()
     }
 }
 

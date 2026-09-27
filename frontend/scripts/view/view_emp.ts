@@ -1,8 +1,7 @@
-import { get_lista_candidatos, get_lista_vagas, get_lista_empresas } from "../service/dados.js";
+import { get_lista_candidatos, get_lista_vagas, get_lista_empresas } from "../persistencia/dados.js";
 import { Candidato } from "../model/candidato.js";
 import { Vaga } from "../model/vaga.js";
 import { Empresa } from "../model/empresa.js";
-
 declare const Chart: any;
 
 const campo_candidatos: HTMLFieldSetElement = document.getElementById("campo") as HTMLFieldSetElement;
@@ -20,19 +19,19 @@ var competencias: Map<string, number> = new Map<string, number>();
 function get_indice_de_afinidade(candidato: Candidato): number{
     if (empresa_selecionada === null) return 0;
 
-    let competencias_pesos: {[key: string] : number} = {};
+    let competencias_pesos: Map<string, number> = new Map<string, number>();
 
 
     for (let i: number = 0; i < vagas.length; i++){
         if(vagas[i].empresa.CNPJ != empresa_selecionada.CNPJ) continue
 
-
         for (let j: number = 0; j < vagas[i].competencias_desejadas.length; j++){            
-            if (vagas[i].competencias_desejadas[j] in competencias_pesos) {
-                competencias_pesos[vagas[i].competencias_desejadas[j]]++
+            if (competencias_pesos.has(vagas[i].competencias_desejadas[j])) {
+                let valor_velho: number = competencias_pesos.get(vagas[i].competencias_desejadas[j]) as number;
+                competencias_pesos.set(vagas[i].competencias_desejadas[j], valor_velho + 1)
             }
             else{
-                competencias_pesos[vagas[i].competencias_desejadas[j]] = 1
+                competencias_pesos.set(vagas[i].competencias_desejadas[j], 1)
             }
         }
 
@@ -43,8 +42,8 @@ function get_indice_de_afinidade(candidato: Candidato): number{
     let nao_tem: number = 0;
 
     for (let i: number = 0; i < candidato.competencias.length; i++){
-        if (candidato.competencias[i] in competencias_pesos){
-            tem += competencias_pesos[candidato.competencias[i]]
+        if (competencias_pesos.has(candidato.competencias[i])){
+            tem += competencias_pesos.get(candidato.competencias[i]) as number
         }
         else{
             nao_tem += 1
@@ -57,7 +56,6 @@ function get_indice_de_afinidade(candidato: Candidato): number{
 
     return Number.parseFloat(afinidade.toFixed(2));
 }
-
 
 function carregar_candidatos(){
     for (let i : number = 0; i < candidatos.length; i++){
@@ -87,6 +85,34 @@ function carregar_candidatos(){
 
         campo_candidatos.insertAdjacentHTML("beforeend", template_vaga);
     }
+    carregar_grafico();
+}
+
+function carregar_grafico(){
+    new Chart(grafico, {
+        type: 'bar',
+
+        data: {
+            labels: [...competencias.keys()],
+            datasets: [{
+                label: 'quantia de candidatos',
+                data: [...competencias.values()],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
 }
 
 campo_cnpj.onkeyup = function () {
@@ -102,29 +128,3 @@ campo_cnpj.onkeyup = function () {
 
     carregar_candidatos();
 }
-
-
-new Chart(grafico, {
-    type: 'bar',
-
-    data: {
-        labels: [...competencias.keys()],
-        datasets: [{
-            label: 'quantia de candidatos',
-            data: [...competencias.values()],
-            borderWidth: 1
-        }]
-    },
-
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1,
-                    precision: 0
-                }
-            }
-        }
-    }
-});

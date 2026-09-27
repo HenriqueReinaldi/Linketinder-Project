@@ -4,12 +4,12 @@ import java.sql.Connection
 import java.sql.SQLException
 
 abstract class ProvedorBanco {
-    String nome_banco
-    String usuario
-    String senha
-    Boolean usar_ssl
+    protected String nome_banco
+    protected String usuario
+    protected String senha
+    protected Boolean usar_ssl
+    public Connection conn
 
-    abstract Connection conectar() throws SQLException
-
-    abstract void desconectar(Connection conn) throws SQLException
+    abstract void conectar() throws SQLException
+    abstract void desconectar() throws SQLException
 }

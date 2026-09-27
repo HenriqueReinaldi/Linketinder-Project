@@ -33,7 +33,7 @@ import org.linketinder.view.terminal.Terminal
 
 //Henrique de Figueiredo Reinaldi
 
-static <GENERICO> GENERICO try_exit(Closure<GENERICO> codigo){
+static <GENERICO> GENERICO try_exit(Closure<GENERICO> codigo) {
     try {
         return codigo()
     }
@@ -44,12 +44,19 @@ static <GENERICO> GENERICO try_exit(Closure<GENERICO> codigo){
 }
 
 static ServiceBundle inicializar_services(Banco bd) {
+    var candidato_dao = new CandidatoDAO(bd)
+    var empresa_dao = new EmpresaDAO(bd)
+    var competencia_dao = new CompetenciaDAO(bd)
+    var endereco_dao = new EnderecoDAO(bd)
+    var vaga_dao = new VagaDAO(bd)
+    var curtida_dao = new CurtidaDAO(bd)
+
     return new ServiceBundle(
-            new CandidatoService(new CandidatoDAO(bd), new CompetenciaDAO(bd), new EnderecoDAO(bd)),
-            new EmpresaService(new EmpresaDAO(bd), new EnderecoDAO(bd)),
-            new CompetenciaService(new CompetenciaDAO(bd)),
-            new CurtidaService(new CurtidaDAO(bd), new CandidatoDAO(bd), new VagaDAO(bd)),
-            new VagaService(new VagaDAO(bd), new EnderecoDAO(bd), new CompetenciaDAO(bd), new EmpresaDAO(bd))
+            new CandidatoService(candidato_dao, competencia_dao, endereco_dao),
+            new EmpresaService(empresa_dao, endereco_dao),
+            new CompetenciaService(competencia_dao),
+            new CurtidaService(curtida_dao, candidato_dao, vaga_dao),
+            new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao)
     )
 }
 
@@ -74,7 +81,7 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
 }
 
 static void main(String[] args) {
-    Banco bd = try_exit {new Banco("postgres")}
+    Banco bd = try_exit { new Banco("postgres") }
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
@@ -86,5 +93,7 @@ static void main(String[] args) {
     while (true) {
         if (!view.run()) break
     }
+
+    try_exit { bd.desconectar() }
 
 }

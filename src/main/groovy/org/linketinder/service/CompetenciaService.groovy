@@ -7,31 +7,24 @@ import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 
 @TupleConstructor
-class CompetenciaService {
+class CompetenciaService extends Service {
     CompetenciaDAO dao
 
     List<Competencia> get_lista() {
-        try {
+        executar_seguramente([]) {
             return dao.get_lista_competencia()
-        }
-        catch (Exception ignored) {
-            return null
         }
     }
 
     void deletar(int id) {
-        try {
+        executar_seguramente() {
             dao.delete_competencia_by_id(id)
-        }
-        catch (Exception ignored) {
         }
     }
 
     void update(Competencia c) {
-        try {
+        executar_seguramente() {
             dao.update_competencia(c)
-        }
-        catch (Exception ignored) {
         }
     }
 

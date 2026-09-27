@@ -1,7 +1,6 @@
-import { get_lista_candidatos, get_lista_vagas, lista_vagas } from "../service/dados.js";
+import { get_lista_candidatos, get_lista_vagas} from "../persistencia/dados.js";
 import { Vaga } from "../model/vaga.js";
 import { Candidato } from "../model/candidato.js";
-import { Empresa } from "../model/empresa.js";
 
 const campo_vagas: HTMLFieldSetElement = document.getElementById("campo") as HTMLFieldSetElement;
 const campo_cpf: HTMLInputElement = document.getElementById("cpf_input") as HTMLInputElement;

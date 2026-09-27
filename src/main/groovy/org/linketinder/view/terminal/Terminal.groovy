@@ -25,7 +25,6 @@ import org.linketinder.view.shared.ViewBundle
 import static java.lang.Integer.parseInt
 
 class Terminal extends View {
-    static final Scanner scan = new Scanner(System.in)
     ViewIO io
 
     CompetenciaView competencia_view
