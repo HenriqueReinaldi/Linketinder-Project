@@ -23,7 +23,7 @@ class CandidatoDAO {
             insert into candidato (nome, sobrenome, e_mail, CPF, descricao, data_nascimento, senha, endereco_id) 
             values (?, ?, ?, ?, ?, ?, ?, ?) returning id;
         """
-        int id_novo = banco.return_id_from_busca(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setString(1, c.nome)
             pst.setString(2, c.sobrenome)
             pst.setString(3, c.email)
@@ -33,89 +33,84 @@ class CandidatoDAO {
             pst.setString(7, c.senha)
             pst.setInt(8, c.endereco.id)
         }
-        return id_novo
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (res.next()) return res.getInt("id")
+            return -1
+        }
     }
 
     boolean delete_candidato_by_id(int id) throws SQLException {
         String busca = """
             delete from candidato where id = ?
         """
-        return banco.execute_busca_detect_updates(busca, { PreparedStatement pst -> pst.setInt(1, id) })
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
+
+        return banco.executar_detectar_updates(busca, busca_args)
     }
 
     List<Candidato> get_lista_candidato() throws SQLException {
-        List<Candidato> candidatos = banco.get_lista_tabela("select * from candidato", {}) { ResultSet res ->
-            String data_nascimento = res.getString("data_nascimento")
-            LocalDate data_nascimento_t = LocalDate.parse(data_nascimento)
-            LocalDate hoje = LocalDate.now()
-            int idade = ChronoUnit.YEARS.between(data_nascimento_t, hoje) as int
+        return banco.executar("select * from candidato", {}) { ResultSet res ->
+            List<Candidato> candidatos = []
 
-            int id = res.getInt("id")
-            return new Candidato(
-                    id: id,
-                    CPF: res.getString("CPF"),
-                    idade: idade,
-                    competencias: [],
-                    nome: res.getString("nome"),
-                    sobrenome: res.getString("sobrenome"),
-                    data_nascimento: data_nascimento,
-                    email: res.getString("e_mail"),
-                    descricao: res.getString("descricao"),
-                    senha: res.getString("senha"),
-                    endereco: new Endereco(id: res.getInt("endereco_id"))
-            )
+            while (res.next()) {
+                String data_nasc = res.getString("data_nascimento")
+                candidatos << new Candidato(
+                        id: res.getInt("id"),
+                        CPF: res.getString("CPF"),
+                        nome: res.getString("nome"),
+                        sobrenome: res.getString("sobrenome"),
+                        email: res.getString("e_mail"),
+                        descricao: res.getString("descricao"),
+                        senha: res.getString("senha"),
+                        data_nascimento: data_nasc,
+                        idade: ChronoUnit.YEARS.between(LocalDate.parse(data_nasc), LocalDate.now()) as int,
+                        competencias: [],
+                        endereco: new Endereco(id: res.getInt("endereco_id"))
+                )
+            }
+
+            return candidatos
         }
-
-        return candidatos;
     }
 
     Candidato get_candidato_by_id(int id) throws SQLException {
         String busca = "select * from candidato where id = ?"
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
 
-        List<Candidato> candidatos = banco.get_lista_tabela(busca, {
-            PreparedStatement pst -> pst.setInt(1, id)
-        }) { ResultSet res ->
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return null
+
             String data_nascimento = res.getString("data_nascimento")
-            LocalDate data_nascimento_t = LocalDate.parse(data_nascimento)
-            LocalDate hoje = LocalDate.now()
-            int idade = ChronoUnit.YEARS.between(data_nascimento_t, hoje) as int
 
-            int cid = res.getInt("id")
             return new Candidato(
-                    id: cid,
+                    id: res.getInt("id"),
                     CPF: res.getString("CPF"),
-                    idade: idade,
-                    competencias: null,
+                    idade: ChronoUnit.YEARS.between(LocalDate.parse(data_nascimento), LocalDate.now()) as int,
                     nome: res.getString("nome"),
                     sobrenome: res.getString("sobrenome"),
                     data_nascimento: data_nascimento,
                     email: res.getString("e_mail"),
                     descricao: res.getString("descricao"),
-                    senha: res.getString("senha"),
-                    endereco: null,
+                    senha: res.getString("senha")
             )
         }
-
-        if (!candidatos) return null
-        return candidatos[0]
     }
 
     int get_candidato_id_by_CPF(String CPF) throws SQLException {
         String busca = "select id from candidato where CPF = ?"
-
-        List<Integer> id = banco.get_lista_tabela(busca, {
+        Closure busca_args = {
             PreparedStatement pst -> pst.setString(1, CPF)
-        }) {
-            ResultSet res -> return res.getInt("id")
         }
 
-        if (!id) return -1
-        return id[0]
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
+        }
     }
 
     boolean update_candidato(Candidato c) throws SQLException {
         if (c == null) return false
-        //if (get_candidato_id_by_CPF(c.CPF) < 0) return false
 
         String busca = """
             update candidato set
@@ -123,8 +118,7 @@ class CandidatoDAO {
                 data_nascimento = ?, senha = ?, endereco_id = ?
             where id = ?
         """
-
-        boolean troca_aconteceu = banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setString(1, c.nome)
             pst.setString(2, c.sobrenome)
             pst.setString(3, c.email)
@@ -136,6 +130,6 @@ class CandidatoDAO {
             pst.setInt(9, c.id)
         }
 
-        return troca_aconteceu
+        return banco.executar_detectar_updates(busca, busca_args)
     }
 }

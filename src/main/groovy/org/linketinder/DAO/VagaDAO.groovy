@@ -21,47 +21,56 @@ class VagaDAO {
             insert into vaga (nome, descricao, endereco_id, empresa_id) 
             values (?, ?, ?, ?) returning id
         """
-        int id_novo = banco.return_id_from_busca(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setString(1, v.nome)
             pst.setString(2, v.descricao)
             pst.setInt(3, v.endereco.id)
             pst.setInt(4, v.empresa.id)
         }
-        return id_novo
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
+        }
     }
 
     List<Vaga> get_lista_vaga() throws SQLException {
-        List<Vaga> vagas = banco.get_lista_tabela("""
+        String busca = """
             select 
                 v.id AS vaga_id,
                 v.nome AS vaga_nome,
                 v.descricao AS vaga_descricao,
                 v.endereco_id AS vaga_endereco_id,
                 e.id AS empresa_id
-            from vaga as v join empresa as e on e.id = v.empresa_id """, {}
-        ) { ResultSet res ->
-            int id = res.getInt("vaga_id")
-            return new Vaga(
-                    id: id,
-                    nome: res.getString("vaga_nome"),
-                    descricao: res.getString("vaga_descricao"),
-                    endereco: new Endereco(id: res.getInt("vaga_endereco_id")),
-                    empresa: new Empresa(id: res.getInt("empresa_id")),
-                    competencias_desejadas: null
-            )
+            from vaga as v join empresa as e on e.id = v.empresa_id 
+        """
+        return banco.executar(busca, {}) { ResultSet res ->
+            List<Vaga> vagas = []
+
+            while (res.next()) {
+                vagas << new Vaga(
+                        id: res.getInt("vaga_id"),
+                        nome: res.getString("vaga_nome"),
+                        descricao: res.getString("vaga_descricao"),
+                        endereco: new Endereco(id: res.getInt("vaga_endereco_id")),
+                        empresa: new Empresa(id: res.getInt("empresa_id")),
+                        competencias_desejadas: null
+                )
+            }
+
+            return vagas
         }
-        return vagas;
     }
 
     Vaga get_vaga_by_id(int id) throws SQLException {
         String busca = "select * from vaga where id = ?"
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
 
-        List<Vaga> vagas = banco.get_lista_tabela(busca, {
-            PreparedStatement pst -> pst.setInt(1, id)
-        }) { ResultSet res ->
-            int vid = res.getInt("id")
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return null
+
             return new Vaga(
-                    id: vid,
+                    id: res.getInt("id"),
                     nome: res.getString("nome"),
                     descricao: res.getString("descricao"),
                     endereco: new Endereco(id: res.getInt("endereco_id")),
@@ -69,9 +78,6 @@ class VagaDAO {
                     competencias_desejadas: null
             )
         }
-
-        if (!vagas) return null
-        return vagas[0]
     }
 
     boolean update_vaga(Vaga v) throws SQLException {
@@ -81,8 +87,7 @@ class VagaDAO {
                 nome = ?, descricao = ?, endereco_id = ?, empresa_id = ?
             where id = ?
         """
-
-        boolean troca_aconteceu = banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setString(1, v.nome)
             pst.setString(2, v.descricao)
             pst.setInt(3, v.endereco.id)
@@ -90,13 +95,15 @@ class VagaDAO {
             pst.setInt(5, v.id)
         }
 
-        return troca_aconteceu
+        return banco.executar_detectar_updates(busca, busca_args)
     }
 
     boolean delete_vaga_by_id(int id) throws SQLException {
         String busca = """
             delete from vaga where id = ?
         """
-        return banco.execute_busca_detect_updates(busca, { PreparedStatement pst -> pst.setInt(1, id) })
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
+
+        return banco.executar_detectar_updates(busca, busca_args)
     }
 }

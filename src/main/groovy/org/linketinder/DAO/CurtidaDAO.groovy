@@ -21,31 +21,36 @@ class CurtidaDAO {
             insert into curtida (candidato_id, vaga_id) 
             values (?, ?) on conflict (candidato_id, vaga_id) do nothing
         """
-
-        banco.execute_busca(busca) { PreparedStatement pst ->
+        Closure busca_args =  { PreparedStatement pst ->
             pst.setInt(1, c.candidato.id)
             pst.setInt(2, c.vaga.id)
         }
 
+        banco.executar(busca, busca_args, {})
     }
 
     List<Curtida> get_lista_curtida() throws SQLException {
-        List<Curtida> curtidas = banco.get_lista_tabela("select * from curtida", {}) { ResultSet res ->
-            return new Curtida(
-                    candidato: new Candidato(id: res.getInt("candidato_id")),
-                    vaga: new Vaga(id: res.getInt("vaga_id")),
-                    empresa_curtiu: res.getBoolean("empresa_curtiu")
-            )
+        return banco.executar("select * from curtida", {}) { ResultSet res ->
+            List<Curtida> curtidas = []
+
+            while (res.next()) {
+                curtidas << new Curtida(
+                        candidato: new Candidato(id: res.getInt("candidato_id")),
+                        vaga: new Vaga(id: res.getInt("vaga_id")),
+                        empresa_curtiu: res.getBoolean("empresa_curtiu")
+                )
+            }
+
+            return curtidas
         }
-        return curtidas
     }
 
     boolean empresa_curtir(Curtida c) throws SQLException {
         String busca = "update curtida set empresa_curtiu = true where candidato_id = ? and vaga_id = ?"
-
-        return banco.execute_busca_detect_updates(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setInt(1, c.candidato.id)
             pst.setInt(2, c.vaga.id)
         }
+        return banco.executar_detectar_updates(busca, busca_args)
     }
 }

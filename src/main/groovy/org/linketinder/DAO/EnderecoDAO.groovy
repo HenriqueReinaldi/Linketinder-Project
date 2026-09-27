@@ -17,8 +17,12 @@ class EnderecoDAO {
             on conflict (nome) do update set nome = pais.nome 
             returning id
             """
-        return banco.return_id_from_busca(busca) { PreparedStatement pst ->
-            pst.setString(1, nome)
+        Closure busca_args = { PreparedStatement pst -> pst.setString(1, nome)
+        }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
         }
     }
 
@@ -28,8 +32,12 @@ class EnderecoDAO {
             on conflict (nome) do update set nome = estado.nome 
             returning id
             """
-        return banco.return_id_from_busca(busca) { PreparedStatement pst ->
-            pst.setString(1, nome)
+        Closure busca_args = { PreparedStatement pst -> pst.setString(1, nome)
+        }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
         }
     }
 
@@ -46,10 +54,15 @@ class EnderecoDAO {
         int estado_id = create_if_not_exists_estado(e.estado)
 
         String busca = "insert into endereco (CEP, pais_id, estado_id) values (?, ?, ?) returning id"
-        return banco.return_id_from_busca(busca) { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setString(1, e.CEP)
             pst.setInt(2, pais_id)
             pst.setInt(3, estado_id)
+        }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
         }
     }
 
@@ -67,16 +80,17 @@ class EnderecoDAO {
             and p.nome = ?
             and es.nome = ?
         """
-
-        List<Integer> endereco = banco.get_lista_tabela(busca, {
+        Closure busca_args = {
             PreparedStatement pst ->
                 pst.setString(1, e.CEP)
                 pst.setString(2, e.pais)
                 pst.setString(3, e.estado)
-        }) { ResultSet res -> return res.getInt("id") }
+        }
 
-        if (!endereco) return -1
-        return endereco[0]
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return -1
+            return res.getInt("id")
+        }
     }
 
     Endereco get_endereco_by_id(int id) throws SQLException {
@@ -91,10 +105,12 @@ class EnderecoDAO {
             join estado es on e.estado_id = es.id
             where e.id = ?
         """
-
-        List<Endereco> enderecos = banco.get_lista_tabela(busca, {
+        Closure busca_args = {
             PreparedStatement pst -> pst.setInt(1, id)
-        }) { ResultSet res ->
+        }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return null
             return new Endereco(
                     id: res.getInt("endereco_id"),
                     pais: res.getString("pais_nome"),
@@ -102,8 +118,5 @@ class EnderecoDAO {
                     CEP: res.getString("CEP"),
             )
         }
-
-        if (!enderecos) return null
-        return enderecos[0]
     }
 }

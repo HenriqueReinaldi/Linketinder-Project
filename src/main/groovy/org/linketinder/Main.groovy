@@ -33,17 +33,15 @@ import org.linketinder.view.terminal.Terminal
 
 //Henrique de Figueiredo Reinaldi
 
-static <GENERICO> GENERICO exit_on_exception(String msg, Closure<GENERICO> codigo) {
+static <GENERICO> GENERICO try_exit(Closure<GENERICO> codigo){
     try {
         return codigo()
     }
     catch (Exception ignored) {
-        println msg
         System.exit(-1)
     }
     return null
 }
-
 
 static ServiceBundle inicializar_services(Banco bd) {
     return new ServiceBundle(
@@ -76,8 +74,7 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
 }
 
 static void main(String[] args) {
-    Banco bd
-    bd = exit_on_exception("erro conectando com banco!") { new Banco("linketinder") }
+    Banco bd = try_exit {new Banco("postgres")}
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
@@ -90,5 +87,4 @@ static void main(String[] args) {
         if (!view.run()) break
     }
 
-    exit_on_exception("erro desconectando com banco!") { bd.desconectar() }
 }
