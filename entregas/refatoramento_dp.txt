@@ -1,0 +1,31 @@
+ - aplicado padrao factory para conexões de BANCO DE DADOS
+ - aplicado padrao SINGLETON para garantir uma unica conexão a qualquer momento
+
+ considerações nao aplicadas + motivos:
+    https://refactoring.guru/design-patterns/
+
+    - "TEMPLATE" para simplificar lógica repetida em services (blocos try, catch+return)
+        "Use the pattern when you have several classes that contain almost identical algorithms with some minor differences..."
+
+        ...Meu template seria muito abrangente, de modo a ferir um dos principios SOLID (I)
+            ...Deixar menos abrangente resultaria na quebra do DESIGN PATTERN
+            ...Criar mais templates adicionaria complexidade desnecessaria
+
+        ...Foi também visto o padrão "DECORATOR", mas ele servia principalmente para mudar comportamento no runtime..
+            "Use the pattern when it’s awkward or not possible to extend an object’s behavior using inheritance."
+            ...A lógica repetida poderia ser simplificada com uma função herdada, como sugerido pelo website  (feito)
+
+
+    - STRATEGY para simplificar diferentes chamadas de view -> controller
+        "Use the Strategy pattern when you want to use different variants of an algorithm within an object and be able to switch
+         from one algorithm to another during runtime."
+
+        ...Seria contra produtivo, já que também teria de aumentar consideravelmente a quantia de classes e complexidade
+        ...OLhando a lista de padrões similares, o padrão "COMMAND" se destacou, já que teria uma implementação "parecida" e
+        permitiria coisas como agendamento de execução. Contudo, tem os mesmos problemas do strategy.
+
+    - BUilder para criar classes service/view/controller
+        "Use the Builder pattern when you want your code to be able to create different representations of some product (for example, stone and wooden houses)."
+
+        ... nenhum objeto era complexo de ser instanciado, bem como os outros padrões, iria piorar o tamanho e complexidade do código.
+

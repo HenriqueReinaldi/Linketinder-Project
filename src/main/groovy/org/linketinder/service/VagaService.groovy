@@ -12,14 +12,14 @@ import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor
-class VagaService {
+class VagaService extends Service {
     VagaDAO dao
     EnderecoDAO endereco_dao
     CompetenciaDAO competencia_dao
     EmpresaDAO empresa_dao
 
     List<Vaga> get_lista() {
-        try {
+        executar_seguramente([]) {
             List<Vaga> vagas = dao.get_lista_vaga()
 
             vagas.each { Vaga vaga ->
@@ -30,13 +30,10 @@ class VagaService {
 
             return vagas
         }
-        catch (Exception ignored) {
-            return null
-        }
     }
 
     void cadastrar(Vaga v) {
-        try {
+        executar_seguramente() {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -52,21 +49,16 @@ class VagaService {
                 competencia_dao.cadastrar_competencias_entidade("vaga", vaga_id, competencia_id)
             }
         }
-        catch (Exception e) {
-            e.printStackTrace()
-        }
     }
 
     void deletar(int id) {
-        try {
+        executar_seguramente() {
             dao.delete_vaga_by_id(id)
-        }
-        catch (Exception ignored) {
         }
     }
 
     void update(Vaga v) {
-        try {
+        executar_seguramente() {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -82,15 +74,11 @@ class VagaService {
                 competencia_dao.cadastrar_competencias_entidade("vaga", v.id, competencia_id)
             }
         }
-        catch (Exception ignored) {
-        }
     }
 
     Vaga get_by_id(String id) {
-        try {
+        executar_seguramente() {
             return dao.get_vaga_by_id(Integer.parseInt(id))
-        } catch (Exception ignored) {
-            return null
         }
     }
 

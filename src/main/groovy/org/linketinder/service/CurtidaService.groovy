@@ -9,13 +9,13 @@ import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 
 @TupleConstructor
-class CurtidaService {
+class CurtidaService extends Service {
     CurtidaDAO dao
     CandidatoDAO candidato_dao
     VagaDAO vaga_dao
 
     List<Curtida> get_lista() {
-        try {
+        executar_seguramente([]) {
             List<Curtida> curtidas = dao.get_lista_curtida()
 
             curtidas.each { Curtida curtida ->
@@ -25,26 +25,17 @@ class CurtidaService {
 
             return curtidas
         }
-        catch (Exception e) {
-            e.printStackTrace()
-            return []
-        }
     }
 
     void curtir_como_candidato(Curtida c) {
-        try {
+        executar_seguramente() {
             dao.cadastrar_curtida(c)
-        }
-        catch (Exception e) {
-            e.printStackTrace()
         }
     }
 
     void curtir_como_empresa(Curtida c) {
-        try {
+        executar_seguramente() {
             dao.empresa_curtir(c)
-        }
-        catch (Exception ignored) {
         }
     }
 

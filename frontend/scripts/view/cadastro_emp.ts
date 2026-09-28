@@ -1,4 +1,4 @@
-import { cadastrar_empresa } from "../service/dados.js";
+import { cadastrar_empresa } from "../service/empresaservice.js";
 
 const input_nome: HTMLInputElement = document.getElementById("input_nome") as HTMLInputElement;
 const input_email: HTMLInputElement = document.getElementById("input_email") as HTMLInputElement;
@@ -7,7 +7,6 @@ const input_CEP: HTMLInputElement = document.getElementById("input_CEP") as HTML
 const input_descricao: HTMLInputElement = document.getElementById("input_descricao") as HTMLInputElement;
 const input_pais: HTMLInputElement = document.getElementById("input_pais") as HTMLInputElement;
 const input_CNPJ: HTMLInputElement = document.getElementById("input_CNPJ") as HTMLInputElement;
-const input_competencias: HTMLInputElement = document.getElementById("input_competencias") as HTMLInputElement;
 
 const submit: HTMLButtonElement = document.getElementById("cadastrar") as HTMLButtonElement;
 const status: HTMLParagraphElement = document.getElementById("status") as HTMLParagraphElement;
@@ -30,7 +29,6 @@ submit.onclick = (evento: MouseEvent) => {
         input_descricao.value,
         input_pais.value,
         input_CNPJ.value,
-        input_competencias.value.trim().split(" ")
     );
 
     if (res) status_sucesso();
