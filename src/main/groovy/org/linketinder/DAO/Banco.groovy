@@ -39,8 +39,15 @@ class Banco {
             pst = conexao.get_conexao().prepareStatement(busca)
             busca_args(pst)
 
-            res = pst.executeQuery()
-            return retornador(res)
+            boolean tem_resultset = pst.execute()
+            if (tem_resultset){
+                res = pst.getResultSet()
+                return retornador(res)
+            }
+            else{
+                return null
+            }
+
         }
         finally {
             res?.close()

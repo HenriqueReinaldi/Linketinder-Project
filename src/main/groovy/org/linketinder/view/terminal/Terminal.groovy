@@ -153,8 +153,7 @@ class Terminal extends View {
 
         io.send_message "Comandos create:"
         io.send_message "cadastrar <candidato / empresa / vaga>"
-        io.send_message "curtir como candidato"
-        io.send_message "nota: competencias são criadas automaticassemble_modelente por demanda.\n"
+        io.send_message "curtir como candidato\n"
 
         io.send_message "Comandos delete:"
         io.send_message "deletar <candidato / empresa / vaga / competencia>\n"
