@@ -1,4 +1,4 @@
-import { cadastrar_candidato  } from "../service/dados.js";
+import { cadastrar_candidato } from "../service/candidatoservice.js";
 
 const input_nome: HTMLInputElement = document.getElementById("input_nome") as HTMLInputElement;
 const input_email: HTMLInputElement = document.getElementById("input_email") as HTMLInputElement;

@@ -11,13 +11,13 @@ import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Curtida
 
 @TupleConstructor
-class CandidatoService {
+class CandidatoService extends Service {
     CandidatoDAO dao
     CompetenciaDAO competencia_dao
     EnderecoDAO endereco_dao
 
     List<Candidato> get_lista() {
-        try {
+        executar_seguramente([]) {
             List<Candidato> candidatos = dao.get_lista_candidato()
 
             candidatos.each { Candidato c ->
@@ -27,13 +27,10 @@ class CandidatoService {
 
             return candidatos
         }
-        catch (Exception ignored) {
-            return []
-        }
     }
 
     void cadastrar(Candidato c) {
-        try {
+        executar_seguramente(){
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
             if (endereco_id < 0) return
             c.endereco.id = endereco_id
@@ -49,21 +46,16 @@ class CandidatoService {
                 competencia_dao.cadastrar_competencias_entidade("candidato", candidato_id, competencia_id)
             }
         }
-        catch (Exception e) {
-            e.printStackTrace()
-        }
     }
 
     void deletar(int id) {
-        try {
+        executar_seguramente() {
             dao.delete_candidato_by_id(id)
-        }
-        catch (Exception ignored) {
         }
     }
 
     void update(Candidato c) {
-        try {
+        executar_seguramente() {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
             if (endereco_id < 0) return
             c.endereco.id = endereco_id
@@ -80,15 +72,11 @@ class CandidatoService {
                 competencia_dao.cadastrar_competencias_entidade("candidato", c.id, competencia_id)
             }
         }
-        catch (Exception ignored) {
-        }
     }
 
     Candidato get_by_id(String id) {
-        try {
+        executar_seguramente() {
             return dao.get_candidato_by_id(Integer.parseInt(id))
-        } catch (Exception ignored) {
-            return null
         }
     }
 }
