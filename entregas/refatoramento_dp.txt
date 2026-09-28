@@ -1,5 +1,5 @@
- - aplicado padrao factory para conexões de BANCO DE DADOS
- - aplicado padrao SINGLETON para garantir uma unica conexão a qualquer momento
+ - aplicado padrao FACTORY para permitir conexões com tipos de bancos de dados diferentes (postgres, sqlite, mysql...) com modificações extremamente baixas no código 
+ - aplicado padrao SINGLETON para garantir uma unica conexão de banco a qualquer dado momento
 
  considerações nao aplicadas + motivos:
     https://refactoring.guru/design-patterns/
