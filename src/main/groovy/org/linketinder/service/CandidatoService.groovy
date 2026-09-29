@@ -1,14 +1,11 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CompetenciaDAO
-import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
-import org.linketinder.model.objetos.Curtida
 
 @TupleConstructor
 class CandidatoService extends Service {
@@ -30,7 +27,7 @@ class CandidatoService extends Service {
     }
 
     void cadastrar(Candidato c) {
-        executar_seguramente(){
+        executar_seguramente() {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
             if (endereco_id < 0) return
             c.endereco.id = endereco_id

@@ -6,7 +6,6 @@ import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Vaga
 import org.linketinder.service.CandidatoService
 import org.linketinder.service.CurtidaService
-import org.linketinder.service.EmpresaService
 import org.linketinder.service.VagaService
 
 @TupleConstructor

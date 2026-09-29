@@ -1,28 +1,11 @@
 package org.linketinder.view.terminal
 
-import org.linketinder.controller.CandidatoController
-import org.linketinder.controller.CompetenciaController
-import org.linketinder.controller.ControllerBundle
-import org.linketinder.controller.CurtidaController
-import org.linketinder.controller.EmpresaController
-import org.linketinder.controller.ModelData
-import org.linketinder.controller.VagaController
-import org.linketinder.model.objetos.Candidato
-import org.linketinder.model.objetos.Competencia
-import org.linketinder.model.objetos.Curtida
-import org.linketinder.model.objetos.Empresa
-import org.linketinder.model.objetos.Vaga
+import org.linketinder.controller.*
+import org.linketinder.model.objetos.*
 import org.linketinder.view.PrefTree
 import org.linketinder.view.View
 import org.linketinder.view.ViewIO
-import org.linketinder.view.shared.CandidatoView
-import org.linketinder.view.shared.CompetenciaView
-import org.linketinder.view.shared.CurtidaView
-import org.linketinder.view.shared.EmpresaView
-import org.linketinder.view.shared.VagaView
-import org.linketinder.view.shared.ViewBundle
-
-import static java.lang.Integer.parseInt
+import org.linketinder.view.shared.*
 
 class Terminal extends View {
     ViewIO io

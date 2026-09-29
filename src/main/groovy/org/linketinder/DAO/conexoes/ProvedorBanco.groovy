@@ -11,5 +11,6 @@ abstract class ProvedorBanco {
     public Connection conn
 
     abstract void conectar() throws SQLException
+
     abstract void desconectar() throws SQLException
 }

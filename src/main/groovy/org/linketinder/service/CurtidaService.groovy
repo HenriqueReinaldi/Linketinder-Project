@@ -1,12 +1,10 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Curtida
-import org.linketinder.model.objetos.Empresa
 
 @TupleConstructor
 class CurtidaService extends Service {

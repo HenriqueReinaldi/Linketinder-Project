@@ -1,17 +1,12 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
-import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.EnderecoDAO
-import org.linketinder.model.objetos.Candidato
-import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
-import org.linketinder.model.objetos.Endereco
 
 @TupleConstructor
-class EmpresaService extends Service{
+class EmpresaService extends Service {
     EmpresaDAO dao
     EnderecoDAO endereco_dao
 
@@ -54,7 +49,7 @@ class EmpresaService extends Service{
     }
 
     Empresa get_by_CNPJ(String CNPJ) {
-        executar_seguramente(){
+        executar_seguramente() {
             int emp_id = dao.get_empresa_id_by_CNPJ(CNPJ)
             if (emp_id == -1) return null
             return dao.get_empresa_by_id(emp_id)

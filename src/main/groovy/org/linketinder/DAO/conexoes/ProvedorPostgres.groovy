@@ -1,6 +1,5 @@
 package org.linketinder.DAO.conexoes
 
-import java.sql.Connection
 import java.sql.SQLException
 
 import static java.sql.DriverManager.getConnection
@@ -27,7 +26,7 @@ class ProvedorPostgres extends ProvedorBanco {
         conn = null
     }
 
-    ProvedorPostgres(){
+    ProvedorPostgres() {
         this.nome_banco = "linketinder"
         this.usuario = "postgres"
         this.senha = "postgres"

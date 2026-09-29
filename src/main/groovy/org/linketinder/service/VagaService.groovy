@@ -1,14 +1,11 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CompetenciaDAO
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.DAO.VagaDAO
-import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
-import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor

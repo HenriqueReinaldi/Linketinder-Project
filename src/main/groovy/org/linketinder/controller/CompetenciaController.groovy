@@ -1,7 +1,6 @@
 package org.linketinder.controller
 
 import groovy.transform.TupleConstructor
-import groovy.transform.Undefined.EXCEPTION
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.service.CompetenciaService
 
