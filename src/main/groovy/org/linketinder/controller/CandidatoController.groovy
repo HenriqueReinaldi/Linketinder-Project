@@ -14,18 +14,22 @@ class CandidatoController {
         return candidato_service.get_lista()
     }
 
-    void cadastrar_candidato(ModelData modelo) {
+    boolean cadastrar_candidato(ModelData modelo) {
         Candidato c = assemble_candidato(modelo.data)
-        candidato_service.cadastrar(c)
+        if (c == null) return false
+
+        return candidato_service.cadastrar(c)
     }
 
-    void deletar_candidato(int id) {
-        candidato_service.deletar(id)
+    boolean deletar_candidato(int id) {
+        return candidato_service.deletar(id)
     }
 
-    void update_candidato(ModelData modelo) {
+    boolean update_candidato(ModelData modelo) {
         Candidato c = assemble_candidato(modelo.data)
-        candidato_service.update(c)
+        if (c == null) return false
+
+        return candidato_service.update(c)
     }
 
 

@@ -25,15 +25,17 @@ class CurtidaService extends Service {
         }
     }
 
-    void curtir_como_candidato(Curtida c) {
-        executar_seguramente() {
+    boolean curtir_como_candidato(Curtida c) {
+        executar_seguramente(false) {
             dao.cadastrar_curtida(c)
+            return true
         }
     }
 
-    void curtir_como_empresa(Curtida c) {
-        executar_seguramente() {
+    boolean curtir_como_empresa(Curtida c) {
+        executar_seguramente(false) {
             dao.empresa_curtir(c)
+            return true
         }
     }
 

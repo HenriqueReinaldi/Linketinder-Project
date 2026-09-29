@@ -14,15 +14,17 @@ class CompetenciaService extends Service {
         }
     }
 
-    void deletar(int id) {
-        executar_seguramente() {
+    boolean deletar(int id) {
+        executar_seguramente(false) {
             dao.delete_competencia_by_id(id)
+            return true
         }
     }
 
     void update(Competencia c) {
-        executar_seguramente() {
+        executar_seguramente(false) {
             dao.update_competencia(c)
+            return true
         }
     }
 

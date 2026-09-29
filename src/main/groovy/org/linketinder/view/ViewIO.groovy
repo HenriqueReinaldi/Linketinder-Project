@@ -1,7 +1,7 @@
 package org.linketinder.view
 
 abstract class ViewIO {
-    static final Scanner scan
+    abstract void send_status(boolean sucesso)
 
     abstract void send_message(String message)
 

@@ -58,15 +58,15 @@ class Terminal extends View {
         switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados()
-                candidato_controller.cadastrar_candidato(md)
+                io.send_status candidato_controller.cadastrar_candidato(md)
                 break
             case "empresa":
                 md.data = empresa_view.capturar_dados()
-                empresa_controller.cadastrar_empresa(md)
+                io.send_status empresa_controller.cadastrar_empresa(md)
                 break
             case "vaga":
                 md.data = vaga_view.capturar_dados()
-                vaga_controller.cadastrar_vaga(md)
+                io.send_status vaga_controller.cadastrar_vaga(md)
                 break
         }
     }

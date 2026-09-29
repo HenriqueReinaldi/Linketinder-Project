@@ -18,20 +18,25 @@ class CurtidaController {
         return curtida_service.get_lista()
     }
 
-    void candidato_curtir(ModelData modelo) {
+    boolean candidato_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
-        curtida_service.curtir_como_candidato(c)
+        if (c == null) return false
+
+        return curtida_service.curtir_como_candidato(c)
     }
 
-    void empresa_curtir(ModelData modelo) {
+    boolean empresa_curtir(ModelData modelo) {
         Curtida c = assemble_curtida(modelo.data)
-        curtida_service.curtir_como_empresa(c)
+        if (c == null) return false
+
+        return curtida_service.curtir_como_empresa(c)
     }
 
     Curtida assemble_curtida(Map<String, String> curtida_info) {
         try {
             Candidato candidato = candidato_service.get_by_id(curtida_info["candidato_id"])
             Vaga vaga = vaga_service.get_by_id(curtida_info["vaga_id"])
+            if (candidato == null || vaga == null) return null
 
             return new Curtida(
                     candidato: candidato,

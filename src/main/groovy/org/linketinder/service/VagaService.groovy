@@ -29,8 +29,8 @@ class VagaService extends Service {
         }
     }
 
-    void cadastrar(Vaga v) {
-        executar_seguramente() {
+    boolean cadastrar(Vaga v) {
+        executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -45,17 +45,20 @@ class VagaService extends Service {
             for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("vaga", vaga_id, competencia_id)
             }
+            return true
         }
     }
 
-    void deletar(int id) {
-        executar_seguramente() {
+    boolean deletar(int id) {
+        executar_seguramente(false) {
             dao.delete_vaga_by_id(id)
+
+            return true
         }
     }
 
-    void update(Vaga v) {
-        executar_seguramente() {
+    boolean update(Vaga v) {
+        executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
             if (endereco_id < 0) return
             v.endereco.id = endereco_id
@@ -70,11 +73,13 @@ class VagaService extends Service {
             for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("vaga", v.id, competencia_id)
             }
+
+            return true
         }
     }
 
     Vaga get_by_id(String id) {
-        executar_seguramente() {
+        executar_seguramente(null) {
             return dao.get_vaga_by_id(Integer.parseInt(id))
         }
     }
