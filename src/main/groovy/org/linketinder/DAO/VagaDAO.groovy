@@ -1,7 +1,6 @@
 package org.linketinder.DAO
 
 import groovy.transform.TupleConstructor
-
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Vaga

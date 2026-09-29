@@ -6,23 +6,26 @@ class Conexao {
     static final Conexao instancia = new Conexao()
     ProvedorBanco provedor
 
-    static Conexao get_instancia(){
+    static Conexao get_instancia() {
         return instancia
     }
-    private Conexao(){}
+
+    private Conexao() {}
 
 
-    void set_tipo_banco(String tipo_banco){
+    void set_tipo_banco(String tipo_banco) {
         provedor = ProvedorFactory.pegar_provedor(tipo_banco)
     }
-    void conectar(){
+
+    void conectar() {
         provedor.conectar()
     }
-    void desconectar(){
+
+    void desconectar() {
         provedor.desconectar()
     }
 
-    Connection get_conexao(){
+    Connection get_conexao() {
         return provedor.conn
     }
 

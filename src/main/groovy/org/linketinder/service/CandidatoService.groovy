@@ -1,14 +1,11 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CompetenciaDAO
-import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
-import org.linketinder.model.objetos.Curtida
 
 @TupleConstructor
 class CandidatoService extends Service {
@@ -29,8 +26,8 @@ class CandidatoService extends Service {
         }
     }
 
-    void cadastrar(Candidato c) {
-        executar_seguramente(){
+    boolean cadastrar(Candidato c) {
+        executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
             if (endereco_id < 0) return
             c.endereco.id = endereco_id
@@ -45,17 +42,20 @@ class CandidatoService extends Service {
             for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("candidato", candidato_id, competencia_id)
             }
+
+            return true
         }
     }
 
-    void deletar(int id) {
-        executar_seguramente() {
+    boolean deletar(int id) {
+        executar_seguramente(false) {
             dao.delete_candidato_by_id(id)
+            return true
         }
     }
 
-    void update(Candidato c) {
-        executar_seguramente() {
+    boolean update(Candidato c) {
+        executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
             if (endereco_id < 0) return
             c.endereco.id = endereco_id
@@ -71,11 +71,13 @@ class CandidatoService extends Service {
             for (int competencia_id : competencias_id) {
                 competencia_dao.cadastrar_competencias_entidade("candidato", c.id, competencia_id)
             }
+
+            return true
         }
     }
 
     Candidato get_by_id(String id) {
-        executar_seguramente() {
+        executar_seguramente(null) {
             return dao.get_candidato_by_id(Integer.parseInt(id))
         }
     }

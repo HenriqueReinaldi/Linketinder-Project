@@ -3,7 +3,6 @@ package org.linketinder.DAO
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Competencia
 
-import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException

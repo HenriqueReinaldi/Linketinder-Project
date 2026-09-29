@@ -1,9 +1,7 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CompetenciaDAO
-import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Competencia
 
 @TupleConstructor
@@ -16,15 +14,17 @@ class CompetenciaService extends Service {
         }
     }
 
-    void deletar(int id) {
-        executar_seguramente() {
+    boolean deletar(int id) {
+        executar_seguramente(false) {
             dao.delete_competencia_by_id(id)
+            return true
         }
     }
 
-    void update(Competencia c) {
-        executar_seguramente() {
+    boolean update(Competencia c) {
+        executar_seguramente(false) {
             dao.update_competencia(c)
+            return true
         }
     }
 

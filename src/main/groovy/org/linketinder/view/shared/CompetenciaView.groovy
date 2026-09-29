@@ -2,7 +2,6 @@ package org.linketinder.view.shared
 
 import groovy.transform.TupleConstructor
 import org.linketinder.model.objetos.Competencia
-import org.linketinder.view.View
 import org.linketinder.view.ViewIO
 import org.linketinder.view.traits.Cadastravel
 import org.linketinder.view.traits.Representavel

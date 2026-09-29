@@ -1,8 +1,6 @@
 package org.linketinder.DAO
 
 import org.linketinder.DAO.conexoes.Conexao
-import org.linketinder.DAO.conexoes.ProvedorBanco
-import org.linketinder.DAO.conexoes.ProvedorFactory
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
