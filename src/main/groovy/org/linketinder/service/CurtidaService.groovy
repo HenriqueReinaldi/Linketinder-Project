@@ -1,12 +1,10 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Curtida
-import org.linketinder.model.objetos.Empresa
 
 @TupleConstructor
 class CurtidaService extends Service {
@@ -27,15 +25,17 @@ class CurtidaService extends Service {
         }
     }
 
-    void curtir_como_candidato(Curtida c) {
-        executar_seguramente() {
+    boolean curtir_como_candidato(Curtida c) {
+        executar_seguramente(false) {
             dao.cadastrar_curtida(c)
+            return true
         }
     }
 
-    void curtir_como_empresa(Curtida c) {
-        executar_seguramente() {
+    boolean curtir_como_empresa(Curtida c) {
+        executar_seguramente(false) {
             dao.empresa_curtir(c)
+            return true
         }
     }
 

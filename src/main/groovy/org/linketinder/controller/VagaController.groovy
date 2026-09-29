@@ -17,18 +17,22 @@ class VagaController {
         return vaga_service.get_lista()
     }
 
-    void cadastrar_vaga(ModelData modelo) {
+    boolean cadastrar_vaga(ModelData modelo) {
         Vaga v = assemble_vaga(modelo.data)
-        vaga_service.cadastrar(v)
+        if (v == null) return false
+
+        return vaga_service.cadastrar(v)
     }
 
-    void deletar_vaga(int id) {
-        vaga_service.deletar(id)
+    boolean deletar_vaga(int id) {
+        return vaga_service.deletar(id)
     }
 
-    void update_vaga(ModelData modelo) {
+    boolean update_vaga(ModelData modelo) {
         Vaga v = assemble_vaga(modelo.data)
-        vaga_service.update(v)
+        if (v == null) return false
+
+        return vaga_service.update(v)
     }
 
     Vaga assemble_vaga(Map<String, String> vaga_info) {
@@ -44,6 +48,7 @@ class VagaController {
             )
 
             Empresa empresa = empresa_service.get_by_CNPJ(vaga_info.empresa_CNPJ)
+            if (empresa == null) return null
 
             return new Vaga(
                     competencias_desejadas: competencias,

@@ -5,7 +5,6 @@ import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Vaga
 
-import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -21,7 +20,7 @@ class CurtidaDAO {
             insert into curtida (candidato_id, vaga_id) 
             values (?, ?) on conflict (candidato_id, vaga_id) do nothing
         """
-        Closure busca_args =  { PreparedStatement pst ->
+        Closure busca_args = { PreparedStatement pst ->
             pst.setInt(1, c.candidato.id)
             pst.setInt(2, c.vaga.id)
         }

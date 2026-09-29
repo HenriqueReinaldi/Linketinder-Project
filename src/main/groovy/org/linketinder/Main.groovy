@@ -1,33 +1,11 @@
 package org.linketinder
 
-import org.linketinder.DAO.CandidatoDAO
-import org.linketinder.DAO.CompetenciaDAO
-import org.linketinder.DAO.CurtidaDAO
-import org.linketinder.DAO.EmpresaDAO
-import org.linketinder.DAO.EnderecoDAO
-import org.linketinder.DAO.VagaDAO
-import org.linketinder.controller.CandidatoController
-import org.linketinder.controller.CompetenciaController
-
-import org.linketinder.DAO.Banco
-import org.linketinder.controller.ControllerBundle
-import org.linketinder.controller.CurtidaController
-import org.linketinder.controller.EmpresaController
-import org.linketinder.controller.VagaController
-import org.linketinder.service.CandidatoService
-import org.linketinder.service.CompetenciaService
-import org.linketinder.service.CurtidaService
-import org.linketinder.service.EmpresaService
-import org.linketinder.service.ServiceBundle
-import org.linketinder.service.VagaService
+import org.linketinder.DAO.*
+import org.linketinder.controller.*
+import org.linketinder.service.*
 import org.linketinder.view.View
 import org.linketinder.view.ViewIO
-import org.linketinder.view.shared.CandidatoView
-import org.linketinder.view.shared.CompetenciaView
-import org.linketinder.view.shared.CurtidaView
-import org.linketinder.view.shared.EmpresaView
-import org.linketinder.view.shared.VagaView
-import org.linketinder.view.shared.ViewBundle
+import org.linketinder.view.shared.*
 import org.linketinder.view.terminal.TermIO
 import org.linketinder.view.terminal.Terminal
 

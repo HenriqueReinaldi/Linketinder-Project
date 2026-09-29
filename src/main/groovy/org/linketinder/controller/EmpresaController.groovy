@@ -1,7 +1,6 @@
 package org.linketinder.controller
 
 import groovy.transform.TupleConstructor
-import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.service.EmpresaService
@@ -14,18 +13,22 @@ class EmpresaController {
         return empresa_service.get_lista()
     }
 
-    void cadastrar_empresa(ModelData modelo) {
+    boolean cadastrar_empresa(ModelData modelo) {
         Empresa m = assemble_empresa(modelo.data)
-        empresa_service.cadastrar(m)
+        if (m == null) return false
+
+        return empresa_service.cadastrar(m)
     }
 
-    void deletar_empresa(int id) {
-        empresa_service.deletar(id)
+    boolean deletar_empresa(int id) {
+        return empresa_service.deletar(id)
     }
 
-    void update_empresa(ModelData modelo) {
+    boolean update_empresa(ModelData modelo) {
         Empresa m = assemble_empresa(modelo.data)
-        empresa_service.update(m)
+        if (m == null) return false
+
+        return empresa_service.update(m)
     }
 
 

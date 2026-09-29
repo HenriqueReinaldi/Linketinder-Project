@@ -1,7 +1,6 @@
 package org.linketinder.controller
 
 import groovy.transform.TupleConstructor
-import groovy.transform.Undefined.EXCEPTION
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.service.CompetenciaService
 
@@ -13,13 +12,15 @@ class CompetenciaController {
         return competencia_service.get_lista()
     }
 
-    void deletar_competencia(int id) {
-        competencia_service.deletar(id)
+    boolean deletar_competencia(int id) {
+        return competencia_service.deletar(id)
     }
 
-    void update_competencia(ModelData modelo) {
+    boolean update_competencia(ModelData modelo) {
         Competencia c = assemble_competencia(modelo.data)
-        competencia_service.update(c)
+        if (c == null) return false
+
+        return competencia_service.update(c)
     }
 
     Competencia assemble_competencia(Map<String, String> competencia_info) {
