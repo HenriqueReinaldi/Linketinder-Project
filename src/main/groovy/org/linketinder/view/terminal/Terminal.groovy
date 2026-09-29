@@ -76,16 +76,16 @@ class Terminal extends View {
 
         switch (entidade) {
             case "candidato":
-                candidato_controller.deletar_candidato(id)
+                io.send_status candidato_controller.deletar_candidato(id)
                 break
             case "empresa":
-                empresa_controller.deletar_empresa(id)
+                io.send_status empresa_controller.deletar_empresa(id)
                 break
             case "vaga":
-                vaga_controller.deletar_vaga(id)
+                io.send_status vaga_controller.deletar_vaga(id)
                 break
             case "competencia":
-                competencia_controller.deletar_competencia(id)
+                io.send_status competencia_controller.deletar_competencia(id)
                 break
         }
     }
@@ -96,19 +96,19 @@ class Terminal extends View {
         switch (entidade) {
             case "candidato":
                 md.data = candidato_view.capturar_dados(true)
-                candidato_controller.update_candidato(md)
+                io.send_status candidato_controller.update_candidato(md)
                 break
             case "empresa":
                 md.data = empresa_view.capturar_dados(true)
-                empresa_controller.update_empresa(md)
+                io.send_status empresa_controller.update_empresa(md)
                 break
             case "vaga":
                 md.data = vaga_view.capturar_dados(true)
-                vaga_controller.update_vaga(md)
+                io.send_status vaga_controller.update_vaga(md)
                 break
             case "competencia":
                 md.data = competencia_view.capturar_dados(true)
-                competencia_controller.update_competencia(md)
+                io.send_status competencia_controller.update_competencia(md)
                 break
         }
     }
@@ -119,11 +119,11 @@ class Terminal extends View {
         switch (entidade) {
             case "candidato":
                 md.data = curtida_view.capturar_dados()
-                curtida_controller.candidato_curtir(md)
+                io.send_status curtida_controller.candidato_curtir(md)
                 break
             case "empresa":
                 md.data = curtida_view.capturar_dados()
-                curtida_controller.empresa_curtir(md)
+                io.send_status curtida_controller.empresa_curtir(md)
                 break
         }
     }
