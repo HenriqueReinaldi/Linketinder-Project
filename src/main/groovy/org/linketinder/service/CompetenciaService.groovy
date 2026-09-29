@@ -21,7 +21,7 @@ class CompetenciaService extends Service {
         }
     }
 
-    void update(Competencia c) {
+    boolean update(Competencia c) {
         executar_seguramente(false) {
             dao.update_competencia(c)
             return true
