@@ -2,11 +2,13 @@ package org.linketinder.controller.http
 
 import com.sun.net.httpserver.HttpExchange
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+import org.linketinder.controller.ModelData
 
 import java.nio.charset.StandardCharsets
 
-abstract class ModelHTTP {
-    protected final static <GENERICO> String pegar_json(GENERICO objeto){
+abstract class EntidadeHTTP {
+    protected final static <GENERICO> String pegar_json(GENERICO objeto) {
         if (objeto == null) return ""
         return new JsonBuilder(objeto).toPrettyString()
     }
@@ -20,5 +22,14 @@ abstract class ModelHTTP {
 
         exchange.sendResponseHeaders(status, bytes.length)
         exchange.getResponseBody().withCloseable { OutputStream os -> os.write(bytes) }
+    }
+
+    protected final static ModelData get_modeldata(HttpExchange exchange) {
+        String corpo = exchange.requestBody.text
+        Map<String, String> parametros = new JsonSlurper().parseText(corpo) as Map<String, String>
+
+        ModelData md = new ModelData()
+        md.data = parametros
+        return md
     }
 }

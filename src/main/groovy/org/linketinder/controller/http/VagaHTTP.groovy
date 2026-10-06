@@ -3,39 +3,38 @@ package org.linketinder.controller.http
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import groovy.transform.TupleConstructor
-import org.linketinder.controller.CandidatoController
+import org.linketinder.controller.VagaController
 import org.linketinder.controller.ModelData
-import org.linketinder.model.objetos.Candidato
-
+import org.linketinder.model.objetos.Vaga
 
 @TupleConstructor
-class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
-    CandidatoController controller
+class VagaHTTP extends EntidadeHTTP implements HttpHandler {
+    VagaController controller
 
     void listar(HttpExchange exchange) throws IOException {
-        if (exchange.requestURI.path != "/candidato") {
+        if (exchange.requestURI.path != "/vaga") {
             responder(exchange, "Endpoint desconhecido", 404)
             return
         }
 
-        List<String> candidatos = controller.get_lista_candidato().collect() { Candidato cand -> pegar_json(cand) }
-        responder(exchange, "[" + candidatos.join(",\n") + "]", 200)
+        List<String> vagas = controller.get_lista_vaga().collect() { Vaga vag -> pegar_json(vag) }
+        responder(exchange, "[" + vagas.join(",\n") + "]", 200)
     }
 
     void cadastrar(HttpExchange exchange) throws IOException {
-        if (exchange.requestURI.path != "/candidato") {
+        if (exchange.requestURI.path != "/vaga") {
             responder(exchange, "Endpoint desconhecido", 404)
             return
         }
 
         ModelData modelo = get_modeldata(exchange)
 
-        if (!controller.cadastrar_candidato(modelo)) {
-            responder(exchange, "falha cadastrando candidato...", 400)
+        if (!controller.cadastrar_vaga(modelo)) {
+            responder(exchange, "falha cadastrando vaga...", 400)
             return
         }
 
-        responder(exchange, "candidato cadastrado!", 200)
+        responder(exchange, "vaga cadastrado!", 200)
     }
 
     @Override
@@ -54,9 +53,7 @@ class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
 
         }
         catch (Exception e) {
-            e.printStackTrace()
             responder(exchange, "Deu erro...", 500)
         }
     }
-
 }

@@ -3,43 +3,44 @@ package org.linketinder.controller.http
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import groovy.transform.TupleConstructor
-import org.linketinder.controller.CandidatoController
+import org.linketinder.controller.EmpresaController
 import org.linketinder.controller.ModelData
-import org.linketinder.model.objetos.Candidato
-
+import org.linketinder.model.objetos.Empresa
 
 @TupleConstructor
-class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
-    CandidatoController controller
+class EmpresaHTTP extends EntidadeHTTP implements HttpHandler {
+    EmpresaController controller
 
     void listar(HttpExchange exchange) throws IOException {
-        if (exchange.requestURI.path != "/candidato") {
+        if (exchange.requestURI.path != "/empresa") {
             responder(exchange, "Endpoint desconhecido", 404)
             return
         }
 
-        List<String> candidatos = controller.get_lista_candidato().collect() { Candidato cand -> pegar_json(cand) }
-        responder(exchange, "[" + candidatos.join(",\n") + "]", 200)
+        List<String> empresas = controller.get_lista_empresa().collect() { Empresa emp -> pegar_json(emp) }
+        responder(exchange, "[" + empresas.join(",\n") + "]", 200)
     }
 
     void cadastrar(HttpExchange exchange) throws IOException {
-        if (exchange.requestURI.path != "/candidato") {
+        if (exchange.requestURI.path != "/empresa") {
             responder(exchange, "Endpoint desconhecido", 404)
             return
         }
-
+        
         ModelData modelo = get_modeldata(exchange)
 
-        if (!controller.cadastrar_candidato(modelo)) {
-            responder(exchange, "falha cadastrando candidato...", 400)
+        if (!controller.cadastrar_empresa(modelo)){
+            responder(exchange, "falha cadastrando empresa...", 400)
             return
         }
 
-        responder(exchange, "candidato cadastrado!", 200)
+        responder(exchange, "empresa cadastrado!", 200)
     }
 
     @Override
     void handle(HttpExchange exchange) throws IOException {
+        println "fdafdsaf"
+
         try {
             switch (exchange.requestMethod) {
                 case "GET":
@@ -54,9 +55,7 @@ class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
 
         }
         catch (Exception e) {
-            e.printStackTrace()
             responder(exchange, "Deu erro...", 500)
         }
     }
-
 }
