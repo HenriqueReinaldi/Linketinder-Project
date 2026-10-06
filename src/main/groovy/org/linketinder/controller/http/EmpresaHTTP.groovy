@@ -35,7 +35,7 @@ class EmpresaHTTP extends EntidadeHTTP implements HttpHandler {
             return
         }
 
-        responder(exchange, "empresa cadastrado!", 200)
+        responder(exchange, "empresa cadastrado!", 201)
     }
 
     @Override

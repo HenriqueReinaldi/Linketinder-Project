@@ -2,6 +2,7 @@ package org.linketinder.controller.http
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
+import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.controller.ControllerBundle
 import org.linketinder.model.objetos.Empresa
 
@@ -24,6 +25,8 @@ class Servidor {
         http.createContext("/candidato", new CandidatoHTTP(controllers.candidato_controller))
         http.createContext("/empresa", new EmpresaHTTP(controllers.empresa_controller))
         http.createContext("/vaga", new VagaHTTP(controllers.vaga_controller))
+        http.createContext("/competencia", new CompetenciaHTTP(controllers.competencia_controller))
+        http.createContext("/curtida", new CurtidaHTTP(controllers.curtida_controller))
 
     }
 

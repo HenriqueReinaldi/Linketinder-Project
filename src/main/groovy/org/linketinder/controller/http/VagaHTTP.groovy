@@ -34,7 +34,7 @@ class VagaHTTP extends EntidadeHTTP implements HttpHandler {
             return
         }
 
-        responder(exchange, "vaga cadastrado!", 200)
+        responder(exchange, "vaga cadastrado!", 201)
     }
 
     @Override

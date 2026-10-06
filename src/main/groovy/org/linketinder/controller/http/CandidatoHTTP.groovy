@@ -35,7 +35,7 @@ class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
             return
         }
 
-        responder(exchange, "candidato cadastrado!", 200)
+        responder(exchange, "candidato cadastrado!", 201)
     }
 
     @Override
