@@ -2,6 +2,7 @@ package org.linketinder
 
 import org.linketinder.DAO.*
 import org.linketinder.controller.*
+import org.linketinder.controller.http.Servidor
 import org.linketinder.service.*
 import org.linketinder.view.View
 import org.linketinder.view.ViewIO
@@ -64,14 +65,16 @@ static void main(String[] args) {
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
 
-    ViewIO view_io = new TermIO()
-    ViewBundle views = inicializar_views(view_io)
-    View view = new Terminal(controllers, views, view_io)
+//    ViewIO view_io = new TermIO()
+//    ViewBundle views = inicializar_views(view_io)
+//    View view = new Terminal(controllers, views, view_io)
+//    while (true) {
+//        if (!view.run()) break
+//    }
 
-    while (true) {
-        if (!view.run()) break
-    }
+    Servidor servidor = new Servidor(controllers)
+    servidor.ligar()
 
-    try_exit { bd.desconectar() }
+    //try_exit { bd.desconectar() }
 
 }

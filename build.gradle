@@ -20,6 +20,7 @@ dependencies {
 
     testImplementation 'org.mockito:mockito-core:5.11.0'
     testImplementation 'net.bytebuddy:byte-buddy:1.14.12'
+    implementation 'org.apache.groovy:groovy-json:6.0.0-RC-3'
 }
 
 test {
