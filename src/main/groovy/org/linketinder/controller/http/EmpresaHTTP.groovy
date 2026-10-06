@@ -28,6 +28,7 @@ class EmpresaHTTP extends EntidadeHTTP implements HttpHandler {
         }
         
         ModelData modelo = get_modeldata(exchange)
+        println modelo.data
 
         if (!controller.cadastrar_empresa(modelo)){
             responder(exchange, "falha cadastrando empresa...", 400)
@@ -39,8 +40,6 @@ class EmpresaHTTP extends EntidadeHTTP implements HttpHandler {
 
     @Override
     void handle(HttpExchange exchange) throws IOException {
-        println "fdafdsaf"
-
         try {
             switch (exchange.requestMethod) {
                 case "GET":
