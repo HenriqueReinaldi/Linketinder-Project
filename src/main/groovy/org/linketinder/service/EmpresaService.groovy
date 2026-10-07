@@ -25,10 +25,12 @@ class EmpresaService extends Service {
     boolean cadastrar(Empresa m) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(m.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             m.endereco.id = endereco_id
 
-            dao.cadastrar_empresa_se_nao_existe(m)
+            int empresa_id = dao.cadastrar_empresa_se_nao_existe(m)
+            if (empresa_id < 0) return false
+
             return true
         }
     }
@@ -43,7 +45,7 @@ class EmpresaService extends Service {
     boolean update(Empresa m) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(m.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             m.endereco.id = endereco_id
 
             dao.update_empresa(m)
