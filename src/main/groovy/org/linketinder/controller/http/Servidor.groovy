@@ -12,7 +12,7 @@ class Servidor {
     ControllerBundle controllers
     HttpServer http
     String host = "localhost"
-    int port = 6767
+    int port = 3040
 
     void preparar_endpoints(){
         http.createContext("/") { HttpExchange exchange ->
