@@ -6,7 +6,7 @@ class Service {
             return acao()
         }
         catch (Exception e) {
-            println e.message
+            e.printStackTrace()
             return retorno_erro
         }
     }

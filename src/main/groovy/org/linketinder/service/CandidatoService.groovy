@@ -29,11 +29,11 @@ class CandidatoService extends Service {
     boolean cadastrar(Candidato c) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             c.endereco.id = endereco_id
 
             int candidato_id = dao.cadastrar_candidato_se_nao_existe(c)
-            if (candidato_id < 0) return
+            if (candidato_id < 0) return false
 
             List<Integer> competencias_id = []
             for (Competencia comp : c.competencias) {
@@ -57,7 +57,7 @@ class CandidatoService extends Service {
     boolean update(Candidato c) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(c.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             c.endereco.id = endereco_id
 
             dao.update_candidato(c)

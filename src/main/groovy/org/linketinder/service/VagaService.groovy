@@ -32,11 +32,11 @@ class VagaService extends Service {
     boolean cadastrar(Vaga v) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             v.endereco.id = endereco_id
 
             int vaga_id = dao.cadastrar_vaga(v)
-            if (vaga_id < 0) return
+            if (vaga_id < 0) return false
 
             List<Integer> competencias_id = []
             for (Competencia comp : v.competencias_desejadas) {
@@ -60,7 +60,7 @@ class VagaService extends Service {
     boolean update(Vaga v) {
         executar_seguramente(false) {
             int endereco_id = endereco_dao.cadastrar_endereco_se_nao_existe(v.endereco)
-            if (endereco_id < 0) return
+            if (endereco_id < 0) return false
             v.endereco.id = endereco_id
 
             dao.update_vaga(v)
