@@ -27,7 +27,7 @@ Resolve and approve the specification decisions before implementation begins. Sc
 
 ## Phase 0: Database schema
 
-### 0. [ ] Prepare schema changes and migrate existing vacancies
+### 0. [ x ] Prepare schema changes and migrate existing vacancies
 - **What:** Author SQL to create `nicho` and `recrutador`, add the required `nicho_id` column and foreign key to the existing `vaga` table, seed the unique `geral` niche, and backfill every existing vacancy's `vaga.nicho_id` to `geral` without changing other vacancy data. Update schema/seed snapshots. Provide exact inspection and application commands; never execute database commands.
 - **Files:** `banco_de_dados/schema.sql`, `banco_de_dados/entrega.sql`, a standalone migration under `banco_de_dados/migrations/`, and a companion runbook.
 - **Done check:** Review SQL and runbook statically for consistency and safe ordering. The user applies the migration to a scratch database and verifies `vaga.nicho_id` exists and references `nicho.id`, vacancy IDs/count and other fields are unchanged, all pre-existing vacancies reference `geral`, and constraints reject missing/unknown niches and duplicate niche names. Do not start Phase 1 until the user reports successful verification.
@@ -37,9 +37,9 @@ Resolve and approve the specification decisions before implementation begins. Sc
 Before each phase, inspect the closest existing implementations and tests, and follow or extend their patterns wherever possible. For example, review the existing controllers and controller specs before creating a recruiter controller. Keep each layer's changes and tests separate. Domain controllers are not HTTP endpoints; route handling and JSON serialization belong only to Phase 5. Start these phases only after Phase 0 is user-verified.
 
 ### 1. [ ] Model
-- **What:** Add `Nicho` and `Recrutador` domain models and the `nicho` relationship on `Vaga`. Keep validation and representation behavior consistent with the approved spec, including never exposing recruiter passwords. Do not add DAO or workflow logic here.
+- **What:** Add the `Recrutador` domain model and represent niche as a plain `String` on `Recrutador` and `Vaga`, following the existing `Endereco.pais` pattern. Do not create a backend `Nicho` entity/model; niche lookup and relational ID mapping belong to the DAO. Keep validation and representation behavior consistent with the approved spec, including never exposing recruiter passwords. Do not add DAO or workflow logic here.
 - **Files:** `src/main/groovy/org/linketinder/model/objetos/`, `src/main/groovy/org/linketinder/model/`, corresponding model specs under `src/test/groovy/org/linketinder/model/`.
-- **Done check:** Focused Spock model specs cover required fields, relationships, allowed representations, and password omission; existing `Vaga` model specs pass.
+- **Done check:** Focused Spock model specs cover required fields, niche string values, allowed representations, and password omission; existing `Vaga` model specs pass. No `Nicho` model is introduced.
 
 ### 2. [ ] View and controller
 - **What:** Add domain-controller operations for the approved recruiter workflows: provisioning administration, recruiter-scoped vacancy listing, and responding to an eligible existing like. Keep request-to-domain assembly and controller results separate from persistence and HTTP routing. Update a view only where an existing shared/terminal view is in scope; do not create a new interaction path or treat view-level masking as privacy enforcement.
@@ -52,9 +52,9 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Done check:** Focused Spock service specs cover valid and rejected inputs, company/niche boundaries, absent prior likes, idempotent responses, and no mutation on rejected operations. No SQL implementation in this phase.
 
 ### 4. [ ] DAO
-- **What:** Implement persistence and hydration for recruiter/niche, vacancy niche assignment and recruiter-scoped vacancy queries, and eligibility-checked updates to existing likes. Match the service collaborator contracts from Phase 3 and keep SQL/data mapping out of services and controllers.
+- **What:** Implement persistence and hydration for recruiters, map niche strings on recruiter/vacancy models to the database's `nicho` table and `nicho_id` foreign keys, support recruiter-scoped vacancy queries, and implement eligibility-checked updates to existing likes. Match the service collaborator contracts from Phase 3 and keep SQL/data mapping out of services and controllers. Do not add a `Nicho` domain entity.
 - **Files:** `src/main/groovy/org/linketinder/DAO/`, DAO specs under `src/test/groovy/org/linketinder/DAO/`, plus connection-free SQL/mapping tests as supported by the existing test setup.
-- **Done check:** Focused DAO tests verify SQL parameters/mapping, niche and recruiter persistence, company/niche filtering, existing-like-only updates, and unchanged state for rejected eligibility cases. Tests must not connect to or mutate a real database.
+- **Done check:** Focused DAO tests verify SQL parameters/mapping between niche strings and `nicho_id`, recruiter persistence, company/niche filtering, existing-like-only updates, and unchanged state for rejected eligibility cases. Tests must not connect to or mutate a real database.
 
 ### 5. [ ] Endpoints
 - **What:** Wire the approved operations through HTTP handlers and application bundles. Define/implement route and method contracts separately from domain controllers, and serialize explicit audience-appropriate response shapes: omit candidate identifiers from recruiter/company-facing payloads, omit company/recruiter identity from candidate-facing payloads, and never return passwords. Preserve the spec's accepted unfiltered-description risk. Do not imply secure role isolation without approved and implemented access control.

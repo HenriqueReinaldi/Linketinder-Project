@@ -55,13 +55,31 @@ create table empresa(
 	endereco_id int references endereco(id) not null
 );
 
+create table nicho(
+	id serial primary key,
+	nome character varying(100) unique not null
+);
+
 create table vaga(
 	id serial primary key,
 	nome character varying(100) not null,
 	descricao TEXT not null,
 	
 	endereco_id int references endereco(id) not null,
-	empresa_id int references empresa(id) not null
+	empresa_id int references empresa(id) not null,
+	nicho_id int references nicho(id) not null
+);
+
+create table recrutador(
+	id serial primary key,
+	nome character varying(50) not null,
+	descricao TEXT not null,
+	e_mail character varying(100) not null,
+	CPF character varying(11) unique not null,
+	data_nascimento date not null,
+	senha TEXT CHECK (length(senha) >= 6) not null,
+	empresa_id int references empresa(id) not null,
+	nicho_id int references nicho(id) not null
 );
 
 create table vaga_competencias(

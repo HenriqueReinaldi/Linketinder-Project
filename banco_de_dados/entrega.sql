@@ -56,13 +56,31 @@ create table empresa(
 	endereco_id int references endereco(id) not null
 );
 
+create table nicho(
+	id serial primary key,
+	nome character varying(100) unique not null
+);
+
 create table vaga(
 	id serial primary key,
 	nome character varying(100) not null,
 	descricao TEXT not null,
 	
 	endereco_id int references endereco(id) not null,
-	empresa_id int references empresa(id) not null
+	empresa_id int references empresa(id) not null,
+	nicho_id int references nicho(id) not null
+);
+
+create table recrutador(
+	id serial primary key,
+	nome character varying(50) not null,
+	descricao TEXT not null,
+	e_mail character varying(100) not null,
+	CPF character varying(11) unique not null,
+	data_nascimento date not null,
+	senha TEXT CHECK (length(senha) >= 6) not null,
+	empresa_id int references empresa(id) not null,
+	nicho_id int references nicho(id) not null
 );
 
 create table vaga_competencias(
@@ -200,6 +218,41 @@ insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'2'
 ); 
 
+insert into nicho (nome) values ('geral');
+
+insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, empresa_id, nicho_id) values (
+	'ana recrutadora',
+	'Especialista em construção de times de tecnologia e boa comunicação com candidatos.',
+	'ana@empresa.com',
+	'11122233344',
+	'1990-05-12',
+	'senha123',
+	1,
+	(SELECT id FROM nicho WHERE nome = 'geral')
+);
+
+insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, empresa_id, nicho_id) values (
+	'bruno tech',
+	'Executa triagem e alinhamento de vagas com perfis de software.',
+	'bruno@linketinder.com',
+	'22233344455',
+	'1988-11-03',
+	'segura456',
+	2,
+	(SELECT id FROM nicho WHERE nome = 'geral')
+);
+
+insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, empresa_id, nicho_id) values (
+	'carla geral',
+	'Responsável por seleção de perfis gerais e alinhamento de demandas internas.',
+	'carla@empresa2.com',
+	'33344455566',
+	'1992-02-28',
+	'minhasenha',
+	3,
+	(SELECT id FROM nicho WHERE nome = 'geral')
+);
+
 insert into candidato_competencias (candidato_id, competencia_id) values (1, 3);
 insert into candidato_competencias (candidato_id, competencia_id) values (1, 8);
 insert into candidato_competencias (candidato_id, competencia_id) values (1, 5);
@@ -212,18 +265,20 @@ insert into candidato_competencias (candidato_id, competencia_id) values (4, 2);
 insert into candidato_competencias (candidato_id, competencia_id) values (5, 9);
 
 
-insert into vaga (nome, descricao, endereco_id, empresa_id) values (
+insert into vaga (nome, descricao, endereco_id, empresa_id, nicho_id) values (
 	'melhor vaga tecweb',
 	'descritiva',
 	'1',
-	'1'
+	'1',
+	(SELECT id FROM nicho WHERE nome = 'geral')
 );
 
-insert into vaga (nome, descricao, endereco_id, empresa_id) values (
+insert into vaga (nome, descricao, endereco_id, empresa_id, nicho_id) values (
 	'linketinder dev',
 	'deve dev o development do linketinder development dev team',
 	'2',
-	'5'
+	'5',
+	(SELECT id FROM nicho WHERE nome = 'geral')
 );
 
 insert into vaga_competencias (vaga_id, competencia_id) values (2, 9);
