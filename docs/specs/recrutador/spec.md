@@ -85,7 +85,7 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - Migrar vagas existentes para `geral`, sem apagar ou recriar vagas nem alterar outros dados delas.
 - Rejeitar resposta de recrutador se não existir curtida do candidato para aquele par, se a vaga não pertencer à empresa associada ou se o nicho não for compatível; a rejeição não deve alterar o registro de curtida.
 - Repetir uma resposta já registrada não cria registros duplicados nem reverte `empresa_curtiu` para `false`.
-- Proteger `senha` de exposição em respostas, logs e serialização. O schema de candidato existente armazena senha como texto; a política de armazenamento de senha para recrutador deve ser resolvida antes da implementação, pois esta spec não aprova replicar armazenamento inseguro.
+- **Decisão aprovada para esta implementação:** armazenar a senha do recrutador como texto simples, seguindo o padrão legado de candidato e empresa. Isso mantém o risco de exposição em caso de acesso indevido ao banco; qualquer migração futura para hash deverá considerar compatibilidade e redefinição/atualização de credenciais. A senha continua proibida em respostas, logs e serialização.
 - Entregar mudanças no banco como arquivo(s) SQL e instruções com os comandos de inspeção/aplicação; somente o usuário executa esses comandos e valida os resultados no banco.
 
 ## Critérios de aceite

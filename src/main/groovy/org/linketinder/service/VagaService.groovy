@@ -4,6 +4,7 @@ import groovy.transform.TupleConstructor
 import org.linketinder.DAO.CompetenciaDAO
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.EnderecoDAO
+import org.linketinder.DAO.RecrutadorDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Vaga
@@ -14,6 +15,7 @@ class VagaService extends Service {
     EnderecoDAO endereco_dao
     CompetenciaDAO competencia_dao
     EmpresaDAO empresa_dao
+    RecrutadorDAO recrutador_dao
 
     List<Vaga> get_lista() {
         executar_seguramente([]) {
@@ -86,7 +88,15 @@ class VagaService extends Service {
 
     List<Vaga> get_lista_vaga_recrutador(int recrutador_id) {
         executar_seguramente([]) {
-            return []
+            if (recrutador_dao == null) return []
+
+            def recrutador = recrutador_dao.get_recrutador_by_id(recrutador_id)
+            if (recrutador == null || recrutador.empresa == null) return []
+
+            return get_lista().findAll { Vaga vaga ->
+                vaga.empresa?.id == recrutador.empresa.id &&
+                        (recrutador.nicho == "geral" || recrutador.nicho == vaga.nicho)
+            }
         }
     }
 

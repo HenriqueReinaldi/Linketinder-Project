@@ -46,7 +46,7 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/view/shared/`, `src/main/groovy/org/linketinder/view/terminal/` only if an existing view needs adaptation, controller specs under `src/test/groovy/org/linketinder/controller/`, and view specs under `src/test/groovy/org/linketinder/view/` for any changed view behavior.
 - **Done check:** Focused controller tests verify input assembly, delegation and failure behavior using service doubles; any changed view test confirms it presents the updated recruiter flow and the data expected by the controller, without implying a privacy boundary. No HTTP routes or serialization changes in this phase.
 
-### 3. [ ] Service
+### 3. [x] Service
 - **What:** Implement the business workflows behind controller operations: recruiter provisioning validation, vacancy filtering by company and niche (`geral` semantics), prohibition of vacancy writes by recruiters, and eligibility/idempotency rules for responding to existing likes. Keep persistence calls behind DAO collaborators and test service behavior with DAO doubles.
 - **Files:** `src/main/groovy/org/linketinder/service/`, service specs under `src/test/groovy/org/linketinder/service/`, and service bundle wiring where required.
 - **Done check:** Focused Spock service specs cover valid and rejected inputs, company/niche boundaries, absent prior likes, idempotent responses, and no mutation on rejected operations. No SQL implementation in this phase.
