@@ -66,6 +66,7 @@ class VagaControllerSpec extends Specification {
                 "empresa_CNPJ"          : "empresa_CNPJ",
                 "nome"                  : "nome",
                 "descricao"             : "descricao",
+                "nicho"                 : "tecnologia",
                 "id"                    : "1"
         ]
         Empresa empresa = new Empresa(CNPJ: "empresa_CNPJ")
@@ -78,6 +79,7 @@ class VagaControllerSpec extends Specification {
 
         vaga.nome == "nome"
         vaga.descricao == "descricao"
+        vaga.nicho == "tecnologia"
         vaga.id == 1
         vaga.endereco.CEP == "CEP"
         vaga.endereco.pais == "pais"

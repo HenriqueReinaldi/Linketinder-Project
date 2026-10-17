@@ -54,6 +54,7 @@ class VagaController {
                     competencias_desejadas: competencias,
                     nome: vaga_info.nome,
                     descricao: vaga_info.descricao,
+                    nicho: vaga_info.nicho,
                     endereco: endereco,
                     empresa: empresa,
                     id: vaga_info.id ? vaga_info.id.toInteger() : -1

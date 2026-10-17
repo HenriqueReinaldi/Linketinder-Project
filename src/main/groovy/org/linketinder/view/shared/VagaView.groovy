@@ -19,6 +19,7 @@ class VagaView implements Representavel<Vaga>, Cadastravel<Vaga> {
 
         """Vaga ${objeto.nome}:
            |Descrição   : ${objeto.descricao}
+              |Nicho       : ${objeto.nicho}
            |Pais        : ${objeto.endereco.pais}
            |CEP         : ${objeto.endereco.CEP}
            |Estado      : ${objeto.endereco.estado}
@@ -42,6 +43,7 @@ class VagaView implements Representavel<Vaga>, Cadastravel<Vaga> {
         Map<String, String> campos = [
                 "nome"                  : "Nome:",
                 "descricao"             : "Descrição:",
+                "nicho"                 : "Nicho:",
                 "CEP"                   : "CEP:",
                 "pais"                  : "pais:",
                 "estado"                : "Estado:",
