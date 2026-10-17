@@ -50,6 +50,20 @@ class CurtidaControllerSpec extends Specification {
         1 * curtida_service.curtir_como_empresa(curtida)
     }
 
+    void "recrutador curtir chama o service correto e assemblemodel"() {
+        given:
+        ModelData md = new ModelData()
+        Curtida curtida = new Curtida()
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
+
+        when:
+        controller.recrutador_curtir(md)
+
+        then:
+        1 * controller.assemble_curtida(md.data) >> curtida
+        1 * curtida_service.curtir_como_recrutador(curtida)
+    }
+
     void "assemble_curtida monta curtida corretamente"() {
         given:
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])

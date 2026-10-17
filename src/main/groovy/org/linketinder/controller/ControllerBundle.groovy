@@ -9,4 +9,5 @@ class ControllerBundle {
     CurtidaController curtida_controller
     EmpresaController empresa_controller
     VagaController vaga_controller
+    RecrutadorController recrutador_controller
 }

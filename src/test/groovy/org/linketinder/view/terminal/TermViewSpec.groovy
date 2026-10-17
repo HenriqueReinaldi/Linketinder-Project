@@ -6,12 +6,14 @@ import org.linketinder.controller.ControllerBundle
 import org.linketinder.controller.CurtidaController
 import org.linketinder.controller.EmpresaController
 import org.linketinder.controller.ModelData
+import org.linketinder.controller.RecrutadorController
 import org.linketinder.controller.VagaController
 import org.linketinder.view.ViewIO
 import org.linketinder.view.shared.CandidatoView
 import org.linketinder.view.shared.CompetenciaView
 import org.linketinder.view.shared.CurtidaView
 import org.linketinder.view.shared.EmpresaView
+import org.linketinder.view.shared.RecrutadorView
 import org.linketinder.view.shared.VagaView
 import org.linketinder.view.shared.ViewBundle
 import spock.lang.Specification
@@ -22,16 +24,18 @@ class TermViewSpec extends Specification {
     CompetenciaController competencia_controller = Mock()
     CurtidaController curtida_controller = Mock()
     VagaController vaga_controller = Mock()
+    RecrutadorController recrutador_controller = Mock()
     ControllerBundle controller_bundle = new ControllerBundle(
-            competencia_controller, candidato_controller, curtida_controller, empresa_controller, vaga_controller
+            competencia_controller, candidato_controller, curtida_controller, empresa_controller, vaga_controller, recrutador_controller
     )
     CandidatoView candidato_view = Mock()
     EmpresaView empresa_view = Mock()
     VagaView vaga_view = Mock()
     CompetenciaView competencia_view = Mock()
     CurtidaView curtida_view = Mock()
+    RecrutadorView recrutador_view = Mock()
     ViewBundle view_bundle = new ViewBundle(
-            candidato_view, empresa_view, vaga_view, competencia_view, curtida_view
+            candidato_view, empresa_view, vaga_view, competencia_view, curtida_view, recrutador_view
     )
 
     ViewIO view_io = Mock()
@@ -47,12 +51,13 @@ class TermViewSpec extends Specification {
         1 * controller_bundle."$controller"."$metodo"() >> []
 
         where:
-        input          | controller               | metodo
-        "candidatos"   | "candidato_controller"   | "get_lista_candidato"
-        "empresas"     | "empresa_controller"     | "get_lista_empresa"
-        "vagas"        | "vaga_controller"        | "get_lista_vaga"
-        "curtidas"     | "curtida_controller"     | "get_lista_curtida"
-        "competencias" | "competencia_controller" | "get_lista_competencia"
+        input            | controller                 | metodo
+        "candidatos"     | "candidato_controller"     | "get_lista_candidato"
+        "empresas"       | "empresa_controller"       | "get_lista_empresa"
+        "vagas"          | "vaga_controller"          | "get_lista_vaga"
+        "curtidas"       | "curtida_controller"       | "get_lista_curtida"
+        "competencias"   | "competencia_controller"   | "get_lista_competencia"
+        "recrutadores"   | "recrutador_controller"    | "get_lista_recrutador"
     }
 
     void "cadastrar chama o controller certo"() {
@@ -67,10 +72,11 @@ class TermViewSpec extends Specification {
         1 * controller_bundle."$controller"."$metodo"(_ as ModelData)
 
         where:
-        input       | controller             | metodo
-        "candidato" | "candidato_controller" | "cadastrar_candidato"
-        "empresa"   | "empresa_controller"   | "cadastrar_empresa"
-        "vaga"      | "vaga_controller"      | "cadastrar_vaga"
+        input        | controller               | metodo
+        "candidato"  | "candidato_controller"   | "cadastrar_candidato"
+        "empresa"    | "empresa_controller"     | "cadastrar_empresa"
+        "vaga"       | "vaga_controller"        | "cadastrar_vaga"
+        "recrutador" | "recrutador_controller"  | "cadastrar_recrutador"
     }
 
     void "deletar chama o controller certo"() {
@@ -90,6 +96,7 @@ class TermViewSpec extends Specification {
         "empresa"     | "empresa_controller"     | "deletar_empresa"
         "vaga"        | "vaga_controller"        | "deletar_vaga"
         "competencia" | "competencia_controller" | "deletar_competencia"
+        "recrutador"  | "recrutador_controller"  | "deletar_recrutador"
     }
 
     void "update chama o controller certo"() {
@@ -110,6 +117,7 @@ class TermViewSpec extends Specification {
         "empresa"     | "empresa_controller"     | "update_empresa"
         "vaga"        | "vaga_controller"        | "update_vaga"
         "competencia" | "competencia_controller" | "update_competencia"
+        "recrutador"  | "recrutador_controller" | "update_recrutador"
     }
 
     void "curtir pela perspectiva chama o controller certo"() {
@@ -124,9 +132,10 @@ class TermViewSpec extends Specification {
         1 * controller_bundle.curtida_controller."$metodo"(_ as ModelData)
 
         where:
-        input       | metodo
-        "candidato" | "candidato_curtir"
-        "empresa"   | "empresa_curtir"
+        input        | metodo
+        "candidato"  | "candidato_curtir"
+        "empresa"    | "empresa_curtir"
+        "recrutador" | "recrutador_curtir"
     }
 
     void "funcao run retorna falso quando input for sair"() {

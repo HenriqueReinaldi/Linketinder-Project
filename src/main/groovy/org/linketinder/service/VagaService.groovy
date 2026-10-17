@@ -84,4 +84,10 @@ class VagaService extends Service {
         }
     }
 
+    List<Vaga> get_lista_vaga_recrutador(int recrutador_id) {
+        executar_seguramente([]) {
+            return []
+        }
+    }
+
 }

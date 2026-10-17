@@ -41,10 +41,10 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Files:** `src/main/groovy/org/linketinder/model/objetos/`, `src/main/groovy/org/linketinder/model/`, corresponding model specs under `src/test/groovy/org/linketinder/model/`.
 - **Done check:** Focused Spock model specs cover required fields, niche string values, allowed representations, and password omission; existing `Vaga` model specs pass. No `Nicho` model is introduced.
 
-### 2. [ ] View and controller
-- **What:** Add domain-controller operations for the approved recruiter workflows: provisioning administration, recruiter-scoped vacancy listing, and responding to an eligible existing like. Keep request-to-domain assembly and controller results separate from persistence and HTTP routing. Update a view only where an existing shared/terminal view is in scope; do not create a new interaction path or treat view-level masking as privacy enforcement.
-- **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/view/` only if an existing view needs adaptation, controller specs under `src/test/groovy/org/linketinder/controller/`, and view specs only for changed views.
-- **Done check:** Focused controller tests verify input assembly, delegation and failure behavior using service doubles; any changed view test confirms it presents only the approved view data. No HTTP routes or serialization changes in this phase.
+### 2. [x] View and controller
+- **What:** Add domain-controller operations for the approved recruiter workflows: provisioning administration, recruiter-scoped vacancy listing, and responding to an eligible existing like. Keep request-to-domain assembly and controller results separate from persistence and HTTP routing. Update the existing view layer to match the new recruiter controller contract: any affected shared/terminal view must capture the updated input fields and present the recruiter-specific data flow in the same pattern as the current terminal/shared views; do not create a new interaction path or treat view-level masking as privacy enforcement.
+- **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/view/shared/`, `src/main/groovy/org/linketinder/view/terminal/` only if an existing view needs adaptation, controller specs under `src/test/groovy/org/linketinder/controller/`, and view specs under `src/test/groovy/org/linketinder/view/` for any changed view behavior.
+- **Done check:** Focused controller tests verify input assembly, delegation and failure behavior using service doubles; any changed view test confirms it presents the updated recruiter flow and the data expected by the controller, without implying a privacy boundary. No HTTP routes or serialization changes in this phase.
 
 ### 3. [ ] Service
 - **What:** Implement the business workflows behind controller operations: recruiter provisioning validation, vacancy filtering by company and niche (`geral` semantics), prohibition of vacancy writes by recruiters, and eligibility/idempotency rules for responding to existing likes. Keep persistence calls behind DAO collaborators and test service behavior with DAO doubles.
@@ -67,5 +67,7 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Done check:** Focused specs pass, then `./gradlew test` passes. Record each acceptance, migration, and privacy check outcome, including checks blocked by unavailable PostgreSQL/access-control infrastructure. Do not run database-mutating commands or claim unperformed user-run checks.
 
 ## Delivery workflow
+
+Important: only the user may mark tasks as done. The assistant must not update checklist items, phase completion markers, or status fields to reflect completion without explicit user confirmation. The plan is a tracking aid for review, not a place for the assistant to self-approve work.
 
 Approve the specification decisions first, then complete and obtain user verification of Phase 0 before starting Phase 1. Implement one phase at a time. Run that phase's focused check before moving on, update its checkbox only after validation passes, and keep each phase's changes independently reviewable. Do not begin the frontend or connect it to the backend as part of this plan.

@@ -35,7 +35,8 @@ static ServiceBundle inicializar_services(Banco bd) {
             new EmpresaService(empresa_dao, endereco_dao),
             new CompetenciaService(competencia_dao),
             new CurtidaService(curtida_dao, candidato_dao, vaga_dao),
-            new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao)
+            new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao),
+            new RecrutadorService()
     )
 }
 
@@ -45,7 +46,8 @@ static ViewBundle inicializar_views(ViewIO view_io) {
             new EmpresaView(view_io),
             new VagaView(view_io),
             new CompetenciaView(view_io),
-            new CurtidaView(view_io)
+            new CurtidaView(view_io),
+            new RecrutadorView(view_io)
     )
 }
 
@@ -55,7 +57,8 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
             new CandidatoController(services.candidato_service),
             new CurtidaController(services.curtida_service, services.candidato_service, services.vaga_service),
             new EmpresaController(services.empresa_service),
-            new VagaController(services.vaga_service, services.empresa_service)
+            new VagaController(services.vaga_service, services.empresa_service),
+            new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service)
     )
 }
 
@@ -65,15 +68,15 @@ static void main(String[] args) {
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
 
-//    ViewIO view_io = new TermIO()
-//    ViewBundle views = inicializar_views(view_io)
-//    View view = new Terminal(controllers, views, view_io)
-//    while (true) {
-//        if (!view.run()) break
-//    }
-
-    Servidor servidor = new Servidor(controllers)
-    servidor.ligar()
+    ViewIO view_io = new TermIO()
+    ViewBundle views = inicializar_views(view_io)
+    View view = new Terminal(controllers, views, view_io)
+    while (true) {
+        if (!view.run()) break
+    }
+//
+//    Servidor servidor = new Servidor(controllers)
+//    servidor.ligar()
 
    // try_exit { bd.desconectar() }
 

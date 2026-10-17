@@ -39,4 +39,10 @@ class CurtidaService extends Service {
         }
     }
 
+    boolean curtir_como_recrutador(Curtida c) {
+        executar_seguramente(false) {
+            return true
+        }
+    }
+
 }
