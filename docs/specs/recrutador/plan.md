@@ -13,55 +13,59 @@ Resolve and record these decisions in the specification before starting applicat
 - Define recruiter password storage, hashing dependency/algorithm, and compatibility expectations. Do not copy the current plaintext storage pattern.
 - Reconcile administrative-only recruiter provisioning with the current absence of authentication/authorization and the spec's exclusion of authorization. Do not expose an unauthenticated administrative operation as though it were protected.
 - Define route/response contracts that enforce candidate-facing and recruiter-facing anonymity at the HTTP boundary. Current routes do not authenticate or identify the caller, so separate response shapes alone must not be presented as secure access control.
-- Choose how database changes are delivered and applied. The repository has schema snapshots but no established migration runner/history.
 
-## Tasks
+Database changes are user-run only. The implementation may author SQL and exact inspection/application commands in files, but must not connect to the database or run those commands. The repository has schema snapshots but no established migration runner/history, so this plan uses a standalone migration SQL file and a companion instruction file; the user reviews and executes them.
 
-### 1. [ ] Resolve decisions and approve the specification
-- **What:** Resolve the implementation gates above, ensure the privacy requirements are compatible with the agreed route/access model, and update the spec's status and rules. Keep the accepted free-text description risk explicit.
+## Prerequisites
+
+Resolve and approve the specification decisions before implementation begins. Schema work is then the first implementation phase and must be completed and user-verified before any application-code phase.
+
+### Approve specification decisions
+- **What:** Resolve the implementation gates above, confirm the route/access model and privacy requirements, and approve the spec. Keep the accepted free-text description risk and user-run database process explicit.
 - **Files:** `docs/specs/recrutador/spec.md`
-- **Done check:** User review confirms the decisions and acceptance criteria; the spec is marked approved. No application code changes in this task.
+- **Done check:** User review confirms the decisions and acceptance criteria; the spec is marked approved. No application code changes.
 
-### 2. [ ] Add schema changes and migrate existing vacancies
-- **What:** Add `nicho` and `recrutador`, seed the unique `geral` niche, add required niche references, and backfill every existing vacancy to `geral` without changing its other data. Apply the migration delivery strategy agreed in Task 1 and keep the schema/seed snapshots consistent.
-- **Files:** `banco_de_dados/schema.sql`, `banco_de_dados/entrega.sql`, and the migration artifact/run instructions selected in Task 1.
-- **Done check:** Apply the migration to a scratch database with the pre-change schema and existing vacancies; verify vacancy IDs/count and other fields are unchanged, every old vacancy references `geral`, and constraints reject missing/unknown niches and duplicate niche names.
+## Phase 0: Database schema
 
-### 3. [ ] Implement niche and recruiter domain persistence
-- **What:** Add domain models and DAO operations for niches and recruiters, including required-field, company/niche-reference, duplicate-CPF, and six-character password validation. Keep secrets out of returned models and logs according to the approved storage policy.
-- **Files:** `src/main/groovy/org/linketinder/model/objetos/`, `src/main/groovy/org/linketinder/DAO/`, corresponding `src/test/groovy/org/linketinder/model/` and `src/test/groovy/org/linketinder/DAO/` specs.
-- **Done check:** Focused Spock specs cover valid records, missing fields/references, duplicate CPF/niche constraints, short passwords, and absence of password values from exposed representations.
+### 0. [ ] Prepare schema changes and migrate existing vacancies
+- **What:** Author SQL to create `nicho` and `recrutador`, add the required `nicho_id` column and foreign key to the existing `vaga` table, seed the unique `geral` niche, and backfill every existing vacancy's `vaga.nicho_id` to `geral` without changing other vacancy data. Update schema/seed snapshots. Provide exact inspection and application commands; never execute database commands.
+- **Files:** `banco_de_dados/schema.sql`, `banco_de_dados/entrega.sql`, a standalone migration under `banco_de_dados/migrations/`, and a companion runbook.
+- **Done check:** Review SQL and runbook statically for consistency and safe ordering. The user applies the migration to a scratch database and verifies `vaga.nicho_id` exists and references `nicho.id`, vacancy IDs/count and other fields are unchanged, all pre-existing vacancies reference `geral`, and constraints reject missing/unknown niches and duplicate niche names. Do not start Phase 1 until the user reports successful verification.
 
-### 4. [ ] Add administrative recruiter provisioning workflow
-- **What:** Implement recruiter provisioning, updates, and deactivation only to the extent approved by Task 1, and wire the model/service/controller through the application bundles. Preserve the agreed administrative access boundary; do not add vacancy-management permissions.
-- **Files:** `src/main/groovy/org/linketinder/service/`, `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/Main.groovy`, `src/main/groovy/org/linketinder/service/ServiceBundle.groovy`, `src/main/groovy/org/linketinder/controller/ControllerBundle.groovy`, plus focused service/controller specs under `src/test/groovy/`.
-- **Done check:** Focused Spock tests verify provisioning validation, agreed access behavior, and that responses/logged output never contain the recruiter password.
+## Implementation Phases
 
-### 5. [ ] Add niche support to vacancy create and update
-- **What:** Carry `nicho_id` through vacancy model, DAO, service, and controller. Require an existing niche on create/update, while preserving existing vacancy behavior apart from the new required classification.
-- **Files:** `src/main/groovy/org/linketinder/model/objetos/Vaga.groovy`, `src/main/groovy/org/linketinder/DAO/VagaDAO.groovy`, `src/main/groovy/org/linketinder/service/VagaService.groovy`, `src/main/groovy/org/linketinder/controller/VagaController.groovy`, and corresponding `Vaga`/controller/service specs under `src/test/groovy/`.
-- **Done check:** Focused Spock tests verify niche persistence and rejection of missing or nonexistent niches on create/update; existing vacancy tests continue to pass.
+Before each phase, inspect the closest existing implementations and tests, and follow or extend their patterns wherever possible. For example, review the existing controllers and controller specs before creating a recruiter controller. Keep each layer's changes and tests separate. Domain controllers are not HTTP endpoints; route handling and JSON serialization belong only to Phase 5. Start these phases only after Phase 0 is user-verified.
 
-### 6. [ ] Add recruiter-scoped, read-only vacancy listing
-- **What:** Resolve the recruiter’s associated company and list only that company’s vacancies. A specific recruiter sees exact niche matches; a `geral` recruiter sees all niches for that company. Recruiter-facing operations must not create, edit, delete, or transfer vacancies.
-- **Files:** `src/main/groovy/org/linketinder/DAO/VagaDAO.groovy`, `src/main/groovy/org/linketinder/service/VagaService.groovy`, `src/main/groovy/org/linketinder/controller/VagaController.groovy`, and focused vacancy service/controller specs under `src/test/groovy/`.
-- **Done check:** Focused Spock tests cover same-company/same-niche results, `geral` results, exclusion of other-company vacancies, invalid recruiter handling, and unchanged vacancy data after attempted write operations.
+### 1. [ ] Model
+- **What:** Add `Nicho` and `Recrutador` domain models and the `nicho` relationship on `Vaga`. Keep validation and representation behavior consistent with the approved spec, including never exposing recruiter passwords. Do not add DAO or workflow logic here.
+- **Files:** `src/main/groovy/org/linketinder/model/objetos/`, `src/main/groovy/org/linketinder/model/`, corresponding model specs under `src/test/groovy/org/linketinder/model/`.
+- **Done check:** Focused Spock model specs cover required fields, relationships, allowed representations, and password omission; existing `Vaga` model specs pass.
 
-### 7. [ ] Enforce eligibility for recruiter responses to likes
-- **What:** Add the recruiter response workflow so it only sets `empresa_curtiu=true` on an existing candidate-vacancy like when the vacancy belongs to the recruiter’s company and its niche is compatible. Repeated responses remain idempotent; rejected requests do not create or modify likes.
-- **Files:** `src/main/groovy/org/linketinder/DAO/CurtidaDAO.groovy`, `src/main/groovy/org/linketinder/service/CurtidaService.groovy`, `src/main/groovy/org/linketinder/controller/CurtidaController.groovy`, and corresponding `Curtida` service/controller specs under `src/test/groovy/`.
-- **Done check:** Focused Spock tests cover eligible response, no prior candidate-like, other company, incompatible niche, idempotent repeat, and no state change on every rejection.
+### 2. [ ] View and controller
+- **What:** Add domain-controller operations for the approved recruiter workflows: provisioning administration, recruiter-scoped vacancy listing, and responding to an eligible existing like. Keep request-to-domain assembly and controller results separate from persistence and HTTP routing. Update a view only where an existing shared/terminal view is in scope; do not create a new interaction path or treat view-level masking as privacy enforcement.
+- **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/view/` only if an existing view needs adaptation, controller specs under `src/test/groovy/org/linketinder/controller/`, and view specs only for changed views.
+- **Done check:** Focused controller tests verify input assembly, delegation and failure behavior using service doubles; any changed view test confirms it presents only the approved view data. No HTTP routes or serialization changes in this phase.
 
-### 8. [ ] Enforce anonymous HTTP response shapes
-- **What:** Replace direct serialization of full domain objects on affected candidate/recruiter-facing flows with explicit response projections. Exclude candidate name, surname, age/date of birth, CPF, e-mail, and address from recruiter/company-facing candidate data; exclude company and recruiter identity from candidate-facing vacancy/like results; never return passwords. Competencies may be returned. Preserve and document the spec's accepted unfiltered-description risk.
-- **Files:** `src/main/groovy/org/linketinder/controller/http/EntidadeHTTP.groovy`, affected `CandidatoHTTP.groovy`, `VagaHTTP.groovy`, and `CurtidaHTTP.groovy`, plus focused HTTP serialization/controller specs under `src/test/groovy/`.
-- **Done check:** HTTP-boundary tests inspect serialized JSON and assert both required field presence and prohibited identifying/password field absence for each approved audience/route contract. Do not claim secure role isolation unless the approved access model actually enforces it.
+### 3. [ ] Service
+- **What:** Implement the business workflows behind controller operations: recruiter provisioning validation, vacancy filtering by company and niche (`geral` semantics), prohibition of vacancy writes by recruiters, and eligibility/idempotency rules for responding to existing likes. Keep persistence calls behind DAO collaborators and test service behavior with DAO doubles.
+- **Files:** `src/main/groovy/org/linketinder/service/`, service specs under `src/test/groovy/org/linketinder/service/`, and service bundle wiring where required.
+- **Done check:** Focused Spock service specs cover valid and rejected inputs, company/niche boundaries, absent prior likes, idempotent responses, and no mutation on rejected operations. No SQL implementation in this phase.
 
-### 9. [ ] Run acceptance and regression checks
-- **What:** Verify every acceptance criterion against focused tests and the agreed migration/manual checks; review the final diff and ensure only backend and spec-plan scope changed.
-- **Files:** Tests and documentation in the tasks above; no additional implementation files expected.
-- **Done check:** Focused specs pass, then `./gradlew test` passes. Record the outcome of each acceptance criterion, migration check, privacy check, and any check blocked by unavailable PostgreSQL/access-control infrastructure. Do not claim unperformed manual checks.
+### 4. [ ] DAO
+- **What:** Implement persistence and hydration for recruiter/niche, vacancy niche assignment and recruiter-scoped vacancy queries, and eligibility-checked updates to existing likes. Match the service collaborator contracts from Phase 3 and keep SQL/data mapping out of services and controllers.
+- **Files:** `src/main/groovy/org/linketinder/DAO/`, DAO specs under `src/test/groovy/org/linketinder/DAO/`, plus connection-free SQL/mapping tests as supported by the existing test setup.
+- **Done check:** Focused DAO tests verify SQL parameters/mapping, niche and recruiter persistence, company/niche filtering, existing-like-only updates, and unchanged state for rejected eligibility cases. Tests must not connect to or mutate a real database.
+
+### 5. [ ] Endpoints
+- **What:** Wire the approved operations through HTTP handlers and application bundles. Define/implement route and method contracts separately from domain controllers, and serialize explicit audience-appropriate response shapes: omit candidate identifiers from recruiter/company-facing payloads, omit company/recruiter identity from candidate-facing payloads, and never return passwords. Preserve the spec's accepted unfiltered-description risk. Do not imply secure role isolation without approved and implemented access control.
+- **Files:** `src/main/groovy/org/linketinder/controller/http/`, `src/main/groovy/org/linketinder/Main.groovy`, relevant controller/service bundles, and focused HTTP tests under `src/test/groovy/`.
+- **Done check:** HTTP-boundary tests assert route/method/status behavior and serialized field presence/absence for each approved contract. Verify registration/wiring without requiring a live database; document the remaining authentication/authorization limitation.
+
+### 6. [ ] Run acceptance and regression checks
+- **What:** Verify every acceptance criterion against focused tests and agreed migration/manual checks; review the final diff and ensure only backend and spec-plan scope changed. Database inspection/application remains user-run; record results only after the user reports them.
+- **Files:** Tests and documentation from the phases above; no additional implementation files expected.
+- **Done check:** Focused specs pass, then `./gradlew test` passes. Record each acceptance, migration, and privacy check outcome, including checks blocked by unavailable PostgreSQL/access-control infrastructure. Do not run database-mutating commands or claim unperformed user-run checks.
 
 ## Delivery workflow
 
-Implement one task at a time after Task 1 is approved. Run that task's focused check before moving on, update its checkbox only after validation passes, and keep each task's changes independently reviewable. Do not begin the frontend or connect it to the backend as part of this plan.
+Approve the specification decisions first, then complete and obtain user verification of Phase 0 before starting Phase 1. Implement one phase at a time. Run that phase's focused check before moving on, update its checkbox only after validation passes, and keep each phase's changes independently reviewable. Do not begin the frontend or connect it to the backend as part of this plan.

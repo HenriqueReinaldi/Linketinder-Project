@@ -2,11 +2,19 @@
 
 **Status:** rascunho para revisão; não aprovado para implementação.
 
+**Processo confirmado para alterações no banco:** qualquer criação ou alteração de schema, tabela, restrição ou dado será entregue em um arquivo SQL dedicado, acompanhado de um arquivo com os comandos exatos para inspeção e aplicação. O usuário revisará e executará esses comandos. O assistente não deve conectar ao banco nem executar operações que alterem schema ou dados. Essa regra também se aplica a carga/população de dados e migrações.
+
 ## Contexto e objetivo
 
 Uma empresa pode contratar recrutadores para encontrar candidatos e responder às curtidas recebidas em suas vagas. O recrutador atua em nome de uma única empresa e não pode administrar as vagas dela.
 
 Esta especificação cobre primeiro o backend (`src/` e `banco_de_dados/`). A funcionalidade correspondente da aplicação frontend será especificada e implementada em uma etapa separada. As duas aplicações continuam independentes; esta feature não as conecta.
+
+## Diretriz de implementação
+
+Antes de criar código, consultar as implementações e testes existentes mais próximos e reutilizar seus padrões sempre que possível. Por exemplo, ao criar um controller de recrutador, revisar os controllers e specs atuais para manter a mesma organização e convenções. Só introduzir uma estrutura diferente quando houver uma necessidade concreta, registrada na implementação.
+
+Quando a feature exigir mudança no banco, preparar primeiro o schema e a migração. As fases de código só começam depois que o usuário executar e validar as mudanças no banco, conforme o processo confirmado acima.
 
 ## Modelo de dados
 
@@ -78,6 +86,7 @@ Esta especificação cobre primeiro o backend (`src/` e `banco_de_dados/`). A fu
 - Rejeitar resposta de recrutador se não existir curtida do candidato para aquele par, se a vaga não pertencer à empresa associada ou se o nicho não for compatível; a rejeição não deve alterar o registro de curtida.
 - Repetir uma resposta já registrada não cria registros duplicados nem reverte `empresa_curtiu` para `false`.
 - Proteger `senha` de exposição em respostas, logs e serialização. O schema de candidato existente armazena senha como texto; a política de armazenamento de senha para recrutador deve ser resolvida antes da implementação, pois esta spec não aprova replicar armazenamento inseguro.
+- Entregar mudanças no banco como arquivo(s) SQL e instruções com os comandos de inspeção/aplicação; somente o usuário executa esses comandos e valida os resultados no banco.
 
 ## Critérios de aceite
 
@@ -96,6 +105,7 @@ Esta especificação cobre primeiro o backend (`src/` e `banco_de_dados/`). A fu
 ## Impactos no comportamento existente
 
 - O schema e os dados de vaga mudam: será necessária migração que crie `nicho`, crie `recrutador`, adicione `vaga.nicho_id` e classifique vagas antigas como `geral`.
+- A migração e qualquer carga ou alteração de dados serão fornecidas em arquivos para execução pelo usuário; o assistente não aplicará mudanças diretamente ao banco.
 - A criação e atualização de vagas passam a exigir nicho.
 - O fluxo existente de curtida de empresa continua representado pelo booleano `empresa_curtiu`; não haverá autoria ou histórico do recrutador nesta etapa.
 - Os modelos/serviços/DAOs e qualquer serialização de dados de vaga/candidato afetados devem preservar as regras de anonimato acima, com a exceção explícita da descrição livre.
