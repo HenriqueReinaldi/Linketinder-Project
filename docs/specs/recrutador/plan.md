@@ -1,8 +1,8 @@
 # Recrutador (Backend) Implementation Plan
 
-Implements the proposed specification at `docs/specs/recrutador/spec.md`, following `AGENTS.md` and `skills/feature-com-spec/SKILL.md`.
+Implements the approved specification at `docs/specs/recrutador/spec.md`, following `AGENTS.md` and `skills/feature-com-spec/SKILL.md`.
 
-**Status:** proposta para revisão. A especificação ainda está marcada como rascunho e precisa ser aprovada antes da implementação.
+**Status:** aprovado para implementação. A especificação foi revisada e aprovada; a implementação pode começar conforme as fases abaixo.
 
 Target runtime: backend (`src/` and `banco_de_dados/`). The frontend remains out of scope.
 
@@ -36,7 +36,7 @@ Resolve and approve the specification decisions before implementation begins. Sc
 
 Before each phase, inspect the closest existing implementations and tests, and follow or extend their patterns wherever possible. For example, review the existing controllers and controller specs before creating a recruiter controller. Keep each layer's changes and tests separate. Domain controllers are not HTTP endpoints; route handling and JSON serialization belong only to Phase 5. Start these phases only after Phase 0 is user-verified.
 
-### 1. [ ] Model
+### 1. [x] Model
 - **What:** Add the `Recrutador` domain model and represent niche as a plain `String` on `Recrutador` and `Vaga`, following the existing `Endereco.pais` pattern. Do not create a backend `Nicho` entity/model; niche lookup and relational ID mapping belong to the DAO. Keep validation and representation behavior consistent with the approved spec, including never exposing recruiter passwords. Do not add DAO or workflow logic here.
 - **Files:** `src/main/groovy/org/linketinder/model/objetos/`, `src/main/groovy/org/linketinder/model/`, corresponding model specs under `src/test/groovy/org/linketinder/model/`.
 - **Done check:** Focused Spock model specs cover required fields, niche string values, allowed representations, and password omission; existing `Vaga` model specs pass. No `Nicho` model is introduced.

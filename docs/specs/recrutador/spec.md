@@ -1,6 +1,6 @@
 # Recrutador (Backend)
 
-**Status:** rascunho para revisão; não aprovado para implementação.
+**Status:** aprovado para implementação.
 
 **Processo confirmado para alterações no banco:** qualquer criação ou alteração de schema, tabela, restrição ou dado será entregue em um arquivo SQL dedicado, acompanhado de um arquivo com os comandos exatos para inspeção e aplicação. O usuário revisará e executará esses comandos. O assistente não deve conectar ao banco nem executar operações que alterem schema ou dados. Essa regra também se aplica a carga/população de dados e migrações.
 

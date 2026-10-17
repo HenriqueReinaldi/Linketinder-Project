@@ -41,7 +41,6 @@ class CurtidaController {
             return new Curtida(
                     candidato: candidato,
                     vaga: vaga,
-                    id: curtida_info.id ? curtida_info.id.toInteger() : -1
             )
         }
         catch (Exception ignored) {

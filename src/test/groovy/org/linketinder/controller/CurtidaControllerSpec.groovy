@@ -25,7 +25,7 @@ class CurtidaControllerSpec extends Specification {
     void "candidato curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        Curtida curtida = new Curtida()
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
@@ -39,7 +39,7 @@ class CurtidaControllerSpec extends Specification {
     void "empresa curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        Curtida curtida = new Curtida()
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
@@ -56,7 +56,6 @@ class CurtidaControllerSpec extends Specification {
         Map<String, String> curtida_info = [
                 "candidato_id": "12",
                 "vaga_id"     : "13",
-                "id"          : "1"
         ]
         Candidato candidato = new Candidato(id: 12)
         Vaga vaga = new Vaga(id: 13)
@@ -68,7 +67,6 @@ class CurtidaControllerSpec extends Specification {
         1 * candidato_service.get_by_id("12") >> candidato
         1 * vaga_service.get_by_id("13") >> vaga
 
-        curtida.id == 1
         curtida.candidato == candidato
         curtida.vaga == vaga
     }

@@ -56,7 +56,6 @@ class CurtidaViewSpec extends Specification {
     )
     @Shared
     Curtida Curtida = new Curtida(
-            id: 1,
             candidato: candidato,
             vaga: vaga,
             empresa_curtiu: false

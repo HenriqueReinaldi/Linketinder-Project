@@ -16,6 +16,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 ### Modificado
 - Atualização dos snapshots SQL de schema e entrega para refletirem o novo modelo de nicho e recrutador.
 - Ajuste do seed de vagas para associar todas as vagas existentes ao nicho `geral`.
+- Adicionado o modelo `Recrutador` e o campo `nicho` em `Vaga`, alinhando os domínios da feature com o plano aprovado.
 
 ### Corrigido
 - Compatibilidade da migração com versões de PostgreSQL que não suportam `ADD CONSTRAINT IF NOT EXISTS`.

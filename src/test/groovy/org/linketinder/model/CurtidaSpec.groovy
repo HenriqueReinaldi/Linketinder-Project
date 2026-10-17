@@ -11,23 +11,13 @@ class CurtidaSpec extends Specification {
     @Shared
     List<Curtida> curtidas = numeros.collect {
         new Curtida(
-                id: it.toInteger(),
                 candidato: null,
                 vaga: null,
                 empresa_curtiu: (it % 2 == 0)
         )
     }
 
-    void "Metodo getId retorna id"() {
-        expect:
-        curtida.getId() == numero.toInteger()
-
-        where:
-        numero << numeros
-        curtida << curtidas
-    }
-
-    void "Outros getters retornam seus valores devidamente"() {
+    void "Getters retornam seus valores devidamente"() {
         expect:
         verifyAll(curtida) {
             getCandidato() == null
