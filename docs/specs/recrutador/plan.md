@@ -66,6 +66,40 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Files:** Tests and documentation from the phases above; no additional implementation files expected.
 - **Done check:** Focused specs pass, then `./gradlew test` passes. Record each acceptance, migration, and privacy check outcome, including checks blocked by unavailable PostgreSQL/access-control infrastructure. Do not run database-mutating commands or claim unperformed user-run checks.
 
+### 7. [ ] Recruiter curtida listing
+- **What:** Add the recruiter-specific listing of curtidas relevant to the recruiter’s company and niche scope. The list must include only curtidas whose vacancy belongs to the recruiter’s company and whose niche matches the recruiter’s compatibility rule, with `geral` allowing any niche within the same company. This expands the approved recruiter workflow without altering the earlier steps or the existing backlog order.
+- **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/service/`, `src/main/groovy/org/linketinder/DAO/`, and the existing recruiter/curtida specs in `src/test/groovy/org/linketinder/`.
+- **Done check:** Run the existing focused Spock tests covering recruiter and curtida behavior, and verify the list is filtered by company and niche compatibility using the project’s current test suite rather than creating new DAO or HTTP-only specs.
+
+## Frontend implementation phases
+
+The frontend work follows the same backend logic and keeps the existing browser-only architecture: recruiters are selected by ID in a recruiter view, and candidates can interact with vacancies through a like action in the candidate view. These steps are additive and should be implemented after the backend phases are stable.
+
+### 8. [ ] Frontend recruiter domain model and browser data plumbing
+- **What:** Extend the frontend model layer with the recruiter representation required by the recruiter view, including recruiter ID, company relation, niche, and the minimum data needed to hydrate the list of matching curtidas. Preserve the existing TypeScript patterns under `frontend/scripts/model/` and `frontend/scripts/persistencia/` without connecting the frontend to the backend API.
+- **Files:** `frontend/scripts/model/`, `frontend/scripts/persistencia/`, and any model/service wiring affected by recruiter selection and curtida matching data.
+- **Done check:** Existing browser-side models and persistence logic still load without breaking the current frontend build; recruiter data is available in memory/localStorage through the same patterns used by candidatos, empresas, and vagas.
+
+### 9. [ ] Frontend recruiter view: `visao recrutador`
+- **What:** Implement a recruiter-focused frontend view that allows selecting a recruiter by ID and then listing the curtidas that match the selected recruiter’s company and niche scope. The logic must mirror the backend rule: only curtidas from vagas owned by the recruiter’s company and compatible with the recruiter’s niche are shown, with `geral` allowing any niche within that company. The recruiter view must not imply auth or a protected route; it is simply a browser-driven selection and display flow.
+- **Files:** `frontend/scripts/view/`, `frontend/view/`, and the related service/controller-layer TypeScript modules used to compose the view.
+- **Done check:** The browser UI can select a recruiter by ID and render only matching curtidas; same-company and niche filters are enforced in the frontend logic, and the view is consistent with the backend business rule.
+
+### 10. [ ] Frontend candidate like workflow for vagas
+- **What:** Add a candidate-side feature that lets a candidate like a vacancy. The candidate should be able to select a candidate record and, from a vacancy list or detail view, create a curtida entry for a selected vaga. Keep the logic aligned with the backend model: a like must reference the candidate and the vacancy, and duplicate likes for the same pair should be prevented or treated idempotently in the frontend state.
+- **Files:** `frontend/scripts/service/`, `frontend/scripts/view/`, and the data persistence layer for candidate-vacancy interaction state.
+- **Done check:** A candidate can like a vacancy through the browser UI, the like is recorded in the managed browser state, and repeated likes for the same candidate/vaga pair do not produce duplicate entries.
+
+### 11. [ ] Frontend integration and validation of recruiter + candidate flows
+- **What:** Connect the recruiter and candidate screens into the same frontend experience so the user can move among recruiter selection, recruiter curtida listing, and candidate vacancy likes without breaking the existing static pages. Ensure the data flow remains localStorage-based and that each screen reads only the fields necessary for the feature, without exposing more identity than the approved business boundary allows.
+- **Files:** `frontend/scripts/main.ts`, `frontend/scripts/view/`, `frontend/scripts/service/`, and any affected HTML templates/styles.
+- **Done check:** The frontend builds correctly with the added recruiter and like flows, and the interactions follow the same logic as the backend rules: recruiter views only same-company compatible curtidas, and candidate likes are stored as candidate-vaga relationships.
+
+### 12. [ ] Frontend acceptance and regression checks
+- **What:** Run the existing frontend build and smoke-check the new screens to validate that the recruiter selection, curtida listing, and candidate like flows operate together without regressing the earlier frontend pages. This is a browser-only verification step and does not replace backend validation.
+- **Files:** `frontend/` source and generated build output; no new backend artifacts or database changes.
+- **Done check:** `npm run build` succeeds, the static pages still render, and the new recruiter/candidate flows are consistent with the approved logic and the project’s current localStorage-based frontend architecture.
+
 ## Delivery workflow
 
 Important: only the user may mark tasks as done. The assistant must not update checklist items, phase completion markers, or status fields to reflect completion without explicit user confirmation. The plan is a tracking aid for review, not a place for the assistant to self-approve work.

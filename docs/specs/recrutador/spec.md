@@ -53,6 +53,7 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - O recrutador atua exclusivamente em nome da empresa associada ao seu registro.
 - O provisionamento, a atualização e a desativação de recrutadores são operações administrativas, fora dos fluxos da empresa nesta etapa.
 - O backend deve filtrar a lista de vagas pelo `empresa_id` do recrutador e pelo nicho, conforme as regras acima.
+- O recrutador também deve poder consultar as curtidas relevantes às vagas da sua empresa e compatíveis com o seu nicho, usando o mesmo critério funcional de empresa e nicho sem criar uma relação de autorização.
 - O recrutador não pode criar, editar ou excluir vagas, nem alterar a empresa proprietária de uma vaga.
 
 ### Curtidas e matches
@@ -60,6 +61,7 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - O recrutador só pode responder a uma curtida candidato-vaga já existente; ele não cria a primeira curtida do par.
 - Uma resposta válida marca `empresa_curtiu=true` no registro existente `(candidato_id, vaga_id)`, equivalendo à curtida da empresa associada.
 - Se o candidato já curtiu a vaga, essa resposta completa o match. A resposta não cria um segundo registro nem guarda a identidade do recrutador que a realizou.
+- O recrutador também pode listar as curtidas elegíveis para o seu escopo empresarial e de nicho: somente registros cuja vaga pertença à empresa do recrutador e cujo nicho seja compatível com o nicho do recrutador, com o caso `geral` permitindo qualquer vaga da empresa.
 - A operação só pode afetar uma vaga da empresa associada e compatível com o nicho do recrutador. Uma tentativa fora desses limites não altera a curtida.
 - O recrutador não pode responder por outra empresa nem atuar em vaga de outro nicho, exceto que o nicho `geral` permite todas as vagas.
 
@@ -92,6 +94,7 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 
 - Dado um recrutador associado a uma empresa e a um nicho específico, quando consulta vagas, então recebe somente vagas da empresa associada que tenham exatamente o mesmo nicho.
 - Dado um recrutador de nicho `geral`, quando consulta vagas, então recebe vagas de qualquer nicho somente da empresa associada.
+- Dado um recrutador associado a uma empresa e a um nicho específico, quando consulta curtidas elegíveis, então recebe somente registros cuja vaga pertença à empresa associada e tenha o mesmo nicho, ou qualquer nicho quando o recrutador é `geral`.
 - Dada uma vaga existente antes da migração, quando a migração termina, então ela permanece disponível e fica associada ao nicho `geral`.
 - Dado um recrutador, quando tenta criar, editar ou excluir uma vaga, então a operação é negada e os dados da vaga permanecem inalterados.
 - Dado um candidato que já curtiu uma vaga elegível, quando o recrutador associado responde à curtida, então o mesmo registro passa a ter `empresa_curtiu=true` e o par representa um match.
@@ -118,6 +121,7 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - Entidades e persistência backend para recrutador e nicho.
 - Relações de nicho para recrutador e vaga, incluindo migração das vagas existentes.
 - Consulta funcional de vagas por empresa e nicho do recrutador.
+- Consulta funcional de curtidas elegíveis por empresa e nicho do recrutador.
 - Resposta do recrutador à curtida existente como curtida da empresa associada.
 - Restrições de ação sobre vagas e anonimização dos campos estruturados do candidato.
 - Provisionamento administrativo de recrutadores.
