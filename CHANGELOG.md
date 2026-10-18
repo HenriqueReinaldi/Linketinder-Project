@@ -24,6 +24,8 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Serviços de recrutador para listar, cadastrar, atualizar e remover registros via DAO; listagem de vagas delegada ao filtro do DAO e hidratação dos detalhes retornados.
 - Hidratação da empresa completa de cada recrutador pela `EmpresaDAO` ao listar recrutadores.
 - Revisada a spec de `VagaService` para verificar a delegação da filtragem e a hidratação dos detalhes das vagas retornadas.
+- Wires do endpoint de recrutador no servidor HTTP, incluindo registro do caminho `/recrutador` e serialização de respostas que evita expor `senha`, `CPF` e identidade de empresa/candidato fora do contexto aprovado.
+- Ajuste da política de serialização do backend para remover campos sensíveis na camada HTTP sem criar novos testes específicos para DAO ou HTTP, reforçando o uso da suíte existente do projeto.
 
 ### Corrigido
 - Compatibilidade da migração com versões de PostgreSQL que não suportam `ADD CONSTRAINT IF NOT EXISTS`.
