@@ -1,6 +1,5 @@
 package org.linketinder.service
 
-import org.linketinder.DAO.Banco
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.RecrutadorDAO
 import org.linketinder.DAO.VagaDAO
@@ -10,7 +9,6 @@ import org.linketinder.model.objetos.Vaga
 import org.linketinder.model.objetos.Competencia
 import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Empresa
-import org.linketinder.model.objetos.Recrutador
 import spock.lang.Specification
 
 class VagaServiceSpec extends Specification{
@@ -82,64 +80,31 @@ class VagaServiceSpec extends Specification{
         1 * vaga_dao.get_vaga_by_id(20)
     }
 
-    def "lista do recrutador de nicho geral retorna todas as vagas da empresa dele"() {
+    def "lista de vagas do recrutador delega o filtro e hidrata as vagas retornadas"() {
         given:
-        VagaService service = Spy(constructorArgs: [vaga_dao, endereco_dao, competencia_dao, empresa_dao, recrutador_dao])
-        service.recrutador_dao = recrutador_dao
-        Recrutador recrutador = new Recrutador(
-                id: 7,
-                nicho: "geral",
-                empresa: new Empresa(id: 3)
-        )
-        List<Vaga> vagas = [
-                new Vaga(id: 1, empresa: new Empresa(id: 3), nicho: "tecnologia"),
-                new Vaga(id: 2, empresa: new Empresa(id: 3), nicho: "saude"),
-                new Vaga(id: 3, empresa: new Empresa(id: 4), nicho: "tecnologia")
-        ]
-
-        when:
-        List<Vaga> resultado = service.get_lista_vaga_recrutador(7)
-
-        then:
-        1 * recrutador_dao.get_recrutador_by_id(7) >> recrutador
-        1 * service.get_lista() >> vagas
-        resultado*.id == [1, 2]
-    }
-
-    def "lista do recrutador de nicho especifico exige empresa e nicho exatos"() {
-        given:
-        VagaService service = Spy(constructorArgs: [vaga_dao, endereco_dao, competencia_dao, empresa_dao, recrutador_dao])
-        service.recrutador_dao = recrutador_dao
-        Recrutador recrutador = new Recrutador(
-                id: 7,
+        Vaga vaga = new Vaga(
+                id: 14,
                 nicho: "tecnologia",
+                endereco: new Endereco(id: 2),
                 empresa: new Empresa(id: 3)
         )
-        List<Vaga> vagas = [
-                new Vaga(id: 1, empresa: new Empresa(id: 3), nicho: "tecnologia"),
-                new Vaga(id: 2, empresa: new Empresa(id: 3), nicho: "geral"),
-                new Vaga(id: 3, empresa: new Empresa(id: 4), nicho: "tecnologia")
-        ]
+        Endereco endereco = new Endereco(id: 2)
+        Empresa empresa = new Empresa(id: 3)
+        List<Competencia> competencias = [new Competencia(tecnologia: "groovy")]
 
         when:
         List<Vaga> resultado = service.get_lista_vaga_recrutador(7)
 
         then:
-        1 * recrutador_dao.get_recrutador_by_id(7) >> recrutador
-        1 * service.get_lista() >> vagas
-        resultado*.id == [1]
-    }
-
-    def "lista do recrutador inexistente retorna lista vazia sem consultar vagas"() {
-        given:
-        service.recrutador_dao = recrutador_dao
-
-        when:
-        List<Vaga> resultado = service.get_lista_vaga_recrutador(99)
-
-        then:
-        1 * recrutador_dao.get_recrutador_by_id(99) >> null
-        0 * vaga_dao.get_lista_vaga()
-        resultado == []
+        1 * vaga_dao.get_lista_vaga_recrutador(7) >> [vaga]
+        1 * endereco_dao.get_endereco_by_id(2) >> endereco
+        1 * competencia_dao.get_lista_competencias_of_entidade("vaga", 14) >> competencias
+        1 * empresa_dao.get_empresa_by_id(3) >> empresa
+        resultado.size() == 1
+        resultado[0].is(vaga)
+        resultado[0].nicho == "tecnologia"
+        resultado[0].endereco.is(endereco)
+        resultado[0].competencias_desejadas == competencias
+        resultado[0].empresa.is(empresa)
     }
 }

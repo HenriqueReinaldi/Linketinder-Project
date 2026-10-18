@@ -51,7 +51,7 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Files:** `src/main/groovy/org/linketinder/service/`, service specs under `src/test/groovy/org/linketinder/service/`, and service bundle wiring where required.
 - **Done check:** Focused Spock service specs cover valid and rejected inputs, company/niche boundaries, absent prior likes, idempotent responses, and no mutation on rejected operations. No SQL implementation in this phase.
 
-### 4. [ ] DAO
+### 4. [x] DAO
 - **What:** Implement persistence and hydration for recruiters, map niche strings on recruiter/vacancy models to the database's `nicho` table and `nicho_id` foreign keys, support recruiter-scoped vacancy queries, and implement eligibility-checked updates to existing likes. Match the service collaborator contracts from Phase 3 and keep SQL/data mapping out of services and controllers. Do not add a `Nicho` domain entity.
 - **Files:** `src/main/groovy/org/linketinder/DAO/`, DAO specs under `src/test/groovy/org/linketinder/DAO/`, plus connection-free SQL/mapping tests as supported by the existing test setup.
 - **Done check:** Focused DAO tests verify SQL parameters/mapping between niche strings and `nicho_id`, recruiter persistence, company/niche filtering, existing-like-only updates, and unchanged state for rejected eligibility cases. Tests must not connect to or mutate a real database.

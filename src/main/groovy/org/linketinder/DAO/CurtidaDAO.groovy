@@ -52,4 +52,27 @@ class CurtidaDAO {
         }
         return banco.executar_detectar_updates(busca, busca_args)
     }
+
+    boolean recrutador_curtir(Curtida c, int recrutador_id) throws SQLException {
+        if (c == null || c.candidato == null || c.vaga == null) return false
+        String busca = """
+            update curtida c
+            set empresa_curtiu = true
+            where c.candidato_id = ? and c.vaga_id = ?
+              and exists (
+                  select 1
+                  from recrutador r
+                  join vaga v on v.empresa_id = r.empresa_id and v.id = c.vaga_id
+                  join nicho nr on nr.id = r.nicho_id
+                  join nicho nv on nv.id = v.nicho_id
+                  where r.id = ? and (nr.nome = 'geral' or nr.nome = nv.nome)
+              )
+        """
+        Closure busca_args = { PreparedStatement pst ->
+            pst.setInt(1, c.candidato.id)
+            pst.setInt(2, c.vaga.id)
+            pst.setInt(3, recrutador_id)
+        }
+        return banco.executar_detectar_updates(busca, busca_args)
+    }
 }

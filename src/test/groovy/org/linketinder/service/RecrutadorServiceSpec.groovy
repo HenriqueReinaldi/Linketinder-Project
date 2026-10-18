@@ -1,22 +1,30 @@
 package org.linketinder.service
 
-import org.linketinder.DAO.CurtidaDAO
+import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.RecrutadorDAO
+import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Recrutador
 import spock.lang.Specification
 
 class RecrutadorServiceSpec extends Specification {
     RecrutadorDAO recrutador_dao = Mock()
-    VagaService vaga_service = Mock()
-    CurtidaDAO curtida_dao = Mock()
-    RecrutadorService service = new RecrutadorService(recrutador_dao, vaga_service, curtida_dao)
+    EmpresaDAO empresa_dao = Mock()
+    RecrutadorService service = new RecrutadorService(recrutador_dao, empresa_dao)
 
-    def "get lista recrutador delega ao DAO"() {
+    def "get lista recrutador hidrata empresa completa pelo DAO de empresa"() {
+        given:
+        Recrutador recrutador = new Recrutador(id: 3, empresa: new Empresa(id: 8))
+        Empresa empresa = new Empresa(id: 8, nome: "Empresa completa", email: "empresa@example.com")
+
         when:
-        service.get_lista()
+        List<Recrutador> resultado = service.get_lista()
 
         then:
-        1 * recrutador_dao.get_lista_recrutador() >> []
+        1 * recrutador_dao.get_lista_recrutador() >> [recrutador]
+        1 * empresa_dao.get_empresa_by_id(8) >> empresa
+        resultado.size() == 1
+        resultado[0].empresa.is(empresa)
+        resultado[0].empresa.nome == "Empresa completa"
     }
 
     def "cadastra recrutador delega ao DAO sem validar campos no service"() {

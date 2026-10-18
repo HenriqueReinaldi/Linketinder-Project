@@ -88,15 +88,13 @@ class VagaService extends Service {
 
     List<Vaga> get_lista_vaga_recrutador(int recrutador_id) {
         executar_seguramente([]) {
-            if (recrutador_dao == null) return []
-
-            def recrutador = recrutador_dao.get_recrutador_by_id(recrutador_id)
-            if (recrutador == null || recrutador.empresa == null) return []
-
-            return get_lista().findAll { Vaga vaga ->
-                vaga.empresa?.id == recrutador.empresa.id &&
-                        (recrutador.nicho == "geral" || recrutador.nicho == vaga.nicho)
+            List<Vaga> vagas = dao.get_lista_vaga_recrutador(recrutador_id)
+            vagas.each { Vaga vaga ->
+                vaga.endereco = endereco_dao.get_endereco_by_id(vaga.endereco.id)
+                vaga.competencias_desejadas = competencia_dao.get_lista_competencias_of_entidade("vaga", vaga.id)
+                vaga.empresa = empresa_dao.get_empresa_by_id(vaga.empresa.id)
             }
+            return vagas
         }
     }
 

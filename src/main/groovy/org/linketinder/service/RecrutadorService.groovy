@@ -1,20 +1,22 @@
 package org.linketinder.service
 
 import groovy.transform.TupleConstructor
-import org.linketinder.DAO.CurtidaDAO
+import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.RecrutadorDAO
-import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Recrutador
 
 @TupleConstructor
 class RecrutadorService extends Service {
     RecrutadorDAO dao
-    VagaService vaga_service
-    CurtidaDAO curtida_dao
+    EmpresaDAO empresa_dao
 
     List<Recrutador> get_lista() {
         executar_seguramente([]) {
-            return dao.get_lista_recrutador()
+            List<Recrutador> recrutadores = dao.get_lista_recrutador()
+            recrutadores.each { Recrutador recrutador ->
+                recrutador.empresa = empresa_dao.get_empresa_by_id(recrutador.empresa.id)
+            }
+            return recrutadores
         }
     }
 
