@@ -160,8 +160,8 @@ class Terminal extends View {
         io.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
         io.send_message "Comandos read:"
-        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas / recrutadores / recrutador.curtidas>"
-        io.send_message "listar recrutador.curtidas <id>\n"
+        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas / recrutadores>"
+        io.send_message "listar recrutador.curtidas\n"
 
         io.send_message "Comandos create:"
         io.send_message "cadastrar <candidato / empresa / vaga / recrutador>"
@@ -172,8 +172,7 @@ class Terminal extends View {
 
         io.send_message "Comandos update:"
         io.send_message "update <candidato / empresa / vaga / competencia / recrutador>"
-        io.send_message "curtir como empresa"
-        io.send_message "curtir como recrutador\n"
+        io.send_message "curtir como <empresa/recrutador>\n"
 
         io.send_message "Outros:"
         io.send_message "sair"

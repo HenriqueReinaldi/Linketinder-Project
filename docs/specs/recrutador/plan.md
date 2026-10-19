@@ -75,9 +75,9 @@ Before each phase, inspect the closest existing implementations and tests, and f
 
 The frontend work follows the same backend logic and keeps the existing browser-only architecture: recruiters are selected by ID in a recruiter view, and candidates can interact with vacancies through a like action in the candidate view. These steps are additive and should be implemented after the backend phases are stable.
 
-### 8. [ ] Frontend recruiter domain model and browser data plumbing
-- **What:** Extend the frontend model layer with the recruiter representation required by the recruiter view, including recruiter ID, company relation, niche, and the minimum data needed to hydrate the list of matching curtidas. Preserve the existing TypeScript patterns under `frontend/scripts/model/` and `frontend/scripts/persistencia/` without connecting the frontend to the backend API.
-- **Files:** `frontend/scripts/model/`, `frontend/scripts/persistencia/`, and any model/service wiring affected by recruiter selection and curtida matching data.
+### 8. [x] Frontend recruiter domain model and browser data plumbing
+- **What:** Extend the frontend model layer with the recruiter representation required by the recruiter view, including recruiter ID, company relation, niche, and the minimum data needed to hydrate the list of matching curtidas. Preserve the existing TypeScript patterns under `frontend/scripts/model/`, `frontend/scripts/service/` and `frontend/scripts/persistencia/` without connecting the frontend to the backend API.
+- **Files:** `frontend/scripts/model/`, `frontend/scripts/service/` `frontend/scripts/persistencia/`, and any model/service wiring affected by recruiter selection and curtida matching data.
 - **Done check:** Existing browser-side models and persistence logic still load without breaking the current frontend build; recruiter data is available in memory/localStorage through the same patterns used by candidatos, empresas, and vagas.
 
 ### 9. [ ] Frontend recruiter view: `visao recrutador`

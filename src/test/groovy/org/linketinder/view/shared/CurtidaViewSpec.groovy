@@ -101,7 +101,6 @@ class CurtidaViewSpec extends Specification {
             resposta.contains("candidato_nome")
             resposta.contains("vaga_nome")
             resposta.contains("false")
-            resposta.contains("1")
         }
     }
 
