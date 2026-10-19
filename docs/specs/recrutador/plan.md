@@ -90,7 +90,7 @@ The frontend work follows the same backend logic and keeps the existing browser-
 - **Files:** `frontend/scripts/service/`, `frontend/scripts/view/`, and the data persistence layer for candidate-vacancy and recruiter-candidate interaction state.
 - **Done check:** A candidate can like a vacancy through the browser UI, a recruiter can like a candidate back from the compatible curtida list, the like/response is recorded in the managed browser state, repeated likes for the same candidate/vaga pair do not produce duplicate entries, and existing curtidas are updated in place when `empresa_curtiu` becomes true.
 
-### 11. [ ] Frontend integration and validation of recruiter + candidate flows
+### 11. [x] Frontend integration and validation of recruiter + candidate flows
 - **What:** Connect the recruiter and candidate screens into the same frontend experience so the user can move among recruiter selection, recruiter curtida listing, and candidate vacancy likes without breaking the existing static pages. Ensure the data flow remains localStorage-based and that each screen reads only the fields necessary for the feature, without exposing more identity than the approved business boundary allows.
 - **Files:** `frontend/scripts/main.ts`, `frontend/scripts/view/`, `frontend/scripts/service/`, and any affected HTML templates/styles.
 - **Done check:** The frontend builds correctly with the added recruiter and like flows, and the interactions follow the same logic as the backend rules: recruiter views only same-company compatible curtidas, and candidate likes are stored as candidate-vaga relationships.
