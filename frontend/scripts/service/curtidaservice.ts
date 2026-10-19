@@ -19,6 +19,24 @@ export function popular_curtidas(): void {
     });
 }
 
+export function ja_curtiu_vaga(candidato: Candidato | null, vaga: Vaga | null, curtidas: Curtida[] = lista_curtidas): boolean {
+    if (!candidato || !vaga) return false;
+
+    return curtidas.some((curtida) =>
+        curtida.candidato?.CPF === candidato.CPF && curtida.vaga?.nome === vaga.nome
+    );
+}
+
+export function like_vaga(candidato: Candidato, vaga: Vaga, curtidas: Curtida[] = lista_curtidas): Curtida | null {
+    if (!candidato || !vaga || ja_curtiu_vaga(candidato, vaga, curtidas)) {
+        return null;
+    }
+
+    const nova_curtida = new Curtida(candidato, vaga, false);
+    curtidas.push(nova_curtida);
+    return nova_curtida;
+}
+
 function normalizar_nicho(nicho: string | undefined): string {
     return (nicho || "geral").trim().toLocaleLowerCase();
 }

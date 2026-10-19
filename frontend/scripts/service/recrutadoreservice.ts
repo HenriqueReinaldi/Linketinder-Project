@@ -4,19 +4,24 @@ import { Recrutador } from "../model/recrutador.js";
 
 export function popular_recrutadores(): void {
     const nichos = ["tech", "design", "geral", "data", "tech"];
+    let proximo_id = 1;
 
     lista_empresas.forEach((empresa, indice) => {
-        lista_recrutadores.push(new Recrutador(
-            indice + 1,
-            `recrutador${indice + 1}`,
-            `descricao recrutador${indice + 1}`,
-            `recrutador${indice + 1}@email.com`,
-            `CPF-R${indice + 1}`,
-            `199${indice}-01-01`,
-            "senha123",
-            empresa,
-            nichos[indice % nichos.length]
-        ));
+        for (let j = 0; j < 3; j++) {
+            const id_atual = proximo_id++;
+
+            lista_recrutadores.push(new Recrutador(
+                id_atual,
+                `recrutador${id_atual}`,
+                `descricao recrutador${id_atual}`,
+                `recrutador${id_atual}@email.com`,
+                `CPF-R${id_atual}`,
+                `199${indice}-01-01`,
+                "senha123",
+                empresa,
+                nichos[indice % nichos.length]
+            ));
+        }
     });
 }
 
