@@ -95,12 +95,12 @@ The frontend work follows the same backend logic and keeps the existing browser-
 - **Files:** `frontend/scripts/main.ts`, `frontend/scripts/view/`, `frontend/scripts/service/`, and any affected HTML templates/styles.
 - **Done check:** The frontend builds correctly with the added recruiter and like flows, and the interactions follow the same logic as the backend rules: recruiter views only same-company compatible curtidas, and candidate likes are stored as candidate-vaga relationships.
 
-### 12. [ ] Frontend recruiter registration flow
+### 12. [x] Frontend recruiter registration flow
 - **What:** Add a frontend recruiter creation flow parallel to the existing candidate and company registration flows. This should allow creating a new recruiter in the browser with the required fields (at least name, contact/email, CPF, date of birth, password, company association, and niche), validate the same basic rules already used by other frontend forms, and persist the created recruiter into the shared localStorage data model. This task is separate from the backend/recruiter API and should not assume any server connection.
 - **Files:** `frontend/scripts/service/`, `frontend/scripts/view/`, `frontend/view/`, and any affected registration form or data-persistence wiring.
 - **Done check:** A recruiter can be created through the frontend form, the new recruiter appears in the same localStorage-backed list as other recruiters, the form rejects invalid or incomplete input, and the flow remains consistent with the existing candidate/company browser registration patterns.
 
-### 13. [ ] Frontend acceptance and regression checks
+### 13. [x] Frontend acceptance and regression checks
 - **What:** Run the existing frontend build and smoke-check the new screens to validate that the recruiter selection, curtida listing, and candidate like flows operate together without regressing the earlier frontend pages. This is a browser-only verification step and does not replace backend validation.
 - **Files:** `frontend/` source and generated build output; no new backend artifacts or database changes.
 - **Done check:** `npm run build` succeeds, the static pages still render, and the new recruiter/candidate flows are consistent with the approved logic and the project’s current localStorage-based frontend architecture.
