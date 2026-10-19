@@ -105,6 +105,22 @@ class CurtidaViewSpec extends Specification {
         }
     }
 
+    void "Representacao secreta mascara o candidato mas preserva a vaga"() {
+        given:
+        CurtidaView curtida_view = new CurtidaView(view)
+
+        when:
+        String resposta = curtida_view.representacao_secreta(Curtida)
+
+        then:
+        verifyAll {
+            !resposta.contains("candidato_nome")
+            resposta.contains("vaga_nome")
+            resposta.contains("descricao")
+            resposta.contains("Sem match ainda...")
+        }
+    }
+
     void "Exibir chama representacao e view.send_message"() {
         given:
         CurtidaView curtida_view = Spy(CurtidaView, constructorArgs: [view])

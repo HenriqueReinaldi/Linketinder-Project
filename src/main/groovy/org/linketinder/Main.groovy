@@ -59,7 +59,7 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
             new CurtidaController(services.curtida_service, services.candidato_service, services.vaga_service),
             new EmpresaController(services.empresa_service),
             new VagaController(services.vaga_service, services.empresa_service),
-            new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service)
+            new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service, services.curtida_service)
     )
 }
 
@@ -68,14 +68,14 @@ static void main(String[] args) {
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
-//
+
 //    ViewIO view_io = new TermIO()
 //    ViewBundle views = inicializar_views(view_io)
 //    View view = new Terminal(controllers, views, view_io)
 //    while (true) {
 //        if (!view.run()) break
 //    }
-//
+
     Servidor servidor = new Servidor(controllers)
     servidor.ligar()
 

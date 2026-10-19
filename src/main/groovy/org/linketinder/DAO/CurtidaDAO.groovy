@@ -44,6 +44,30 @@ class CurtidaDAO {
         }
     }
 
+    List<Curtida> get_lista_curtida_recrutador(int recrutador_id) throws SQLException {
+        String busca = """
+            select c.candidato_id, c.vaga_id, c.empresa_curtiu
+            from curtida c
+            join vaga v on v.id = c.vaga_id
+            join recrutador r on r.empresa_id = v.empresa_id
+            join nicho nr on nr.id = r.nicho_id
+            join nicho nv on nv.id = v.nicho_id
+            where r.id = ? and (nr.nome = 'geral' or nr.nome = nv.nome)
+        """
+
+        return banco.executar(busca, { PreparedStatement pst -> pst.setInt(1, recrutador_id) }) { ResultSet res ->
+            List<Curtida> curtidas = []
+            while (res.next()) {
+                curtidas << new Curtida(
+                        candidato: new Candidato(id: res.getInt("candidato_id")),
+                        vaga: new Vaga(id: res.getInt("vaga_id")),
+                        empresa_curtiu: res.getBoolean("empresa_curtiu")
+                )
+            }
+            return curtidas
+        }
+    }
+
     boolean empresa_curtir(Curtida c) throws SQLException {
         String busca = "update curtida set empresa_curtiu = true where candidato_id = ? and vaga_id = ?"
         Closure busca_args = { PreparedStatement pst ->

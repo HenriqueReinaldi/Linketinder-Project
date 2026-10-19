@@ -53,15 +53,25 @@ class CurtidaControllerSpec extends Specification {
     void "recrutador curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
+        md.data = [candidato_id: "12", vaga_id: "13"]
         Curtida curtida = new Curtida()
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
-        controller.recrutador_curtir(md)
+        controller.recrutador_curtir(md, 21)
 
         then:
         1 * controller.assemble_curtida(md.data) >> curtida
-        1 * curtida_service.curtir_como_recrutador(curtida)
+        1 * curtida_service.curtir_como_recrutador(curtida, 21)
+    }
+
+    void "recrutador curtir rejeita identificador negativo"() {
+        given:
+        ModelData md = new ModelData(data: [candidato_id: "12", vaga_id: "13"])
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
+
+        expect:
+        !controller.recrutador_curtir(md, -1)
     }
 
     void "assemble_curtida monta curtida corretamente"() {

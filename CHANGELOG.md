@@ -12,6 +12,9 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Coluna `vaga.nicho_id` com referência obrigatória para `nicho.id`.
 - Migração SQL para preencher automaticamente o nicho `geral` em vagas existentes.
 - Dados mock de recrutadores de exemplo no seed de desenvolvimento.
+- Listagem de curtidas do recrutador filtrada pela empresa associada e pela compatibilidade de nicho, com `geral` abrangendo todos os nichos dessa empresa; os dados relacionados são hidratados pelo serviço.
+- Endpoint `GET /recrutador/{id}/curtidas` com resposta limitada à descrição do candidato, nome da vaga e estado do match, além do comando terminal `listar recrutador.curtidas <id>`.
+- Endpoint `POST /curtida/recrutador/{id}` para responder a uma curtida, com o ID do recrutador separado dos dados da curtida e validação do escopo permitido.
 
 ### Modificado
 - Atualização dos snapshots SQL de schema e entrega para refletirem o novo modelo de nicho e recrutador.

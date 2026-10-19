@@ -66,9 +66,9 @@ Before each phase, inspect the closest existing implementations and tests, and f
 - **Files:** Tests and documentation from the phases above; no additional implementation files expected.
 - **Done check:** Focused specs pass, then `./gradlew test` passes. Record each acceptance, migration, and privacy check outcome, including checks blocked by unavailable PostgreSQL/access-control infrastructure. Do not run database-mutating commands or claim unperformed user-run checks.
 
-### 7. [ ] Recruiter curtida listing
+### 7. [x] Recruiter curtida listing
 - **What:** Add the recruiter-specific listing of curtidas relevant to the recruiter’s company and niche scope. The list must include only curtidas whose vacancy belongs to the recruiter’s company and whose niche matches the recruiter’s compatibility rule, with `geral` allowing any niche within the same company. This expands the approved recruiter workflow without altering the earlier steps or the existing backlog order.
-- **Files:** `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/service/`, `src/main/groovy/org/linketinder/DAO/`, and the existing recruiter/curtida specs in `src/test/groovy/org/linketinder/`.
+- **Files:** `src/main/groovy/org/linketinder/view/`, `src/main/groovy/org/linketinder/controller/`, `src/main/groovy/org/linketinder/service/`, `src/main/groovy/org/linketinder/DAO/`, and the existing recruiter/curtida specs in `src/test/groovy/org/linketinder/`.
 - **Done check:** Run the existing focused Spock tests covering recruiter and curtida behavior, and verify the list is filtered by company and niche compatibility using the project’s current test suite rather than creating new DAO or HTTP-only specs.
 
 ## Frontend implementation phases

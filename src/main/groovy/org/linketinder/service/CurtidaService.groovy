@@ -25,6 +25,19 @@ class CurtidaService extends Service {
         }
     }
 
+    List<Curtida> get_lista_curtida_recrutador(int recrutador_id) {
+        executar_seguramente([]) {
+            List<Curtida> curtidas = dao.get_lista_curtida_recrutador(recrutador_id)
+
+            curtidas.each { Curtida curtida ->
+                curtida.candidato = candidato_dao.get_candidato_by_id(curtida.candidato.id)
+                curtida.vaga = vaga_dao.get_vaga_by_id(curtida.vaga.id)
+            }
+
+            return curtidas
+        }
+    }
+
     boolean curtir_como_candidato(Curtida c) {
         executar_seguramente(false) {
             dao.cadastrar_curtida(c)
@@ -40,8 +53,14 @@ class CurtidaService extends Service {
     }
 
     boolean curtir_como_recrutador(Curtida c) {
+        return curtir_como_recrutador(c, -1)
+    }
+
+    boolean curtir_como_recrutador(Curtida c, int recrutador_id) {
         executar_seguramente(false) {
-            return true
+            if (c == null || c.candidato == null || c.vaga == null) return false
+            if (recrutador_id < 0) return false
+            return dao.recrutador_curtir(c, recrutador_id)
         }
     }
 

@@ -50,4 +50,32 @@ class CurtidaServiceSpec extends Specification{
         1 * curtida_dao.empresa_curtir(curtida)
 
     }
+
+    def "curtir como recrutador delega o identificador para validar escopo no DAO"() {
+        given:
+        Curtida curtida = new Curtida(candidato: new Candidato(id: 7), vaga: new Vaga(id: 9))
+
+        when:
+        boolean resultado = service.curtir_como_recrutador(curtida, 21)
+
+        then:
+        1 * curtida_dao.recrutador_curtir(curtida, 21) >> true
+        resultado
+    }
+
+    def "get lista curtida do recrutador delega ao DAO e hidrata objetos relacionados"() {
+        given:
+        Curtida curtida = new Curtida(candidato: new Candidato(id: 7), vaga: new Vaga(id: 9))
+
+        when:
+        List<Curtida> resultado = service.get_lista_curtida_recrutador(3)
+
+        then:
+        1 * curtida_dao.get_lista_curtida_recrutador(3) >> [curtida]
+        1 * candidato_dao.get_candidato_by_id(7) >> new Candidato(id: 7)
+        1 * vaga_dao.get_vaga_by_id(9) >> new Vaga(id: 9)
+        resultado.size() == 1
+        resultado[0].candidato.id == 7
+        resultado[0].vaga.id == 9
+    }
 }

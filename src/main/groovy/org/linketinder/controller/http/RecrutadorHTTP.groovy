@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpHandler
 import groovy.transform.TupleConstructor
 import org.linketinder.controller.ModelData
 import org.linketinder.controller.RecrutadorController
+import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Recrutador
 
 @TupleConstructor
@@ -37,12 +38,38 @@ class RecrutadorHTTP extends EntidadeHTTP implements HttpHandler {
         responder(exchange, "recrutador cadastrado!", 201)
     }
 
+    void listar_curtidas(HttpExchange exchange) throws IOException {
+        def matcher = exchange.requestURI.path =~ /^\/recrutador\/([^\/]+)\/curtidas$/
+        if (!matcher.matches()) {
+            responder(exchange, "Endpoint desconhecido", 404)
+            return
+        }
+
+        try {
+            List<String> curtidas = controller.get_lista_curtida_recrutador(Integer.parseInt(matcher[0][1])).collect { Curtida curtida ->
+                pegar_json([
+                        candidato_descricao: curtida.candidato?.descricao,
+                        vaga_nome: curtida.vaga?.nome,
+                        match: curtida.empresa_curtiu
+                ])
+            }
+            responder(exchange, "[" + curtidas.join(",\n") + "]", 200)
+        }
+        catch (NumberFormatException ignored) {
+            responder(exchange, "parametro id invalido", 400)
+        }
+    }
+
     @Override
     void handle(HttpExchange exchange) throws IOException {
         try {
             switch (exchange.requestMethod) {
                 case "GET":
-                    listar(exchange)
+                    if (exchange.requestURI.path.startsWith("/recrutador/") && exchange.requestURI.path.endsWith("/curtidas")) {
+                        listar_curtidas(exchange)
+                    } else {
+                        listar(exchange)
+                    }
                     break
                 case "POST":
                     cadastrar(exchange)

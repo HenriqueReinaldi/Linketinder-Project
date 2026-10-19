@@ -36,6 +36,18 @@ class RecrutadorControllerSpec extends Specification {
         1 * vaga_service.get_lista_vaga_recrutador(7)
     }
 
+    void "listar curtidas do recrutador chama o service correto"() {
+        given:
+        CurtidaService curtida_service = Mock()
+        RecrutadorController controller = new RecrutadorController(recrutador_service, empresa_service, vaga_service, curtida_service)
+
+        when:
+        controller.get_lista_curtida_recrutador(9)
+
+        then:
+        1 * curtida_service.get_lista_curtida_recrutador(9)
+    }
+
     void "cadastrar recrutador chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()

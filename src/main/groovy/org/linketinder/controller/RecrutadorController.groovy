@@ -6,7 +6,7 @@ import org.linketinder.model.objetos.Curtida
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Recrutador
 import org.linketinder.model.objetos.Vaga
-import org.linketinder.service.CandidatoService
+import org.linketinder.service.CurtidaService
 import org.linketinder.service.EmpresaService
 import org.linketinder.service.RecrutadorService
 import org.linketinder.service.VagaService
@@ -16,6 +16,7 @@ class RecrutadorController {
     RecrutadorService recrutador_service
     EmpresaService empresa_service
     VagaService vaga_service
+    CurtidaService curtida_service
 
     List<Recrutador> get_lista_recrutador() {
         return recrutador_service.get_lista()
@@ -41,6 +42,11 @@ class RecrutadorController {
 
     List<Vaga> get_lista_vaga_recrutador(int recrutador_id) {
         return vaga_service.get_lista_vaga_recrutador(recrutador_id)
+    }
+
+    List<Curtida> get_lista_curtida_recrutador(int recrutador_id) {
+        if (curtida_service == null) return []
+        return curtida_service.get_lista_curtida_recrutador(recrutador_id)
     }
 
     Recrutador assemble_recrutador(Map<String, String> recrutador_info) {

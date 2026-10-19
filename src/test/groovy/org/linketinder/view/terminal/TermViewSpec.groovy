@@ -43,21 +43,29 @@ class TermViewSpec extends Specification {
     void "listar chama o controller certo"() {
         given:
         Terminal termView = new Terminal(controller_bundle, view_bundle, view_io)
+        if (input == "recrutador.curtidas") {
+            view_io.get_generic_id() >> 7
+        }
 
         when:
         termView.listar(input)
 
         then:
-        1 * controller_bundle."$controller"."$metodo"() >> []
+        if (input == "recrutador.curtidas") {
+            1 * controller_bundle."$controller"."$metodo"(_ as int) >> []
+        } else {
+            1 * controller_bundle."$controller"."$metodo"() >> []
+        }
 
         where:
-        input            | controller                 | metodo
-        "candidatos"     | "candidato_controller"     | "get_lista_candidato"
-        "empresas"       | "empresa_controller"       | "get_lista_empresa"
-        "vagas"          | "vaga_controller"          | "get_lista_vaga"
-        "curtidas"       | "curtida_controller"       | "get_lista_curtida"
-        "competencias"   | "competencia_controller"   | "get_lista_competencia"
-        "recrutadores"   | "recrutador_controller"    | "get_lista_recrutador"
+        input                  | controller                 | metodo
+        "candidatos"          | "candidato_controller"     | "get_lista_candidato"
+        "empresas"            | "empresa_controller"       | "get_lista_empresa"
+        "vagas"               | "vaga_controller"          | "get_lista_vaga"
+        "curtidas"            | "curtida_controller"       | "get_lista_curtida"
+        "competencias"        | "competencia_controller"   | "get_lista_competencia"
+        "recrutadores"        | "recrutador_controller"    | "get_lista_recrutador"
+        "recrutador.curtidas" | "recrutador_controller"   | "get_lista_curtida_recrutador"
     }
 
     void "cadastrar chama o controller certo"() {
@@ -124,18 +132,39 @@ class TermViewSpec extends Specification {
         given:
         Terminal termView = Spy(Terminal, constructorArgs: [controller_bundle, view_bundle, view_io])
         termView.get_input(*_) >> "input"
+        if (input == "recrutador") {
+            curtida_view.capturar_dados() >> [candidato_id: "1", vaga_id: "2"]
+            view_io.get_generic_id() >> 21
+        }
 
         when:
         termView.curtir_pela_perspectiva(input)
 
         then:
-        1 * controller_bundle.curtida_controller."$metodo"(_ as ModelData)
+        if (input == "recrutador") {
+            1 * controller_bundle.curtida_controller.recrutador_curtir({ it.data == [candidato_id: "1", vaga_id: "2"] }, 21)
+        } else {
+            1 * controller_bundle.curtida_controller."$metodo"(_ as ModelData)
+        }
 
         where:
         input        | metodo
         "candidato"  | "candidato_curtir"
         "empresa"    | "empresa_curtir"
         "recrutador" | "recrutador_curtir"
+    }
+
+    void "curtir como recrutador envia o ID informado no terminal"() {
+        given:
+        Terminal termView = new Terminal(controller_bundle, view_bundle, view_io)
+        curtida_view.capturar_dados() >> [candidato_id: "1", vaga_id: "2"]
+        view_io.get_generic_id() >> 21
+
+        when:
+        termView.curtir_pela_perspectiva("recrutador")
+
+        then:
+        1 * curtida_controller.recrutador_curtir({ it.data == [candidato_id: "1", vaga_id: "2"] }, 21)
     }
 
     void "funcao run retorna falso quando input for sair"() {
