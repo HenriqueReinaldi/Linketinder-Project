@@ -1,0 +1,6 @@
+- generic [active] [ref=e1]:
+  - textbox "id do recrutador" [ref=e2]
+  - group "Curtidas compatíveis:" [ref=e3]:
+    - paragraph [ref=e5]: Nenhum recrutador está cadastrado neste navegador.
+  - link "Voltar para pagina principal" [ref=e6] [cursor=pointer]:
+    - /url: ../index.html

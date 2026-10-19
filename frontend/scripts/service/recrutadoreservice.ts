@@ -1,6 +1,24 @@
-import { lista_recrutadores, fetch_localstorage, update_localstorage } from "../persistencia/dados.js";
+import { lista_recrutadores, lista_empresas, fetch_localstorage, update_localstorage } from "../persistencia/dados.js";
 import { Empresa } from "../model/empresa.js";
 import { Recrutador } from "../model/recrutador.js";
+
+export function popular_recrutadores(): void {
+    const nichos = ["tech", "design", "geral", "data", "tech"];
+
+    lista_empresas.forEach((empresa, indice) => {
+        lista_recrutadores.push(new Recrutador(
+            indice + 1,
+            `recrutador${indice + 1}`,
+            `descricao recrutador${indice + 1}`,
+            `recrutador${indice + 1}@email.com`,
+            `CPF-R${indice + 1}`,
+            `199${indice}-01-01`,
+            "senha123",
+            empresa,
+            nichos[indice % nichos.length]
+        ));
+    });
+}
 
 export function cadastrar_recrutador(
     nome: string,

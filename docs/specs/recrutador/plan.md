@@ -80,7 +80,7 @@ The frontend work follows the same backend logic and keeps the existing browser-
 - **Files:** `frontend/scripts/model/`, `frontend/scripts/service/` `frontend/scripts/persistencia/`, and any model/service wiring affected by recruiter selection and curtida matching data.
 - **Done check:** Existing browser-side models and persistence logic still load without breaking the current frontend build; recruiter data is available in memory/localStorage through the same patterns used by candidatos, empresas, and vagas.
 
-### 9. [ ] Frontend recruiter view: `visao recrutador`
+### 9. [x] Frontend recruiter view: `visao recrutador`
 - **What:** Implement a recruiter-focused frontend view that allows selecting a recruiter by ID and then listing the curtidas that match the selected recruiter’s company and niche scope. The logic must mirror the backend rule: only curtidas from vagas owned by the recruiter’s company and compatible with the recruiter’s niche are shown, with `geral` allowing any niche within that company. The recruiter view must not imply auth or a protected route; it is simply a browser-driven selection and display flow.
 - **Files:** `frontend/scripts/view/`, `frontend/view/`, and the related service/controller-layer TypeScript modules used to compose the view.
 - **Done check:** The browser UI can select a recruiter by ID and render only matching curtidas; same-company and niche filters are enforced in the frontend logic, and the view is consistent with the backend business rule.
