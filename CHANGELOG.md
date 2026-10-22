@@ -13,7 +13,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Migração SQL para preencher automaticamente o nicho `geral` em vagas existentes.
 - Dados mock de recrutadores de exemplo no seed de desenvolvimento.
 - Listagem de curtidas do recrutador filtrada pela empresa associada e pela compatibilidade de nicho, com `geral` abrangendo todos os nichos dessa empresa; os dados relacionados são hidratados pelo serviço.
-- Endpoint `GET /recrutador/{id}/curtidas` com resposta limitada à descrição do candidato, nome da vaga e estado do match, além do comando terminal `listar recrutador.curtidas <id>`.
+- Endpoint `GET /recrutador/{id}/curtidas` com descrição do candidato, competências, nome da vaga e estado do match, além do comando terminal `listar recrutador.curtidas <id>`.
 - Endpoint `POST /curtida/recrutador/{id}` para responder a uma curtida, com o ID do recrutador separado dos dados da curtida e validação do escopo permitido.
 
 ### Modificado
@@ -30,6 +30,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Revisada a spec de `VagaService` para verificar a delegação da filtragem e a hidratação dos detalhes das vagas retornadas.
 - Wires do endpoint de recrutador no servidor HTTP, incluindo registro do caminho `/recrutador` e serialização de respostas que evita expor `senha`, `CPF` e identidade de empresa/candidato fora do contexto aprovado.
 - Ajuste da política de serialização do backend para remover campos sensíveis na camada HTTP sem criar novos testes específicos para DAO ou HTTP, reforçando o uso da suíte existente do projeto.
+- Visão do recrutador atualizada para exibir as competências dos candidatos nas curtidas compatíveis.
 
 ### Corrigido
 - Compatibilidade da migração com versões de PostgreSQL que não suportam `ADD CONSTRAINT IF NOT EXISTS`.

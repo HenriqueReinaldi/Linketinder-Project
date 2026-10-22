@@ -49,6 +49,7 @@ class RecrutadorHTTP extends EntidadeHTTP implements HttpHandler {
             List<String> curtidas = controller.get_lista_curtida_recrutador(Integer.parseInt(matcher[0][1])).collect { Curtida curtida ->
                 pegar_json([
                         candidato_descricao: curtida.candidato?.descricao,
+                        competencias: curtida.candidato?.competencias?.collect { it.tecnologia } ?: [],
                         vaga_nome: curtida.vaga?.nome,
                         match: curtida.empresa_curtiu
                 ])

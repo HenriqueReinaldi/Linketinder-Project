@@ -105,10 +105,15 @@ The frontend work follows the same backend logic and keeps the existing browser-
 - **Files:** `frontend/` source and generated build output; no new backend artifacts or database changes.
 - **Done check:** `npm run build` succeeds, the static pages still render, and the new recruiter/candidate flows are consistent with the approved logic and the project’s current localStorage-based frontend architecture.
 
-### 14. [ ] Apply SHA-512 password policy to recruiter service
+### 14. [x] Apply SHA-512 password policy to recruiter service
 - **What:** Update recruiter provisioning in the backend service layer to reject submitted passwords shorter than six characters and store only the lowercase hexadecimal SHA-512 digest of the password's UTF-8 bytes, as defined in `spec.md`. Apply this policy only to recruiters; do not change candidate or company password handling.
 - **Files:** Recruiter service implementation under `src/main/groovy/org/linketinder/service/` and focused recruiter service specs under `src/test/groovy/org/linketinder/service/`. No DAO, model, controller/HTTP, frontend, or database changes.
 - **Done check:** Focused Spock tests verify the digest against a known SHA-512 value, minimum-length rejection before persistence, and absence of plaintext in the recruiter object passed to the DAO. Existing candidate and company service tests pass unchanged, confirming their password behavior was not modified.
+
+### 15. [x] List candidate competencies in recruiter curtidas
+- **What:** Include the liked candidate's competencies in the recruiter curtidas endpoint response and display them in the frontend recruiter view. Preserve the existing curtida filtering and response fields, and ensure the payload still omits candidate identifiers and passwords. Confirm the competency fields are consistent with the approved privacy contract before implementation.
+- **Files:** `src/main/groovy/org/linketinder/controller/http/RecrutadorHTTP.groovy`, `frontend/scripts/view/view_recrutador.ts`, and any directly required frontend model or service files.
+- **Done check:** Focused backend tests verify the serialized competency list for a curtida and preserve the existing anonymity/response contract; the frontend view renders the candidate competencies for each matching curtida, and `npm run build` succeeds.
 
 ## Delivery workflow
 

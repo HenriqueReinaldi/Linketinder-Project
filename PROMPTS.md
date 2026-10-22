@@ -248,7 +248,7 @@ agents: openrouter -thinking machines, copilot
 
 <br>
 
-# Adicionar criptografia para senhas:
+### Adicionar criptografia para senhas:
 
     lets change this. We should now store passwords by passing it through SHA512 function.
     though not 100% safe, it should be better than plain-text storage.
@@ -260,6 +260,16 @@ agents: openrouter -thinking machines, copilot
 <br>
 
     implement task 14 of the plan
+<br>
+
+### Create and Implement task 15:
+
+    cire uma nova task, numero 15 para adicionar listagem de competencias no endpoint de listar curtidas e no view do frontend.
+
+<br>
+
+    implement task 15
+
 <br>
 
 ## Nota:
