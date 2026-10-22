@@ -6,9 +6,9 @@ import org.linketinder.model.Pessoa
 
 @ToString(includeSuperProperties = true, includeNames = true)
 @TupleConstructor(includeSuperProperties = true)
-class Recrutador extends Pessoa {
+class Recrutador {
     int id = -1
-
     String CPF, data_nascimento, nicho
     Empresa empresa
+    String nome, email, descricao, senha
 }

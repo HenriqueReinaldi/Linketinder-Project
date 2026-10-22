@@ -15,7 +15,8 @@ class CurtidaServiceSpec extends Specification{
     CurtidaDAO curtida_dao = Mock()
     CandidatoDAO candidato_dao = Mock()
     VagaDAO vaga_dao = Mock()
-    CurtidaService service = new CurtidaService(curtida_dao, candidato_dao, vaga_dao)
+    CompetenciaDAO competencia_dao = Mock()
+    CurtidaService service = new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao)
 
     def "get lista curtida chama o metodo DAO correto"(){
         when:
@@ -23,7 +24,8 @@ class CurtidaServiceSpec extends Specification{
 
         then:
         1 * curtida_dao.get_lista_curtida() >> [new Curtida(candidato: new Candidato(id: 1), vaga: new Vaga(id: 3))]
-        1 * candidato_dao.get_candidato_by_id(1)
+        1 * candidato_dao.get_candidato_by_id(1) >> new Candidato(id: 1)
+        1 * competencia_dao.get_lista_competencias_of_entidade("candidato", 1)
         1 * vaga_dao.get_vaga_by_id(3)
     }
 

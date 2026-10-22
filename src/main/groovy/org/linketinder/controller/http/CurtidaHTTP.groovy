@@ -54,7 +54,7 @@ class CurtidaHTTP extends EntidadeHTTP implements HttpHandler {
                 case "GET":
                     listar(exchange)
                     break
-                case "POST":
+                case "PUT":
                     recrutador_curtir(exchange)
                     break
                 default:

@@ -66,7 +66,6 @@ class RecrutadorController {
                     data_nascimento: recrutador_info.nascimento ?: recrutador_info.data_nascimento,
                     empresa: empresa,
                     nicho: recrutador_info.nicho,
-                    endereco: null,
                     id: recrutador_info.id ? recrutador_info.id.toInteger() : -1
             )
         }

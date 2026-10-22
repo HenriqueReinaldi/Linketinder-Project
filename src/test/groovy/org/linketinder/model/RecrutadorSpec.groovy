@@ -20,8 +20,7 @@ class RecrutadorSpec extends Specification {
                 CPF: "0${it}",
                 data_nascimento: "1990-01-${it}",
                 nicho: "nicho${it}",
-                empresa: new Empresa(id: it.toInteger(), CNPJ: "empresa${it}", nome: "empresa nome${it}", email: "emp${it}@mail", descricao: "descr${it}", senha: "senha${it}", endereco: null),
-                endereco: null
+                empresa: new Empresa(id: it.toInteger(), CNPJ: "empresa${it}", nome: "empresa nome${it}", email: "emp${it}@mail", descricao: "descr${it}", senha: "senha${it}", endereco: null)
         )
     }
 
@@ -46,7 +45,6 @@ class RecrutadorSpec extends Specification {
             getData_nascimento() == "1990-01-$numero"
             getNicho() == "nicho$numero"
             getEmpresa() != null
-            getEndereco() == null
         }
 
         where:
