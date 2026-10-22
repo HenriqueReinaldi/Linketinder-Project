@@ -68,17 +68,20 @@ static void main(String[] args) {
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
+    boolean terminal = false
 
-    ViewIO view_io = new TermIO()
-    ViewBundle views = inicializar_views(view_io)
-    View view = new Terminal(controllers, views, view_io)
-    while (true) {
-        if (!view.run()) break
+    if (terminal){
+        ViewIO view_io = new TermIO()
+        ViewBundle views = inicializar_views(view_io)
+        View view = new Terminal(controllers, views, view_io)
+        while (true) {
+            if (!view.run()) break
+        }
+        try_exit { bd.desconectar() }
     }
-
-//    Servidor servidor = new Servidor(controllers)
-//    servidor.ligar()
-
-   // try_exit { bd.desconectar() }
+    else{
+        Servidor servidor = new Servidor(controllers)
+        servidor.ligar()
+    }
 
 }

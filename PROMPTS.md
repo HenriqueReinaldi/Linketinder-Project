@@ -250,14 +250,18 @@ agents: openrouter -thinking machines, copilot
 
 # Adicionar criptografia para senhas:
 
+    lets change this. We should now store passwords by passing it through SHA512 function.
+    though not 100% safe, it should be better than plain-text storage.
 <br>
+
+    Now, lets add a new section right after task 13 with a new task #14, that modifies the service layer to apply the new password policy to recruiter.
+    this change should only affect the recruiter.
+
+<br>
+
+    implement task 14 of the plan
+<br>
+
 ## Nota:
 
-Para fazer esse MARKDOWN, encontrei o diretório contendo histórico de mensagens. Pedi para o copilot analisar os arquivos e reconstruir as partes principais das minhas conversas. Foi interessante perceber como que alguns prompts que fiz foram modificados.. exemplo:
-
-    lets add a new task behind task 12. one to allow creating new recruiters just like how its done with candidato and empresa.
-
-    virou
-
-    add a new task behind task 12 to allow creating new recruiters just like how it is already done for the other entities.
-    follow the established patterns and keep ID uniqueness, validation, and admin-related controls in place.
+Para fazer esse MARKDOWN, encontrei o diretório contendo histórico de mensagens. Pedi para o copilot analisar os arquivos e reconstruir as partes principais das minhas conversas.

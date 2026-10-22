@@ -27,21 +27,39 @@ class RecrutadorServiceSpec extends Specification {
         resultado[0].empresa.nome == "Empresa completa"
     }
 
-    def "cadastra recrutador delega ao DAO sem validar campos no service"() {
+    def "cadastra recrutador persiste somente o digest SHA-512 da senha UTF-8"() {
         given:
-        Recrutador recrutador = new Recrutador()
+        String senha_original = "senha123"
+        Recrutador recrutador = new Recrutador(senha: senha_original)
 
         when:
         boolean cadastrado = service.cadastrar(recrutador)
 
         then:
-        1 * recrutador_dao.cadastrar_recrutador_se_nao_existe(recrutador) >> 12
+        1 * recrutador_dao.cadastrar_recrutador_se_nao_existe({ Recrutador recebido ->
+            recebido.senha == "fa3c1cdee866e8b57b644e55aa85ad1f001ea14471da9d41cdd3195e5613f4b8b6fff905e7f1afb3954a3e182e92c52497e41decf5718b51a09bfadf52e77f20" &&
+                    recebido.senha != senha_original
+        }) >> 12
         cadastrado
+        recrutador.senha == "fa3c1cdee866e8b57b644e55aa85ad1f001ea14471da9d41cdd3195e5613f4b8b6fff905e7f1afb3954a3e182e92c52497e41decf5718b51a09bfadf52e77f20"
+    }
+
+    def "rejeita senha de recrutador menor que seis caracteres sem chamar DAO"() {
+        given:
+        Recrutador recrutador = new Recrutador(senha: "12345")
+
+        when:
+        boolean cadastrado = service.cadastrar(recrutador)
+
+        then:
+        0 * recrutador_dao.cadastrar_recrutador_se_nao_existe(_)
+        !cadastrado
+        recrutador.senha == "12345"
     }
 
     def "cadastro falho retorna falso"() {
         given:
-        Recrutador recrutador = new Recrutador()
+        Recrutador recrutador = new Recrutador(senha: "senha123")
 
         when:
         boolean cadastrado = service.cadastrar(recrutador)

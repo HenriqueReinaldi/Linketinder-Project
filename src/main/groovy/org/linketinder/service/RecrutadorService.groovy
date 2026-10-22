@@ -1,5 +1,6 @@
 package org.linketinder.service
 
+import java.security.MessageDigest
 import groovy.transform.TupleConstructor
 import org.linketinder.DAO.EmpresaDAO
 import org.linketinder.DAO.RecrutadorDAO
@@ -22,6 +23,15 @@ class RecrutadorService extends Service {
 
     boolean cadastrar(Recrutador recrutador) {
         executar_seguramente(false) {
+            if (recrutador?.senha == null || recrutador.senha.length() < 6) {
+                return false
+            }
+
+            byte[] senha_bytes = recrutador.senha.getBytes('UTF-8')
+            recrutador.senha = MessageDigest.getInstance('SHA-512')
+                    .digest(senha_bytes)
+                    .encodeHex()
+                    .toString()
             return dao.cadastrar_recrutador_se_nao_existe(recrutador) >= 0
         }
     }
