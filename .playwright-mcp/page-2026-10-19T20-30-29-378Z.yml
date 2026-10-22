@@ -1,0 +1,11 @@
+- generic [active] [ref=e1]:
+  - link "Cadastro de candidato" [ref=e2] [cursor=pointer]:
+    - /url: view/cadastro_cand.html
+  - link "Cadastro de empresa" [ref=e3] [cursor=pointer]:
+    - /url: view/cadastro_emp.html
+  - link "perfil candidato" [ref=e4] [cursor=pointer]:
+    - /url: view/view_cand.html
+  - link "perfil empresa" [ref=e5] [cursor=pointer]:
+    - /url: view/view_emp.html
+  - link "visão recrutador" [ref=e6] [cursor=pointer]:
+    - /url: view/view_recrutador.html

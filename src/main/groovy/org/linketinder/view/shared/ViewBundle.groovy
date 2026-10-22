@@ -9,4 +9,5 @@ class ViewBundle {
     VagaView vaga_view
     CompetenciaView competencia_view
     CurtidaView curtida_view
+    RecrutadorView recrutador_view
 }

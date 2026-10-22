@@ -32,6 +32,14 @@ class CurtidaController {
         return curtida_service.curtir_como_empresa(c)
     }
 
+    boolean recrutador_curtir(ModelData modelo, int recrutador_id) {
+        if (modelo?.data == null || recrutador_id < 0) return false
+        Curtida c = assemble_curtida(modelo.data)
+        if (c == null) return false
+
+        return curtida_service.curtir_como_recrutador(c, recrutador_id)
+    }
+
     Curtida assemble_curtida(Map<String, String> curtida_info) {
         try {
             Candidato candidato = candidato_service.get_by_id(curtida_info["candidato_id"])
@@ -41,7 +49,6 @@ class CurtidaController {
             return new Curtida(
                     candidato: candidato,
                     vaga: vaga,
-                    id: curtida_info.id ? curtida_info.id.toInteger() : -1
             )
         }
         catch (Exception ignored) {

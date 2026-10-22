@@ -41,11 +41,12 @@ The application is still in development. Differences between source code, SQL, d
 
 ### Backend
 
-1. Ensure a PostgreSQL database named `linketinder` exists (create it if it does not already exist).
-2. Apply `banco_de_dados/entrega.sql` to create and populate its tables (only needed when setting up a new database).
-3. Check the connection settings in `src/main/groovy/org/linketinder/DAO/conexoes/ProvedorPostgres.groovy`; connection settings are currently defined in source.
-4. From the repository root, run `./gradlew run -q --console=plain`.
-5. Run backend tests with `./gradlew test`; compile production sources with `./gradlew classes`.
+1. Database creation, schema changes, and data changes are run by the user, not by the assistant.
+2. When database work is needed, provide the SQL in a dedicated `.sql` file and the exact commands to inspect/apply it in a companion instruction file. The user reviews and executes those commands. Never connect to a database or run commands that create, alter, populate, update, or delete database data.
+3. For a new local database, the user can create a PostgreSQL database named `linketinder` and apply `banco_de_dados/entrega.sql` themselves.
+4. Check the connection settings in `src/main/groovy/org/linketinder/DAO/conexoes/ProvedorPostgres.groovy`; connection settings are currently defined in source.
+5. From the repository root, run `./gradlew run -q --console=plain`.
+6. Run backend tests with `./gradlew test`; compile production sources with `./gradlew classes`. Do not run these commands with side effects that mutate the database.
 
 The HTTP server currently binds to `localhost:3040`. Tests use Spock and commonly mock services or DAOs; a passing test suite does not by itself verify a live PostgreSQL connection or HTTP privacy behavior.
 
@@ -57,6 +58,7 @@ From `frontend/`, run `npm install`, then `npm run this` to compile and serve th
 
 - Code follows clean code and SOLID principles.
 - Preserve the existing separation of backend model/DAO/service/controller/view responsibilities.
+- Before adding or changing code, inspect the closest existing implementation and its tests, then follow or extend those patterns wherever possible. For example, when adding a recruiter controller, review the existing controllers and their specs first; do not invent a parallel structure without a concrete need.
 - Existing domain names and many identifiers are Portuguese. Classes use PascalCase; fields and methods often use `snake_case`. Preserve nearby naming and style rather than doing unrelated renames.
 - Backend tests are Spock specifications, generally using descriptive feature names and `given`/`when`/`then` blocks.
 - Frontend TypeScript uses ES modules and a `NodeNext` module configuration. Follow the existing `.js` import suffix convention in TypeScript imports.
@@ -66,6 +68,7 @@ From `frontend/`, run `npm install`, then `npm run this` to compile and serve th
 ## Restrictions And Unresolved Decisions
 
 - If a requirement or decision is ambiguous or undocumented, stop and ask the user before choosing.
+- **Database changes are user-run only:** never connect to PostgreSQL or execute SQL/commands that create or modify databases, tables, constraints, or data. Author the SQL in a dedicated file and put exact review/application commands in a companion instruction file; the user runs them and reports the result. This applies to feature migrations, seed data, sample data, and any other database changes.
 - **Anonymity is a required business constraint:** a candidate must not learn which company owns a vacancy. A company must not learn the name or personal/identifying information of a candidate who liked one of its vacancies.
 - Full candidate/company records may be accessed by administrative endpoints or functions for administrative purposes; this is not a violation of anonymity between candidates and companies. Keep such access strictly in the admin context and do not expose those records to the opposing user role.
 - Apply anonymity at the data/API boundary for candidate- and company-facing flows, not only by hiding text in a view. Do not expose identifying fields through serialized objects, routes, logs, or client-side data accessible to the other party.

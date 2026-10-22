@@ -25,6 +25,9 @@ class Terminal extends View {
     VagaView vaga_view
     VagaController vaga_controller
 
+    RecrutadorView recrutador_view
+    RecrutadorController recrutador_controller
+
     PrefTree comandos
 
     void listar(String entidade) {
@@ -49,6 +52,15 @@ class Terminal extends View {
                 List<Competencia> competencias = competencia_controller.get_lista_competencia()
                 competencias.forEach { Competencia c -> competencia_view.exibir(c) }
                 break
+            case "recrutadores":
+                List<Recrutador> recrutadores = recrutador_controller.get_lista_recrutador()
+                recrutadores.forEach { Recrutador r -> recrutador_view.exibir(r) }
+                break
+            case "recrutador.curtidas":
+                int recrutador_id = io.get_generic_id()
+                List<Curtida> curtidas = recrutador_controller.get_lista_curtida_recrutador(recrutador_id)
+                curtidas.forEach { Curtida c -> io.send_message(curtida_view.representacao_secreta(c)) }
+                break
         }
     }
 
@@ -68,6 +80,10 @@ class Terminal extends View {
                 md.data = vaga_view.capturar_dados()
                 io.send_status vaga_controller.cadastrar_vaga(md)
                 break
+            case "recrutador":
+                md.data = recrutador_view.capturar_dados()
+                io.send_status recrutador_controller.cadastrar_recrutador(md)
+                break
         }
     }
 
@@ -86,6 +102,9 @@ class Terminal extends View {
                 break
             case "competencia":
                 io.send_status competencia_controller.deletar_competencia(id)
+                break
+            case "recrutador":
+                io.send_status recrutador_controller.deletar_recrutador(id)
                 break
         }
     }
@@ -110,6 +129,10 @@ class Terminal extends View {
                 md.data = competencia_view.capturar_dados(true)
                 io.send_status competencia_controller.update_competencia(md)
                 break
+            case "recrutador":
+                md.data = recrutador_view.capturar_dados(true)
+                io.send_status recrutador_controller.update_recrutador(md)
+                break
         }
     }
 
@@ -125,6 +148,11 @@ class Terminal extends View {
                 md.data = curtida_view.capturar_dados()
                 io.send_status curtida_controller.empresa_curtir(md)
                 break
+            case "recrutador":
+                md.data = curtida_view.capturar_dados()
+                int recrutador_id = io.get_generic_id()
+                io.send_status curtida_controller.recrutador_curtir(md, recrutador_id)
+                break
         }
     }
 
@@ -132,18 +160,19 @@ class Terminal extends View {
         io.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
         io.send_message "Comandos read:"
-        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas>\n"
+        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas / recrutadores>"
+        io.send_message "listar recrutador.curtidas\n"
 
         io.send_message "Comandos create:"
-        io.send_message "cadastrar <candidato / empresa / vaga>"
+        io.send_message "cadastrar <candidato / empresa / vaga / recrutador>"
         io.send_message "curtir como candidato\n"
 
         io.send_message "Comandos delete:"
-        io.send_message "deletar <candidato / empresa / vaga / competencia>\n"
+        io.send_message "deletar <candidato / empresa / vaga / competencia / recrutador>\n"
 
         io.send_message "Comandos update:"
-        io.send_message "update <candidato / empresa / vaga / competencia>"
-        io.send_message "curtir como empresa\n"
+        io.send_message "update <candidato / empresa / vaga / competencia / recrutador>"
+        io.send_message "curtir como <empresa/recrutador>\n"
 
         io.send_message "Outros:"
         io.send_message "sair"
@@ -174,12 +203,14 @@ class Terminal extends View {
         this.curtida_view = view_bundle.curtida_view
         this.empresa_view = view_bundle.empresa_view
         this.vaga_view = view_bundle.vaga_view
+        this.recrutador_view = view_bundle.recrutador_view
 
         this.competencia_controller = controller_bundle.competencia_controller
         this.candidato_controller = controller_bundle.candidato_controller
         this.curtida_controller = controller_bundle.curtida_controller
         this.empresa_controller = controller_bundle.empresa_controller
         this.vaga_controller = controller_bundle.vaga_controller
+        this.recrutador_controller = controller_bundle.recrutador_controller
 
         comandos = new PrefTree()
         Map<String, Closure> lista_comandos = [

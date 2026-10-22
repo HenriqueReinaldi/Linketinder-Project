@@ -40,7 +40,7 @@ Clarify ambiguous product behavior before writing the specification. Ask focused
 
 ### 3. Create and review the implementation plan
 
-1. Read the approved specification at `docs/specs/<nome-da-feature>/spec.md` and `AGENTS.md` together. Propose a numbered sequence of small, independently verifiable tasks in `docs/plans/<nome-da-feature>/plan.md`.
+1. Read the approved specification at `docs/specs/<nome-da-feature>/spec.md` and `AGENTS.md` together. Propose a numbered sequence of small, independently verifiable tasks in `docs/specs/<nome-da-feature>/plan.md`.
 2. Derive tasks directly from the spec's acceptance criteria. Each task must be small enough to be analyzed, tested, and validated sequentially.
 3. For each task, state:
    - What will be done and which spec requirement it advances.
@@ -66,9 +66,10 @@ If implementation reveals that the specification is incomplete or incorrect, sto
 
 1. Run the automated tests for the feature using the project's existing test framework: Spock (`./gradlew test`) for backend; no configured frontend test suite exists, so rely on build (`npm run build`) and manual checks for frontend.
 2. Check every acceptance criterion individually and report whether it passed, failed, or could not be verified. Link each criterion to a test or a specific manual check.
-3. Exercise relevant existing workflows manually in the running application, including behaviors identified in the specification's impact section. For backend: list, filter, like/match flows; for frontend: registration, list/affinity views.
-4. Run the broadest relevant regression suite available (`./gradlew test` for backend; `npm run build` + serve for frontend). Report commands and outcomes, including unavailable tests or environment limitations. Do not claim manual validation that was not performed.
-5. Review the final diff and repository status to ensure the implementation, tests, documentation (`docs/specs/` and `docs/plans/`), and completed plan agree with the approved scope.
+3. Verify the anonymity principle explicitly for every candidate- and company-facing flow: a candidate must not learn which company owns a vacancy, and a company must not learn the name or personal identifying information of a candidate who liked one of its vacancies. Validate this at the data/API boundary, not only by hiding text in a view or UI.
+4. Exercise relevant existing workflows manually in the running application, including behaviors identified in the specification's impact section. For backend: list, filter, like/match flows; for frontend: registration, list/affinity views.
+5. Run the broadest relevant regression suite available (`./gradlew test` for backend; `npm run build` + serve for frontend). Report commands and outcomes, including unavailable tests or environment limitations. Do not claim manual validation that was not performed.
+6. Review the final diff and repository status to ensure the implementation, tests, documentation (`docs/specs/`), and completed plan agree with the approved scope.
 
 ## Rules
 
@@ -81,7 +82,7 @@ If implementation reveals that the specification is incomplete or incorrect, sto
 - Apply anonymity at the data/API boundary for candidate- and company-facing flows, not only by hiding text in a view. Do not expose identifying fields through serialized objects, routes, logs, or client-side data accessible to the other party.
 - Do not connect the frontend to the backend, unify their models, or assume shared business rules without an explicit request.
 - Prefer focused automated checks first, followed by broader tests and relevant manual regression checks.
-- Keep documentation paths (`docs/specs/<nome-da-feature>` and `docs/plans/<nome-da-feature>`) and commands appropriate to the target runtime.
+- Keep documentation paths (`docs/specs/<nome-da-feature>`) and commands appropriate to the target runtime.
 
 ## Templates
 
@@ -117,7 +118,7 @@ If implementation reveals that the specification is incomplete or incorrect, sto
 - ...
 ```
 
-### `docs/plans/<nome-da-feature>/plan.md`
+### `docs/specs/<nome-da-feature>/plan.md`
 
 ```markdown
 # <Feature name> Implementation Plan
