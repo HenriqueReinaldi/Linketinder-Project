@@ -1,0 +1,5 @@
+[     185ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4173/style.css:0
+[     246ms] [LOG] [Candidato, Candidato, Candidato, Candidato, Candidato] @ http://localhost:4173/build/main.js:20
+[     257ms] [LOG] [Empresa, Empresa, Empresa, Empresa, Empresa] @ http://localhost:4173/build/main.js:21
+[     257ms] [LOG] [Vaga, Vaga, Vaga, Vaga, Vaga, Vaga, Vaga, Vaga, Vaga, Vaga] @ http://localhost:4173/build/main.js:22
+[     269ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4173/favicon.ico:0

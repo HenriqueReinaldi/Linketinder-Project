@@ -56,7 +56,6 @@ class CurtidaViewSpec extends Specification {
     )
     @Shared
     Curtida Curtida = new Curtida(
-            id: 1,
             candidato: candidato,
             vaga: vaga,
             empresa_curtiu: false
@@ -102,7 +101,22 @@ class CurtidaViewSpec extends Specification {
             resposta.contains("candidato_nome")
             resposta.contains("vaga_nome")
             resposta.contains("false")
-            resposta.contains("1")
+        }
+    }
+
+    void "Representacao secreta mascara o candidato mas preserva a vaga"() {
+        given:
+        CurtidaView curtida_view = new CurtidaView(view)
+
+        when:
+        String resposta = curtida_view.representacao_secreta(Curtida)
+
+        then:
+        verifyAll {
+            !resposta.contains("candidato_nome")
+            resposta.contains("vaga_nome")
+            resposta.contains("descricao")
+            resposta.contains("Sem match ainda...")
         }
     }
 

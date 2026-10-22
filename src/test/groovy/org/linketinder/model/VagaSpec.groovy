@@ -16,6 +16,7 @@ class VagaSpec extends Specification{
             descricao: "descricao${it}",
             endereco: null,
             empresa: null,
+            nicho: "nicho${it}",
             competencias_desejadas: null
         )
     }
@@ -43,6 +44,7 @@ class VagaSpec extends Specification{
             verifyAll(vaga) {
                 getEndereco() == null
                 getEmpresa() == null
+                getNicho() == "nicho$numero"
                 getCompetencias_desejadas() == null
                 getId() == numero.toInteger()
             }

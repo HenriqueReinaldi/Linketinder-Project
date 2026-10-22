@@ -29,6 +29,7 @@ class VagaViewSpec extends Specification {
             id: 1,
             nome: "vaga_nome",
             descricao: "descricao",
+            nicho: "tecnologia",
             endereco: new Endereco(
                     estado: "estado",
                     CEP: "CEP"
@@ -45,7 +46,7 @@ class VagaViewSpec extends Specification {
         Map<String, String> info = vaga_view.capturar_dados()
 
         then:
-        7 * view.get_input(_ as String) >> "input"
+        8 * view.get_input(_ as String) >> "input"
 
         and:
         info.every { it.value == "input" }
@@ -59,7 +60,7 @@ class VagaViewSpec extends Specification {
         Map<String, String> info = vaga_view.capturar_dados(true)
 
         then:
-        8 * view.get_input(_ as String) >> "input"
+        9 * view.get_input(_ as String) >> "input"
 
         and:
         info.every { it.value == "input" }
@@ -76,6 +77,7 @@ class VagaViewSpec extends Specification {
         verifyAll {
             resposta.contains("nome")
             resposta.contains("1")
+            resposta.contains("Nicho       : tecnologia")
         }
     }
 

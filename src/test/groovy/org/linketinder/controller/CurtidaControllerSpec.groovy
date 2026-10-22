@@ -25,7 +25,7 @@ class CurtidaControllerSpec extends Specification {
     void "candidato curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        Curtida curtida = new Curtida()
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
@@ -39,7 +39,7 @@ class CurtidaControllerSpec extends Specification {
     void "empresa curtir chama o service correto e assemblemodel"() {
         given:
         ModelData md = new ModelData()
-        Curtida curtida = new Curtida(id: 1)
+        Curtida curtida = new Curtida()
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
 
         when:
@@ -50,13 +50,36 @@ class CurtidaControllerSpec extends Specification {
         1 * curtida_service.curtir_como_empresa(curtida)
     }
 
+    void "recrutador curtir chama o service correto e assemblemodel"() {
+        given:
+        ModelData md = new ModelData()
+        md.data = [candidato_id: "12", vaga_id: "13"]
+        Curtida curtida = new Curtida()
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
+
+        when:
+        controller.recrutador_curtir(md, 21)
+
+        then:
+        1 * controller.assemble_curtida(md.data) >> curtida
+        1 * curtida_service.curtir_como_recrutador(curtida, 21)
+    }
+
+    void "recrutador curtir rejeita identificador negativo"() {
+        given:
+        ModelData md = new ModelData(data: [candidato_id: "12", vaga_id: "13"])
+        CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
+
+        expect:
+        !controller.recrutador_curtir(md, -1)
+    }
+
     void "assemble_curtida monta curtida corretamente"() {
         given:
         CurtidaController controller = Spy(constructorArgs: [curtida_service, candidato_service, vaga_service])
         Map<String, String> curtida_info = [
                 "candidato_id": "12",
                 "vaga_id"     : "13",
-                "id"          : "1"
         ]
         Candidato candidato = new Candidato(id: 12)
         Vaga vaga = new Vaga(id: 13)
@@ -68,7 +91,6 @@ class CurtidaControllerSpec extends Specification {
         1 * candidato_service.get_by_id("12") >> candidato
         1 * vaga_service.get_by_id("13") >> vaga
 
-        curtida.id == 1
         curtida.candidato == candidato
         curtida.vaga == vaga
     }

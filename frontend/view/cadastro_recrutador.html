@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cadastro recrutador</title>
+</head>
+<body>
+    <form action="">
+        <fieldset>
+            <legend>Cadastrar recrutador</legend>
+
+            <input type="text" id="input_nome" placeholder="nome"><br>
+            <input type="email" id="input_email" placeholder="email"><br>
+            <input type="text" id="input_CPF" placeholder="CPF"><br>
+            <input type="date" id="input_data_nascimento" placeholder="data de nascimento"><br>
+            <input type="password" id="input_senha" placeholder="senha"><br>
+            <select id="input_empresa"></select><br>
+            <input type="text" id="input_nicho" placeholder="nicho"><br>
+            <textarea id="input_descricao" placeholder="descricao"></textarea><br>
+
+            <button id="cadastrar">Cadastrar</button>
+            <input type="reset" value="Resetar">
+
+            <p id="status"></p>
+        </fieldset>
+    </form>
+
+    <br>
+    <a href="../index.html">Voltar para pagina principal</a>
+    <script type="module" src="../build/view/cadastro_recrutador.js"></script>
+</body>
+</html>

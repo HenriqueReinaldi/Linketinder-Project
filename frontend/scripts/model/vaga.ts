@@ -6,6 +6,7 @@ export class Vaga{
         public salario:number,
         public descricao:string,
         public empresa: Empresa,
-        public competencias_desejadas: string[]
+        public competencias_desejadas: string[],
+        public nicho: string = "geral"
     ){}
 }

@@ -5,6 +5,7 @@ import { get_random_competencias } from "./dados.js";
 export function popular_vagas(): void{
     //necessita de que lista_empresas nao esteja vazia.
     if (lista_empresas.length == 0) return;
+    const nichos = ["tech", "design", "geral", "data", "tech"];
 
     for (let i: number = 0; i < 10; i++){
         lista_vagas.push(
@@ -13,7 +14,8 @@ export function popular_vagas(): void{
                 67*(i+1),
                 `descricao${i}`,
                 lista_empresas[i%5],
-                get_random_competencias()
+                get_random_competencias(),
+                nichos[i % nichos.length]
 
             )
         );

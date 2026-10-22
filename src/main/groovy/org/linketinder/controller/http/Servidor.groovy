@@ -27,6 +27,7 @@ class Servidor {
         http.createContext("/vaga", new VagaHTTP(controllers.vaga_controller))
         http.createContext("/competencia", new CompetenciaHTTP(controllers.competencia_controller))
         http.createContext("/curtida", new CurtidaHTTP(controllers.curtida_controller))
+        http.createContext("/recrutador", new RecrutadorHTTP(controllers.recrutador_controller))
 
     }
 
