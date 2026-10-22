@@ -39,12 +39,14 @@ function exibir_curtidas(): void {
         const detalhe = document.createElement("div");
         const resumo = document.createElement("p");
         const descricao = document.createElement("p");
+        const competencias = document.createElement("p");
         const match = document.createElement("strong");
         const botao_match = document.createElement("button");
 
         titulo.textContent = `Curtida ${indice + 1}`;
         resumo.textContent = `Vaga: ${curtida.vaga.nome} · Nicho: ${curtida.vaga.nicho || "geral"}`;
         descricao.textContent = `Descrição do candidato: ${curtida.candidato.descricao || "Sem descrição informada."}`;
+        competencias.textContent = `Competências: ${curtida.candidato.competencias?.length ? curtida.candidato.competencias.join(", ") : "Sem competências informadas."}`;
         match.textContent = curtida.empresa_curtiu ? "MATCH" : "";
         match.style.color = curtida.empresa_curtiu ? "green" : "";
         match.style.fontWeight = "700";
@@ -53,7 +55,7 @@ function exibir_curtidas(): void {
         botao_match.disabled = curtida.empresa_curtiu;
         botao_match.addEventListener("click", () => marcar_match(curtida));
 
-        detalhe.append(resumo, descricao);
+        detalhe.append(resumo, descricao, competencias);
         if (curtida.empresa_curtiu) {
             detalhe.append(match);
         } else {
