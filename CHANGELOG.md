@@ -25,6 +25,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Consulta de vagas do recrutador limitada no DAO à empresa associada e ao nicho compatível.
 - Atualização de curtidas pelo recrutador condicionada a uma curtida existente e à elegibilidade de empresa e nicho.
 - Serviços de recrutador para listar, cadastrar, atualizar e remover registros via DAO; listagem de vagas delegada ao filtro do DAO e hidratação dos detalhes retornados.
+- Provisionamento de recrutadores valida senha com no mínimo seis caracteres e persiste somente o digest SHA-512 hexadecimal da senha em UTF-8.
 - Hidratação da empresa completa de cada recrutador pela `EmpresaDAO` ao listar recrutadores.
 - Revisada a spec de `VagaService` para verificar a delegação da filtragem e a hidratação dos detalhes das vagas retornadas.
 - Wires do endpoint de recrutador no servidor HTTP, incluindo registro do caminho `/recrutador` e serialização de respostas que evita expor `senha`, `CPF` e identidade de empresa/candidato fora do contexto aprovado.
