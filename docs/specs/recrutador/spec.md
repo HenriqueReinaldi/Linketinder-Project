@@ -33,7 +33,8 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - `e_mail`: `varchar(100) NOT NULL`, sem restrição de unicidade, conforme candidato.
 - `CPF`: `varchar(11) UNIQUE NOT NULL`, conforme candidato.
 - `data_nascimento`: `date NOT NULL`.
-- `senha`: `TEXT NOT NULL` com comprimento mínimo de seis caracteres, conforme a restrição do schema de candidato.
+- `senha`: `TEXT NOT NULL` contendo o digest hexadecimal SHA-512 da senha, com exatamente 128 caracteres. A senha recebida deve ter no mínimo seis caracteres antes do cálculo do digest; essa regra não deve ser aplicada ao digest armazenado.
+- O digest é calculado sobre os bytes UTF-8 da senha, sem salt, e armazenado como 128 caracteres hexadecimais minúsculos.
 - `empresa_id`: obrigatório, referência à empresa para a qual trabalha.
 - `nicho_id`: obrigatório, referência ao nicho de atuação.
 - Uma empresa pode ter vários recrutadores; cada recrutador pertence a uma empresa.
@@ -81,13 +82,14 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 ## Validações e casos-limite
 
 - Rejeitar recrutador sem qualquer campo obrigatório, sem empresa existente ou sem nicho existente.
-- Rejeitar CPF duplicado e senha com menos de seis caracteres.
+- Rejeitar CPF duplicado e senha recebida com menos de seis caracteres antes de calcular o digest.
+- Persistir somente o digest hexadecimal SHA-512 da senha, nunca a senha em texto simples.
 - Rejeitar nicho duplicado pela restrição `UNIQUE`; a comparação segue o valor armazenado pelo banco, sem equivalência automática entre caixa/espaços.
 - Rejeitar vaga nova/atualizada sem nicho ou com nicho inexistente.
 - Migrar vagas existentes para `geral`, sem apagar ou recriar vagas nem alterar outros dados delas.
 - Rejeitar resposta de recrutador se não existir curtida do candidato para aquele par, se a vaga não pertencer à empresa associada ou se o nicho não for compatível; a rejeição não deve alterar o registro de curtida.
 - Repetir uma resposta já registrada não cria registros duplicados nem reverte `empresa_curtiu` para `false`.
-- **Decisão aprovada para esta implementação:** armazenar a senha do recrutador como texto simples, seguindo o padrão legado de candidato e empresa. Isso mantém o risco de exposição em caso de acesso indevido ao banco; qualquer migração futura para hash deverá considerar compatibilidade e redefinição/atualização de credenciais. A senha continua proibida em respostas, logs e serialização.
+- **Decisão aprovada para esta implementação:** armazenar SHA-512 sem salt da senha, codificado como hexadecimal minúsculo. Essa função é rápida e não é um algoritmo de derivação de senha; portanto, digests expostos ainda podem ser testados offline em alta velocidade. É uma proteção limitada em relação ao texto simples, não uma solução segura para armazenamento de senhas. Uma futura migração para Argon2id, scrypt, bcrypt ou PBKDF2 deverá considerar compatibilidade e redefinição/atualização de credenciais. A senha original e o digest continuam proibidos em respostas, logs e serialização.
 - Entregar mudanças no banco como arquivo(s) SQL e instruções com os comandos de inspeção/aplicação; somente o usuário executa esses comandos e valida os resultados no banco.
 
 ## Critérios de aceite
@@ -102,13 +104,15 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - Dado um recrutador que tenta responder em vaga de outra empresa ou de nicho incompatível, quando a operação é solicitada, então ela falha sem alterar a curtida.
 - Dado um payload de candidato retornado para seleção, quando consultado por empresa ou recrutador, então não contém os campos estruturados identificadores listados nesta spec; contém competências e, conforme a exceção aceita, a descrição livre sem filtragem.
 - Dado um fluxo de candidato que retorna uma vaga ou um evento de curtida/match, quando consultado pelo candidato, então não revela empresa proprietária nem recrutador.
-- Dado um recrutador com senha, quando qualquer resposta ou log do backend é produzido, então a senha não é exposta.
+- Dado um recrutador cuja senha recebida tem pelo menos seis caracteres, quando ele é provisionado, então o banco armazena somente o digest SHA-512 hexadecimal de 128 caracteres, calculado a partir dos bytes UTF-8, e não a senha em texto simples.
+- Dado um recrutador com senha, quando qualquer resposta, log ou serialização do backend é produzido, então nem a senha original nem o digest são expostos.
 - Dado um CPF ou nicho já existente, quando se tenta cadastrar outro com o mesmo valor conforme a restrição do banco, então o cadastro duplicado é rejeitado.
 
 ## Impactos no comportamento existente
 
 - O schema e os dados de vaga mudam: será necessária migração que crie `nicho`, crie `recrutador`, adicione `vaga.nicho_id` e classifique vagas antigas como `geral`.
 - A migração e qualquer carga ou alteração de dados serão fornecidas em arquivos para execução pelo usuário; o assistente não aplicará mudanças diretamente ao banco.
+- Se houver recrutadores já provisionados com senhas em texto simples quando a decisão for aplicada, a migração deverá convertê-las para o digest SHA-512 antes de o backend passar a validar digests.
 - A criação e atualização de vagas passam a exigir nicho.
 - O fluxo existente de curtida de empresa continua representado pelo booleano `empresa_curtiu`; não haverá autoria ou histórico do recrutador nesta etapa.
 - Os modelos/serviços/DAOs e qualquer serialização de dados de vaga/candidato afetados devem preservar as regras de anonimato acima, com a exceção explícita da descrição livre.
@@ -135,4 +139,4 @@ Quando a feature exigir mudança no banco, preparar primeiro o schema e a migra�
 - Curtida inicial do candidato pelo recrutador, autoria/auditoria da resposta, notificações, mensagens ou outros passos de contratação.
 - Criação, edição ou exclusão de vagas pelo recrutador.
 - Validações de formato de e-mail/CPF ou regra mínima/máxima de idade além das restrições já definidas para candidato.
-- Política segura de armazenamento de senha, que precisa ser decidida antes da implementação.
+- Uso de um algoritmo de derivação de senha com salt e fator de custo, como Argon2id, scrypt, bcrypt ou PBKDF2; o SHA-512 sem salt é a decisão limitada desta etapa.

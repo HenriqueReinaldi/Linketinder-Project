@@ -105,6 +105,11 @@ The frontend work follows the same backend logic and keeps the existing browser-
 - **Files:** `frontend/` source and generated build output; no new backend artifacts or database changes.
 - **Done check:** `npm run build` succeeds, the static pages still render, and the new recruiter/candidate flows are consistent with the approved logic and the project’s current localStorage-based frontend architecture.
 
+### 14. [ ] Apply SHA-512 password policy to recruiter service
+- **What:** Update recruiter provisioning in the backend service layer to reject submitted passwords shorter than six characters and store only the lowercase hexadecimal SHA-512 digest of the password's UTF-8 bytes, as defined in `spec.md`. Apply this policy only to recruiters; do not change candidate or company password handling.
+- **Files:** Recruiter service implementation under `src/main/groovy/org/linketinder/service/` and focused recruiter service specs under `src/test/groovy/org/linketinder/service/`. No DAO, model, controller/HTTP, frontend, or database changes.
+- **Done check:** Focused Spock tests verify the digest against a known SHA-512 value, minimum-length rejection before persistence, and absence of plaintext in the recruiter object passed to the DAO. Existing candidate and company service tests pass unchanged, confirming their password behavior was not modified.
+
 ## Delivery workflow
 
 Important: only the user may mark tasks as done. The assistant must not update checklist items, phase completion markers, or status fields to reflect completion without explicit user confirmation. The plan is a tracking aid for review, not a place for the assistant to self-approve work.
