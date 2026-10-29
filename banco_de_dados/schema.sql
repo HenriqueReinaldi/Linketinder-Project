@@ -96,3 +96,13 @@ create table curtida(
 
     primary key(vaga_id, candidato_id)
 );
+
+create table match(
+    candidato_id int not null references candidato(id) on delete cascade,
+    vaga_id int not null references vaga(id) on delete cascade,
+
+    recrutador_id int references recrutador(id) on delete set null,
+    data_match date not null,
+
+    primary key(vaga_id, candidato_id)
+);
