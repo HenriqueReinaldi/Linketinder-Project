@@ -97,6 +97,16 @@ create table curtida(
 
     primary key(vaga_id, candidato_id)
 );
+
+create table match(
+      candidato_id int not null references candidato(id) on delete cascade,
+      vaga_id int not null references vaga(id) on delete cascade,
+
+      recrutador_id int references recrutador(id) on delete set null,
+      data_match date not null,
+
+      primary key(vaga_id, candidato_id)
+);
 --POPULACAO:
 
 insert into pais (nome) values ('China');
@@ -187,8 +197,7 @@ insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'maior tec nao empresa empresa tec do tecnologic world nao mundo tecnologico (nao mundo tec)',
 	'ftyiugkhlkj nao tec senha',
 	'3'
-); 
-
+);
 insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'FGGGASDEF',
 	'fgggasdef@fgggasdef.fgggasdef',
@@ -196,9 +205,7 @@ insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'quem descobrir op signifciado de fgggasdef ganha uma vaga vitalicia de emprego',
 	'fgggasdef',
 	'2'
-); 
-
-
+);
 insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'gugle',
 	'gugle.com@gucle.gom',
@@ -206,9 +213,7 @@ insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'gugle com é a mairor empresa de tecnologica web do planeta google maps translate',
 	'guoogle',
 	'1'
-); 
-
-
+);
 insert into empresa (nome, e_mail, CNPJ, descricao, senha, endereco_id) values (
 	'linketinder',
 	'linketinder@link.tinder',
@@ -230,7 +235,6 @@ insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, em
 	1,
 	(SELECT id FROM nicho WHERE nome = 'geral')
 );
-
 insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, empresa_id, nicho_id) values (
 	'bruno tech',
 	'Executa triagem e alinhamento de vagas com perfis de software.',
@@ -241,7 +245,6 @@ insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, em
 	2,
 	(SELECT id FROM nicho WHERE nome = 'geral')
 );
-
 insert into recrutador (nome, descricao, e_mail, CPF, data_nascimento, senha, empresa_id, nicho_id) values (
 	'carla geral',
 	'Responsável por seleção de perfis gerais e alinhamento de demandas internas.',
@@ -264,7 +267,6 @@ insert into candidato_competencias (candidato_id, competencia_id) values (4, 1);
 insert into candidato_competencias (candidato_id, competencia_id) values (4, 2);
 insert into candidato_competencias (candidato_id, competencia_id) values (5, 9);
 
-
 insert into vaga (nome, descricao, endereco_id, empresa_id, nicho_id) values (
 	'melhor vaga tecweb',
 	'descritiva',
@@ -272,7 +274,6 @@ insert into vaga (nome, descricao, endereco_id, empresa_id, nicho_id) values (
 	'1',
 	(SELECT id FROM nicho WHERE nome = 'geral')
 );
-
 insert into vaga (nome, descricao, endereco_id, empresa_id, nicho_id) values (
 	'linketinder dev',
 	'deve dev o development do linketinder development dev team',
@@ -290,7 +291,15 @@ insert into vaga_competencias (vaga_id, competencia_id) values (1, 2);
 insert into vaga_competencias (vaga_id, competencia_id) values (1, 3);
 insert into vaga_competencias (vaga_id, competencia_id) values (1, 4);
 
-insert into curtida (candidato_id, vaga_id) values (3, 1)
+insert into curtida (candidato_id, vaga_id) values (3, 1);
+insert into curtida (candidato_id, vaga_id, empresa_curtiu) values (3, 2, true);
+insert into curtida (candidato_id, vaga_id, empresa_curtiu) values (2, 1, true);
+insert into curtida (candidato_id, vaga_id, empresa_curtiu) values (4, 1, true);
+
+insert into match (candidato_id, vaga_id, recrutador_id, data_match) values (3, 1, 1, '2026-02-02');
+insert into match (candidato_id, vaga_id,  data_match) values (3, 2, '2026-02-02');
+insert into match (candidato_id, vaga_id, recrutador_id, data_match) values (2, 1, 1, '2026-01-02');
+insert into match (candidato_id, vaga_id, recrutador_id, data_match) values (4, 1, 1, '2026-02-02');
 
 
 

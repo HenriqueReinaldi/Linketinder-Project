@@ -13,7 +13,7 @@ psql -d linketinder -f banco_de_dados/migrations/001_add_nicho_e_recrutador.sql
 ```bash
 createdb linketinder_scratch
 psql -d linketinder_scratch -f banco_de_dados/schema.sql
-psql -d linketinder_scratch -f banco_de_dados/entrega.sql
+psql -d linketinder_scratch -f banco_de_dados/schema_com_populacao.sql
 ```
 
 ## 3) Inspecionar a migração e validar o resultado
