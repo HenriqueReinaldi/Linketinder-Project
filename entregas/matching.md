@@ -7,6 +7,5 @@
 # Parte 2: MVP (implementação)
 
  - TODO:
-   - Necessario criar novo VIEW para match
    - Necessario criar novo Controller + Service para match
    - Necessario alterar lógica já existente para novo comportamento

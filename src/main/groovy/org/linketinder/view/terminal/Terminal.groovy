@@ -28,6 +28,9 @@ class Terminal extends View {
     RecrutadorView recrutador_view
     RecrutadorController recrutador_controller
 
+    MatchView match_view
+    MatchController match_controller
+
     PrefTree comandos
 
     void listar(String entidade) {
@@ -60,6 +63,10 @@ class Terminal extends View {
                 int recrutador_id = io.get_generic_id()
                 List<Curtida> curtidas = recrutador_controller.get_lista_curtida_recrutador(recrutador_id)
                 curtidas.forEach { Curtida c -> io.send_message(curtida_view.representacao_secreta(c)) }
+                break
+            case "matches":
+                List<Match> matches = match_controller.get_lista_matches()
+                matches.forEach { Match match -> io.send_message(match_view.representacao(match)) }
                 break
         }
     }
@@ -204,6 +211,7 @@ class Terminal extends View {
         this.empresa_view = view_bundle.empresa_view
         this.vaga_view = view_bundle.vaga_view
         this.recrutador_view = view_bundle.recrutador_view
+        this.match_view = view_bundle.match_view
 
         this.competencia_controller = controller_bundle.competencia_controller
         this.candidato_controller = controller_bundle.candidato_controller
@@ -211,6 +219,7 @@ class Terminal extends View {
         this.empresa_controller = controller_bundle.empresa_controller
         this.vaga_controller = controller_bundle.vaga_controller
         this.recrutador_controller = controller_bundle.recrutador_controller
+        this.match_controller = controller_bundle.match_controller
 
         comandos = new PrefTree()
         Map<String, Closure> lista_comandos = [

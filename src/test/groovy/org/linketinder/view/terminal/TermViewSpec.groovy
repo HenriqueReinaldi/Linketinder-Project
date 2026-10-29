@@ -5,6 +5,7 @@ import org.linketinder.controller.CompetenciaController
 import org.linketinder.controller.ControllerBundle
 import org.linketinder.controller.CurtidaController
 import org.linketinder.controller.EmpresaController
+import org.linketinder.controller.MatchController
 import org.linketinder.controller.ModelData
 import org.linketinder.controller.RecrutadorController
 import org.linketinder.controller.VagaController
@@ -13,6 +14,7 @@ import org.linketinder.view.shared.CandidatoView
 import org.linketinder.view.shared.CompetenciaView
 import org.linketinder.view.shared.CurtidaView
 import org.linketinder.view.shared.EmpresaView
+import org.linketinder.view.shared.MatchView
 import org.linketinder.view.shared.RecrutadorView
 import org.linketinder.view.shared.VagaView
 import org.linketinder.view.shared.ViewBundle
@@ -25,8 +27,9 @@ class TermViewSpec extends Specification {
     CurtidaController curtida_controller = Mock()
     VagaController vaga_controller = Mock()
     RecrutadorController recrutador_controller = Mock()
+    MatchController match_controller = Mock()
     ControllerBundle controller_bundle = new ControllerBundle(
-            competencia_controller, candidato_controller, curtida_controller, empresa_controller, vaga_controller, recrutador_controller
+            competencia_controller, candidato_controller, curtida_controller, empresa_controller, vaga_controller, recrutador_controller, match_controller
     )
     CandidatoView candidato_view = Mock()
     EmpresaView empresa_view = Mock()
@@ -34,8 +37,9 @@ class TermViewSpec extends Specification {
     CompetenciaView competencia_view = Mock()
     CurtidaView curtida_view = Mock()
     RecrutadorView recrutador_view = Mock()
+    MatchView match_view = Mock()
     ViewBundle view_bundle = new ViewBundle(
-            candidato_view, empresa_view, vaga_view, competencia_view, curtida_view, recrutador_view
+            candidato_view, empresa_view, vaga_view, competencia_view, curtida_view, recrutador_view, match_view
     )
 
     ViewIO view_io = Mock()

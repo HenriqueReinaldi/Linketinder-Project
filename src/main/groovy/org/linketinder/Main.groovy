@@ -48,7 +48,8 @@ static ViewBundle inicializar_views(ViewIO view_io) {
             new VagaView(view_io),
             new CompetenciaView(view_io),
             new CurtidaView(view_io),
-            new RecrutadorView(view_io)
+            new RecrutadorView(view_io),
+            new MatchView(view_io)
     )
 }
 
@@ -59,7 +60,8 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
             new CurtidaController(services.curtida_service, services.candidato_service, services.vaga_service),
             new EmpresaController(services.empresa_service),
             new VagaController(services.vaga_service, services.empresa_service),
-            new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service, services.curtida_service)
+            new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service, services.curtida_service),
+            new MatchController()
     )
 }
 
