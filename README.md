@@ -5,7 +5,7 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
 
 ### Para executar:
     1. Crie um banco de dados PostgreSQL nomeado 'linketinder'
-    2. Utilize o script de criação em banco_de_dados/entrega.sql para criar as tabelas e popular o banco.
+    2. Utilize o script de criação em banco_de_dados/schema_com_populacao.sql para criar as tabelas e popular o banco.
     3. Execute na raiz do projeto o seguinte comando:
 
         ./gradlew run -q --console=plain
@@ -39,38 +39,27 @@ Esté é uma aplicação que mistura o Linkedin com o Tinder, para facilitar o p
          
 ## BANCO DE DADOS:
 
-Para juntar o novo banco de dados com o aplicativo, tive que re-estruturar algumas (várias) coisas tanto no código quanto no modelo do banco. Como exemplo, movi "competencias desejadas" da classe Empresa para uma nova classe "Vaga".<br>
-Antes dessa junção, tentei também refatorar o projeto com a arquitetura MVCS (minha primeira vez usando ela).<br>
-Uma ferramenta que serviu grande auxílio foi o próprio Intellij, que permitiu uma conexão com o banco para fazer queries de forma rápida e adicionar IntelliSense a strings SQL.
-
 ![DER](banco_de_dados/image.png)
 
-<br>
-<br>
-<br>
 
-### Informações pertinentes:
+## Sistema de curtidas:
 
-1. As classes sugeridas estão em src/main/groovy/org/linketinder/classes
-2. src/main/groovy/org/linketinder/dados contém "Dados.groovy", que armazena os usuários e "Random.groovy", que pode ser usado para criar usuários aleatóriamente
-3. src/main/groovy/org/linketinder/terminal contém a classe que serve como interface
-4. Backend feito com groovy e build tool gradle
-5. Frontend feito com Typescript + HTML, com o uso da biblioteca [chart.js](https://www.chartjs.org/)
-6. Frontend ainda é completamente independente do backend.
-7. Banco de dados feito com PostgreSQL
-8. Modelo DER feito com [dbdiagram](https://dbdiagram.io/home)
+Funciona por meio da tabela "curtida" no banco de dados, onde é feita uma chave primaria composta pelo ID do candidato e o ID da vaga (já que o candidato é aquele quem inicia o processo de match).
+Quando a empresa dona da vaga quer fazer o match, é trocado o valor de "empresa_curtiu" na tabela de falso para verdadeiro.
 
-    ### Sistema de curtidas:
 
-    Funciona por meio da tabela "curtida" no banco de dados, onde é feita uma chave primaria composta pelo ID do candidato e o ID da vaga (já que o candidato é aquele quem inicia o processo de match).
-    Quando a empresa dona da vaga quer fazer o match, é trocado o valor de "empresa_curtiu" na tabela de falso para verdadeiro.
+## Índice de afinidade:
 
-    
-    ### Índice de afinidade:
-    
-    O frontend do projeto conta com um sistema de índice de afinidade, tanto para candidatos quanto para empresas.
+O frontend do projeto conta com um sistema de índice de afinidade, tanto para candidatos quanto para empresas.
 
-    Como candidato, ao acessar a listagem de vagas, o sistema conta quantas das competencias desejadas da vaga o candidato tem para mostrar um índice de afinidade.
+Como candidato, ao acessar a listagem de vagas, o sistema conta quantas das competencias desejadas da vaga o candidato tem para mostrar um índice de afinidade.
 
-    Como empresa, ao acessar a listagem de candidatos, o sistema cria um mapa simples de todas as ocorrências de competências desejadas de suas vagas para mostrar uma "afinidade global" com o candidato. (Um candidato que sabe groovy terá afinidade maior em uma empresa que possui 3 vagas que buscam por groovy do que uma empresa que possui apenas 1 vaga que busca por groovy)
+Como empresa, ao acessar a listagem de candidatos, o sistema cria um mapa simples de todas as ocorrências de competências desejadas de suas vagas para mostrar uma "afinidade global" com o candidato. (Um candidato que sabe groovy terá afinidade maior em uma empresa que possui 3 vagas que buscam por groovy do que uma empresa que possui apenas 1 vaga que busca por groovy)
 
+
+## Informações pertinentes:
+
+1. Frontend feito com Typescript + HTML, com o uso da biblioteca [chart.js](https://www.chartjs.org/)
+2. Frontend ainda é completamente independente do backend.
+3. Banco de dados feito com PostgreSQL
+4. Modelo DER feito com [dbdiagram](https://dbdiagram.io/home)

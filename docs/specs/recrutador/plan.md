@@ -29,7 +29,7 @@ Resolve and approve the specification decisions before implementation begins. Sc
 
 ### 0. [ x ] Prepare schema changes and migrate existing vacancies
 - **What:** Author SQL to create `nicho` and `recrutador`, add the required `nicho_id` column and foreign key to the existing `vaga` table, seed the unique `geral` niche, and backfill every existing vacancy's `vaga.nicho_id` to `geral` without changing other vacancy data. Update schema/seed snapshots. Provide exact inspection and application commands; never execute database commands.
-- **Files:** `banco_de_dados/schema.sql`, `banco_de_dados/entrega.sql`, a standalone migration under `banco_de_dados/migrations/`, and a companion runbook.
+- **Files:** `banco_de_dados/schema.sql`, `../../../banco_de_dados/schema_com_populacao.sql`, a standalone migration under `banco_de_dados/migrations/`, and a companion runbook.
 - **Done check:** Review SQL and runbook statically for consistency and safe ordering. The user applies the migration to a scratch database and verifies `vaga.nicho_id` exists and references `nicho.id`, vacancy IDs/count and other fields are unchanged, all pre-existing vacancies reference `geral`, and constraints reject missing/unknown niches and duplicate niche names. Do not start Phase 1 until the user reports successful verification.
 
 ## Implementation Phases

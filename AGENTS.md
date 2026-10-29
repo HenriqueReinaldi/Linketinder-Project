@@ -32,7 +32,7 @@ The application is still in development. Differences between source code, SQL, d
 - `frontend/scripts/model/`, `service/`, `persistencia/`, `view/`: frontend models, workflows, local persistence, and DOM-facing views.
 - `frontend/view/`: static HTML pages and stylesheet.
 - `frontend/build/`: compiled frontend output. Edit `frontend/scripts/`, then build; do not treat generated output as the source of truth.
-- `banco_de_dados/schema.sql`: database schema; `entrega.sql`: schema plus sample data; `buscas.sql`: example queries.
+- `banco_de_dados/schema.sql`: database schema; `schema_com_populacao.sql`: schema plus sample data.
 - Root `build/` and `bin/` contain generated/compiled output, not primary source.
 - `CHANGELOG.md`: project history file at the root; it contains the changelog and can be useful for tracking changes.
 - `skills/`: folder at root containing project skills that the AI model can reference.
@@ -43,7 +43,7 @@ The application is still in development. Differences between source code, SQL, d
 
 1. Database creation, schema changes, and data changes are run by the user, not by the assistant.
 2. When database work is needed, provide the SQL in a dedicated `.sql` file and the exact commands to inspect/apply it in a companion instruction file. The user reviews and executes those commands. Never connect to a database or run commands that create, alter, populate, update, or delete database data.
-3. For a new local database, the user can create a PostgreSQL database named `linketinder` and apply `banco_de_dados/entrega.sql` themselves.
+3. For a new local database, the user can create a PostgreSQL database named `linketinder` and apply `banco_de_dados/schema_com_populacao.sql` themselves.
 4. Check the connection settings in `src/main/groovy/org/linketinder/DAO/conexoes/ProvedorPostgres.groovy`; connection settings are currently defined in source.
 5. From the repository root, run `./gradlew run -q --console=plain`.
 6. Run backend tests with `./gradlew test`; compile production sources with `./gradlew classes`. Do not run these commands with side effects that mutate the database.
