@@ -11,9 +11,15 @@ class MatchView implements Representavel<Match> {
 
     @Override
     String representacao(Match objeto) {
-        """Candidato     : ${objeto.candidato.id} ${objeto.candidato.nome}
+        if (objeto.recrutador){
+            return """Candidato    : ${objeto.candidato.id} ${objeto.candidato.nome}
+                      |Vaga         : ${objeto.vaga.id} ${objeto.vaga.nome}
+                      |Recrutador   : ${objeto.recrutador.id} ${objeto.recrutador.nome}
+                      |Data Match   : ${objeto.data_match}
+                   """.stripMargin()
+        }
+        """Candidato    : ${objeto.candidato.id} ${objeto.candidato.nome}
            |Vaga         : ${objeto.vaga.id} ${objeto.vaga.nome}
-           |Recrutador   : ${objeto.recrutador.id} ${objeto.recrutador.nome}
            |Data Match   : ${objeto.data_match}
         """.stripMargin()
     }

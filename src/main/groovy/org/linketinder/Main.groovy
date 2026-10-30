@@ -30,6 +30,7 @@ static ServiceBundle inicializar_services(Banco bd) {
     var vaga_dao = new VagaDAO(bd)
     var curtida_dao = new CurtidaDAO(bd)
     var recrutador_dao = new RecrutadorDAO(bd)
+    var match_dao = new MatchDAO(bd)
 
     return new ServiceBundle(
             new CandidatoService(candidato_dao, competencia_dao, endereco_dao),
@@ -37,7 +38,8 @@ static ServiceBundle inicializar_services(Banco bd) {
             new CompetenciaService(competencia_dao),
             new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao),
             new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao, recrutador_dao),
-            new RecrutadorService(recrutador_dao, empresa_dao)
+            new RecrutadorService(recrutador_dao, empresa_dao),
+            new MatchService(match_dao, candidato_dao, vaga_dao, recrutador_dao)
     )
 }
 
@@ -61,7 +63,7 @@ static ControllerBundle inicializar_controllers(ServiceBundle services) {
             new EmpresaController(services.empresa_service),
             new VagaController(services.vaga_service, services.empresa_service),
             new RecrutadorController(services.recrutador_service, services.empresa_service, services.vaga_service, services.curtida_service),
-            new MatchController()
+            new MatchController(services.match_service)
     )
 }
 
@@ -70,7 +72,7 @@ static void main(String[] args) {
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
-    boolean terminal = false
+    boolean terminal = true
 
     if (terminal){
         ViewIO view_io = new TermIO()

@@ -167,7 +167,7 @@ class Terminal extends View {
         io.send_message "É importante destacar que todos esses comandos são usados pela perspectiva de um ADM, por isso falta anonimidade.\n"
 
         io.send_message "Comandos read:"
-        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas / recrutadores>"
+        io.send_message "listar <candidatos / empresas / vagas / competencias / curtidas / recrutadores / matches>"
         io.send_message "listar recrutador.curtidas\n"
 
         io.send_message "Comandos create:"

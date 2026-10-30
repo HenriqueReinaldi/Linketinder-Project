@@ -32,7 +32,6 @@ class CandidatoController {
         return candidato_service.update(c)
     }
 
-
     Candidato assemble_candidato(Map<String, String> candidato_info) {
         try {
             List<Competencia> competencias = candidato_info["competencias"]
