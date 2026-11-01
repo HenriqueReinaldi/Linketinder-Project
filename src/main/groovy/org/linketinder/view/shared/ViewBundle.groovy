@@ -10,4 +10,5 @@ class ViewBundle {
     CompetenciaView competencia_view
     CurtidaView curtida_view
     RecrutadorView recrutador_view
+    MatchView match_view
 }

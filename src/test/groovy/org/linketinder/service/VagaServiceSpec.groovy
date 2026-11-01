@@ -11,7 +11,7 @@ import org.linketinder.model.objetos.Endereco
 import org.linketinder.model.objetos.Empresa
 import spock.lang.Specification
 
-class VagaServiceSpec extends Specification{
+class VagaServiceSpec extends Specification {
     VagaDAO vaga_dao = Mock()
     CompetenciaDAO competencia_dao = Mock()
     EnderecoDAO endereco_dao = Mock()
@@ -19,7 +19,7 @@ class VagaServiceSpec extends Specification{
     RecrutadorDAO recrutador_dao = Mock()
     VagaService service = new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao, recrutador_dao)
 
-    def "get lista vaga chama o metodo DAO correto"(){
+    def "get lista vaga chama o metodo DAO correto"() {
         when:
         service.get_lista()
 
@@ -27,7 +27,7 @@ class VagaServiceSpec extends Specification{
         1 * vaga_dao.get_lista_vaga()
     }
 
-    def "cadastrar vaga chama os metodos DAO corretos"(){
+    def "cadastrar vaga chama os metodos DAO corretos"() {
         given:
         Vaga vaga = new Vaga(
                 id: 1,
@@ -45,7 +45,7 @@ class VagaServiceSpec extends Specification{
         2 * competencia_dao.cadastrar_competencias_entidade("vaga", *_)
     }
 
-    def "deletar vaga chama o metodo DAO correto"(){
+    def "deletar vaga chama o metodo DAO correto"() {
         when:
         service.deletar(20)
 
@@ -53,7 +53,7 @@ class VagaServiceSpec extends Specification{
         1 * vaga_dao.delete_vaga_by_id(20)
     }
 
-    def "update vaga chama os metodos DAO corretos"(){
+    def "update vaga chama os metodos DAO corretos"() {
         given:
         Vaga vaga = new Vaga(
                 id: 1,
@@ -72,7 +72,7 @@ class VagaServiceSpec extends Specification{
         2 * competencia_dao.cadastrar_competencias_entidade("vaga", vaga.id, _)
     }
 
-    def "get by id chama o metodo DAO correto"(){
+    def "get by id chama o metodo DAO correto"() {
         when:
         service.get_by_id("20")
 

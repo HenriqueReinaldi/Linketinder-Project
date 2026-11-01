@@ -10,4 +10,5 @@ class ControllerBundle {
     EmpresaController empresa_controller
     VagaController vaga_controller
     RecrutadorController recrutador_controller
+    MatchController match_controller
 }
