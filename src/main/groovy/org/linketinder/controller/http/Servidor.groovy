@@ -14,7 +14,7 @@ class Servidor {
     String host = "localhost"
     int port = 3040
 
-    void preparar_endpoints(){
+    void preparar_endpoints() {
         http.createContext("/") { HttpExchange exchange ->
             exchange.responseHeaders.set("Content-Type", "text/plain; charset=UTF-8")
             byte[] bytes = "Linketinder ONLINE!".getBytes(StandardCharsets.UTF_8)
@@ -31,15 +31,16 @@ class Servidor {
 
     }
 
-    void ligar(){
+    void ligar() {
         println "http://${host}:${port}/"
         http.start()
     }
-    void fechar(){
+
+    void fechar() {
         http.stop(0)
     }
 
-    Servidor(ControllerBundle controllers){
+    Servidor(ControllerBundle controllers) {
         this.controllers = controllers
 
         http = HttpServer.create(new InetSocketAddress(this.host, this.port), 0)

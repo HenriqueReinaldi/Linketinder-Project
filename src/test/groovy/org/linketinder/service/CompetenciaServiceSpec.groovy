@@ -6,11 +6,11 @@ import org.linketinder.DAO.EnderecoDAO
 import org.linketinder.model.objetos.Competencia
 import spock.lang.Specification
 
-class CompetenciaServiceSpec extends Specification{
+class CompetenciaServiceSpec extends Specification {
     CompetenciaDAO competencia_dao = Mock()
     CompetenciaService service = new CompetenciaService(competencia_dao)
 
-    def "get lista competencia chama o metodo DAO correto"(){
+    def "get lista competencia chama o metodo DAO correto"() {
         when:
         service.get_lista()
 
@@ -18,7 +18,7 @@ class CompetenciaServiceSpec extends Specification{
         1 * competencia_dao.get_lista_competencia()
     }
 
-    def "deletar competencia chama o metodo DAO correto"(){
+    def "deletar competencia chama o metodo DAO correto"() {
         when:
         service.deletar(20)
 
@@ -26,9 +26,9 @@ class CompetenciaServiceSpec extends Specification{
         1 * competencia_dao.delete_competencia_by_id(20)
     }
 
-    def "atualizar competencia chama o metodo DAO correto"(){
+    def "atualizar competencia chama o metodo DAO correto"() {
         given:
-        Competencia competencia = new Competencia(id:20)
+        Competencia competencia = new Competencia(id: 20)
 
         when:
         service.update(competencia)

@@ -19,7 +19,7 @@ class MatchDAO {
         String busca
         Closure busca_args
 
-        if (match.recrutador == null){
+        if (match.recrutador == null) {
             busca = """
                 insert into match (candidato_id, vaga_id, data_match) 
                 values (?, ?, ?) on conflict (candidato_id, vaga_id) do nothing
@@ -27,10 +27,9 @@ class MatchDAO {
             busca_args = { PreparedStatement pst ->
                 pst.setInt(1, match.candidato.id)
                 pst.setInt(2, match.vaga.id)
-                pst.setDate(3,  java.sql.Date.valueOf(match.data_match))
+                pst.setDate(3, java.sql.Date.valueOf(match.data_match))
             }
-        }
-        else {
+        } else {
             busca = """
                 insert into match (candidato_id, vaga_id, recrutador_id, data_match) 
                 values (?, ?, ?, ?) on conflict (candidato_id, vaga_id) do nothing
@@ -52,10 +51,10 @@ class MatchDAO {
 
             while (res.next()) {
                 matches << new Match(
-                    new Candidato(id: res.getInt("candidato_id")),
-                    new Vaga(id: res.getInt("vaga_id")),
-                    new Recrutador(id: res.getInt("recrutador_id")),
-                    res.getString("data_match")
+                        new Candidato(id: res.getInt("candidato_id")),
+                        new Vaga(id: res.getInt("vaga_id")),
+                        new Recrutador(id: res.getInt("recrutador_id")),
+                        res.getString("data_match")
                 )
             }
 

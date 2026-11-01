@@ -62,14 +62,14 @@ class TermViewSpec extends Specification {
         }
 
         where:
-        input                  | controller                 | metodo
-        "candidatos"          | "candidato_controller"     | "get_lista_candidato"
-        "empresas"            | "empresa_controller"       | "get_lista_empresa"
-        "vagas"               | "vaga_controller"          | "get_lista_vaga"
-        "curtidas"            | "curtida_controller"       | "get_lista_curtida"
-        "competencias"        | "competencia_controller"   | "get_lista_competencia"
-        "recrutadores"        | "recrutador_controller"    | "get_lista_recrutador"
-        "recrutador.curtidas" | "recrutador_controller"   | "get_lista_curtida_recrutador"
+        input                 | controller               | metodo
+        "candidatos"          | "candidato_controller"   | "get_lista_candidato"
+        "empresas"            | "empresa_controller"     | "get_lista_empresa"
+        "vagas"               | "vaga_controller"        | "get_lista_vaga"
+        "curtidas"            | "curtida_controller"     | "get_lista_curtida"
+        "competencias"        | "competencia_controller" | "get_lista_competencia"
+        "recrutadores"        | "recrutador_controller"  | "get_lista_recrutador"
+        "recrutador.curtidas" | "recrutador_controller"  | "get_lista_curtida_recrutador"
     }
 
     void "cadastrar chama o controller certo"() {
@@ -84,11 +84,11 @@ class TermViewSpec extends Specification {
         1 * controller_bundle."$controller"."$metodo"(_ as ModelData)
 
         where:
-        input        | controller               | metodo
-        "candidato"  | "candidato_controller"   | "cadastrar_candidato"
-        "empresa"    | "empresa_controller"     | "cadastrar_empresa"
-        "vaga"       | "vaga_controller"        | "cadastrar_vaga"
-        "recrutador" | "recrutador_controller"  | "cadastrar_recrutador"
+        input        | controller              | metodo
+        "candidato"  | "candidato_controller"  | "cadastrar_candidato"
+        "empresa"    | "empresa_controller"    | "cadastrar_empresa"
+        "vaga"       | "vaga_controller"       | "cadastrar_vaga"
+        "recrutador" | "recrutador_controller" | "cadastrar_recrutador"
     }
 
     void "deletar chama o controller certo"() {
@@ -129,7 +129,7 @@ class TermViewSpec extends Specification {
         "empresa"     | "empresa_controller"     | "update_empresa"
         "vaga"        | "vaga_controller"        | "update_vaga"
         "competencia" | "competencia_controller" | "update_competencia"
-        "recrutador"  | "recrutador_controller" | "update_recrutador"
+        "recrutador"  | "recrutador_controller"  | "update_recrutador"
     }
 
     void "curtir pela perspectiva chama o controller certo"() {

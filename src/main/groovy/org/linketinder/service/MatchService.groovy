@@ -9,7 +9,7 @@ import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Match
 
 @TupleConstructor
-class MatchService extends Service{
+class MatchService extends Service {
     MatchDAO dao
     CandidatoDAO candidato_dao
     VagaDAO vaga_dao

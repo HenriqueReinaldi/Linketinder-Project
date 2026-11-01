@@ -26,11 +26,11 @@ class CandidatoHTTP extends EntidadeHTTP implements HttpHandler {
 
         Matcher matcher = exchange.requestURI.path =~ /^\/candidato\/([^\/]+)\/match$/
         if (matcher.matches()) {
-            try{
+            try {
                 List<Match> matches = match_controller.get_lista_matches_por_candidato(Integer.parseInt(matcher[0][1])).collect() { Match match -> pegar_json(match) }
                 responder(exchange, "[" + matches.join(",\n") + "]", 200)
             }
-            catch (Exception e){
+            catch (Exception e) {
                 e.printStackTrace()
                 responder(exchange, "parametro id invalido", 400)
             }

@@ -13,10 +13,10 @@ class MatchViewSpec extends Specification {
 
     @Shared
     Match match = new Match(
-        new Candidato(id: 1, nome: "abc"),
-        new Vaga(id: 1, nome: "def"),
-        new Recrutador(id: 1, nome: "ghi"),
-        "2002-02-02"
+            new Candidato(id: 1, nome: "abc"),
+            new Vaga(id: 1, nome: "def"),
+            new Recrutador(id: 1, nome: "ghi"),
+            "2002-02-02"
     )
 
     void "Representacao funciona corretamente"() {

@@ -74,7 +74,7 @@ static void main(String[] args) {
     ControllerBundle controllers = inicializar_controllers(services)
     boolean terminal = false
 
-    if (terminal){
+    if (terminal) {
         ViewIO view_io = new TermIO()
         ViewBundle views = inicializar_views(view_io)
         View view = new Terminal(controllers, views, view_io)
@@ -82,8 +82,7 @@ static void main(String[] args) {
             if (!view.run()) break
         }
         try_exit { bd.desconectar() }
-    }
-    else{
+    } else {
         Servidor servidor = new Servidor(controllers)
         servidor.ligar()
     }
