@@ -22,7 +22,7 @@ class Servidor {
             exchange.getResponseBody().withCloseable { OutputStream os -> os.write(bytes) }
         }
 
-        http.createContext("/candidato", new CandidatoHTTP(controllers.candidato_controller))
+        http.createContext("/candidato", new CandidatoHTTP(controllers.candidato_controller, controllers.match_controller))
         http.createContext("/empresa", new EmpresaHTTP(controllers.empresa_controller))
         http.createContext("/vaga", new VagaHTTP(controllers.vaga_controller))
         http.createContext("/competencia", new CompetenciaHTTP(controllers.competencia_controller))

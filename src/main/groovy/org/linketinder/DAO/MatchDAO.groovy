@@ -62,4 +62,24 @@ class MatchDAO {
             return matches
         }
     }
+
+    List<Match> get_lista_match_por_candidato(Candidato candidato) throws SQLException {
+        String busca = "select * from match where candidato_id = ?"
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, candidato.id) }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            List<Match> matches = []
+
+            while (res.next()) {
+                matches << new Match(
+                        new Candidato(id: res.getInt("candidato_id")),
+                        new Vaga(id: res.getInt("vaga_id")),
+                        new Recrutador(id: res.getInt("recrutador_id")),
+                        res.getString("data_match")
+                )
+            }
+
+            return matches
+        }
+    }
 }

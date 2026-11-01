@@ -72,7 +72,7 @@ static void main(String[] args) {
 
     ServiceBundle services = inicializar_services(bd)
     ControllerBundle controllers = inicializar_controllers(services)
-    boolean terminal = true
+    boolean terminal = false
 
     if (terminal){
         ViewIO view_io = new TermIO()
