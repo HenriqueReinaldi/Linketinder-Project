@@ -4,8 +4,13 @@ import groovy.transform.TupleConstructor
 import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CompetenciaDAO
 import org.linketinder.DAO.CurtidaDAO
+import org.linketinder.DAO.MatchDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Curtida
+import org.linketinder.model.objetos.Match
+import org.linketinder.model.objetos.Recrutador
+
+import java.time.LocalDate
 
 @TupleConstructor
 class CurtidaService extends Service {
@@ -13,6 +18,7 @@ class CurtidaService extends Service {
     CandidatoDAO candidato_dao
     CompetenciaDAO competencia_dao
     VagaDAO vaga_dao
+    MatchDAO match_dao
 
     List<Curtida> get_lista() {
         executar_seguramente([]) {
@@ -51,8 +57,14 @@ class CurtidaService extends Service {
 
     boolean curtir_como_empresa(Curtida c) {
         executar_seguramente(false) {
-            dao.empresa_curtir(c)
-            return true
+            if (c == null || c.candidato == null || c.vaga == null) return false
+
+            boolean status_curtida = dao.empresa_curtir(c)
+
+            Match match = new Match(c.candidato, c.vaga, null, LocalDate.now().toString())
+            boolean status_match = match_dao.cadastrar_match(match)
+
+            return status_curtida && status_match
         }
     }
 
@@ -60,7 +72,13 @@ class CurtidaService extends Service {
         executar_seguramente(false) {
             if (c == null || c.candidato == null || c.vaga == null) return false
             if (recrutador_id < 0) return false
-            return dao.recrutador_curtir(c, recrutador_id)
+
+            boolean status_curtida = dao.recrutador_curtir(c, recrutador_id)
+
+            Match match = new Match(c.candidato, c.vaga, new Recrutador(id: recrutador_id), LocalDate.now().toString())
+            boolean status_match = match_dao.cadastrar_match(match)
+
+            return status_curtida && status_match
         }
     }
 

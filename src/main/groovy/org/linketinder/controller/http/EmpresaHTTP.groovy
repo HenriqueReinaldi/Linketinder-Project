@@ -26,11 +26,11 @@ class EmpresaHTTP extends EntidadeHTTP implements HttpHandler {
             responder(exchange, "Endpoint desconhecido", 404)
             return
         }
-        
+
         ModelData modelo = get_modeldata(exchange)
         println modelo.data
 
-        if (!controller.cadastrar_empresa(modelo)){
+        if (!controller.cadastrar_empresa(modelo)) {
             responder(exchange, "falha cadastrando empresa...", 400)
             return
         }

@@ -30,10 +30,9 @@ class TermIO extends ViewIO {
 
     @Override
     void send_status(boolean sucesso) {
-        if (sucesso){
+        if (sucesso) {
             println "executado com sucesso!"
-        }
-        else {
+        } else {
             println "falha executando..."
         }
     }

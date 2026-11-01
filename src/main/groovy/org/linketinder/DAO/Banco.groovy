@@ -38,11 +38,10 @@ class Banco {
             busca_args(pst)
 
             boolean tem_resultset = pst.execute()
-            if (tem_resultset){
+            if (tem_resultset) {
                 res = pst.getResultSet()
                 return retornador(res)
-            }
-            else{
+            } else {
                 return null
             }
 

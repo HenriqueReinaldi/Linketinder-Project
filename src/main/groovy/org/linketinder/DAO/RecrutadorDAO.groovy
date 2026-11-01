@@ -1,12 +1,15 @@
 package org.linketinder.DAO
 
 import groovy.transform.TupleConstructor
+import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Empresa
 import org.linketinder.model.objetos.Recrutador
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 @TupleConstructor
 class RecrutadorDAO {
@@ -126,5 +129,15 @@ class RecrutadorDAO {
                 empresa: new Empresa(id: res.getInt("empresa_id")),
                 nicho: res.getString("nicho_nome")
         )
+    }
+
+    Recrutador get_recrutador_by_id(int id) throws SQLException {
+        String busca = "select r.*, n.nome as nicho_nome from recrutador as r join nicho as n on r.nicho_id = n.id where r.id = ?"
+        Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
+
+        return banco.executar(busca, busca_args) { ResultSet res ->
+            if (!res.next()) return null
+            return mapear_recrutador(res)
+        }
     }
 }

@@ -10,4 +10,5 @@ class ServiceBundle {
     CurtidaService curtida_service
     VagaService vaga_service
     RecrutadorService recrutador_service
+    MatchService match_service
 }
