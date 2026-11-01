@@ -36,7 +36,7 @@ static ServiceBundle inicializar_services(Banco bd) {
             new CandidatoService(candidato_dao, competencia_dao, endereco_dao),
             new EmpresaService(empresa_dao, endereco_dao),
             new CompetenciaService(competencia_dao),
-            new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao),
+            new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao, match_dao),
             new VagaService(vaga_dao, endereco_dao, competencia_dao, empresa_dao, recrutador_dao),
             new RecrutadorService(recrutador_dao, empresa_dao),
             new MatchService(match_dao, candidato_dao, vaga_dao, recrutador_dao)

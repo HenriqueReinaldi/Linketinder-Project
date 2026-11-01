@@ -5,6 +5,7 @@ import org.linketinder.DAO.CandidatoDAO
 import org.linketinder.DAO.CurtidaDAO
 import org.linketinder.DAO.CompetenciaDAO
 import org.linketinder.DAO.EnderecoDAO
+import org.linketinder.DAO.MatchDAO
 import org.linketinder.DAO.VagaDAO
 import org.linketinder.model.objetos.Candidato
 import org.linketinder.model.objetos.Curtida
@@ -16,7 +17,8 @@ class CurtidaServiceSpec extends Specification{
     CandidatoDAO candidato_dao = Mock()
     VagaDAO vaga_dao = Mock()
     CompetenciaDAO competencia_dao = Mock()
-    CurtidaService service = new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao)
+    MatchDAO match_dao = Mock()
+    CurtidaService service = new CurtidaService(curtida_dao, candidato_dao, competencia_dao, vaga_dao, match_dao)
 
     def "get lista curtida chama o metodo DAO correto"(){
         when:

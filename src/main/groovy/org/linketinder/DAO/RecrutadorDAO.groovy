@@ -132,12 +132,12 @@ class RecrutadorDAO {
     }
 
     Recrutador get_recrutador_by_id(int id) throws SQLException {
-        String busca = "select * from recrutador where id = ?"
+        String busca = "select r.*, n.nome as nicho_nome from recrutador as r join nicho as n on r.nicho_id = n.id where r.id = ?"
         Closure busca_args = { PreparedStatement pst -> pst.setInt(1, id) }
 
         return banco.executar(busca, busca_args) { ResultSet res ->
             if (!res.next()) return null
-            return  mapear_recrutador(res)
+            return mapear_recrutador(res)
         }
     }
 }
